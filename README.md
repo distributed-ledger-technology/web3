@@ -18,3 +18,9 @@ deno test --allow-net test.ts
 
 ```
 
+## Contributions
+Feel free to contribute by raising Pull Requests.
+
+
+## Support
+Feel free to create issues and fund their solution e.g. via [https://gitcoin.co/](https://gitcoin.co/).
