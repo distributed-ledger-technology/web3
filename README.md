@@ -10,8 +10,8 @@ It would be cool if we come up with a long term TypeScript only version. This re
 
 ```sh
 
-git clone https://github.com/michael-spengler/web3.ts.git
-cd web3.ts/web3-server
+git clone https://github.com/michael-spengler/web3.git
+cd web3/web3-server
 npm i
 cp .env-sample.json .env.json # add your ingredients 
 cd ..
@@ -21,7 +21,7 @@ deno test --allow-net test.ts
 ```
 
 ## Contributions
-Feel free to contribute by raising Pull Requests.
+Feel free to contribute by raising Pull Requests. If you are a contributor at https://github.com/ethereum let me know I'd like to move the repo there as soon as the time is right.
 
 
 ## Support
