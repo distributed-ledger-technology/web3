@@ -31,4 +31,13 @@ export class Web3 {
         return response
     }
 
+    public static async createAccount(): Promise<number> {
+        const url = `http://localhost:3026/createAccount`
+        const response = await Request.get(url)
+
+        log.info(response.newAccount)
+
+        return response.newAccount
+    }
+
 }

@@ -74,6 +74,11 @@ function defineRoutes(app) {
         res.send({ transaction: web3Result })
     })
 
+    app.get('/createAccount', async (req, res) => {
+        const web3Result = await web3.eth.accounts.create()
+        res.send({ newAccount: web3Result })
+    })
+
 }
 
 function startListening(app) {
