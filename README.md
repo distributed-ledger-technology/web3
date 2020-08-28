@@ -11,11 +11,12 @@ It would be cool if we come up with a long term TypeScript only version. This re
 ```sh
 
 git clone https://github.com/michael-spengler/web3.git
+cp .env-sample.json .env.json # no need to change anything here - just as an option
 cd web3/web3-server
-npm i
 cp .env-sample.json .env.json # add your ingredients 
+npm i
 cd ..
-node web3-server/web3-server.js
+pm2 start web3-server/web3-server.js
 deno test --allow-net test.ts
 
 ```
