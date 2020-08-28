@@ -8,7 +8,7 @@ In the long run it would be cool if we could come up with a long term solution -
 This repo shall then probably be moved to https://github.com/ethereum.  
 
 
-## Prerequisites
+## Prerequisites Due To Workaround
 
 ```sh
 
@@ -23,7 +23,7 @@ deno test --allow-net test.ts
 
 ```
 
-## Usage Examples 
+## Usage Example 
 
 ```ts
 
