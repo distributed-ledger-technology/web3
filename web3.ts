@@ -1,6 +1,6 @@
 import * as log from "https://deno.land/std/log/mod.ts";
 import { Request } from 'https://deno.land/x/request@1.1.0/request.ts'
-import { web3ServerBaseURL } from './.env.ts'
+import { web3ServerBaseURL } from './.env-sample.ts'
 
 export class Web3 {
 

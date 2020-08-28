@@ -8,7 +8,7 @@ In the long run it would be cool if we could come up with a long term solution -
 This repo shall then probably be moved to https://github.com/ethereum.  
 
 
-## Usage Examples
+## Prerequisites
 
 ```sh
 
@@ -22,6 +22,18 @@ pm2 start web3-server/web3-server.js
 deno test --allow-net test.ts
 
 ```
+
+## Usage Examples 
+
+```ts
+
+import * as log from "https://deno.land/std/log/mod.ts";
+import { Web3,  Helper } from "https://deno.land/x/web3/mod.ts";
+
+const balance = Helper.getEthFromWei(await Web3.getBalance('0x....enterAddressHere-NOTTheKey:)'))
+log.info(balance)
+
+``` 
 
 ## Contributions
 Feel free to contribute by raising Pull Requests. If you are a contributor at https://github.com/ethereum let me know I'd like to move the repo there as soon as the time is right.
