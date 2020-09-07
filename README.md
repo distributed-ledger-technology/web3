@@ -3,12 +3,12 @@
 
 As there seems to be no TypeScript implementation of web3 yet, the solution at hand uses a workaround (a node server) to bridge the gap between web3.ts and web3.js.
 
-In the long run it would be cool if we could come up with a long term solution - see: https://github.com/ethereum/web3.js/issues/3700.
+It would be cool if we could come up with a TypeScript only solution - see: https://github.com/ethereum/web3.js/issues/3700.
 
 This repo shall then probably be moved to https://github.com/ethereum.  
 
 
-## Prerequisites
+## Prerequisites due to Workaround
 
 ```sh
 
@@ -23,7 +23,7 @@ deno test --allow-net test.ts
 
 ```
 
-## Usage Examples 
+## Usage Example 
 
 ```ts
 
