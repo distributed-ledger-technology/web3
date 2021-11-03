@@ -8,7 +8,7 @@ Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we hav
 
 ```sh 
 
-deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/get-balance.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/get-balance.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
@@ -31,7 +31,7 @@ console.log(`the balance is ${balance} wei`)
 
 ```sh 
 
-deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/get-transaction.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/get-transaction.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
@@ -56,7 +56,7 @@ console.log(transaction)
 
 ```sh 
 
-deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
