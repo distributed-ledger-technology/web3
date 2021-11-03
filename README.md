@@ -7,7 +7,7 @@ Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we hav
 ### Get Balance
 ```ts
 
-import Web3 from '../mod.ts'
+import Web3 from 'https://deno.land/x/web3/mod.ts'
 import { PROVIDER_URL } from './.env.ts'
 
 const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
@@ -21,7 +21,7 @@ console.log(`the balance is ${balance} wei`)
 ### Create Balance
 ```ts
 
-import Web3 from '../mod.ts'
+import Web3 from 'https://deno.land/x/web3/mod.ts'
 import { PROVIDER_URL } from './.env.ts'
 
 const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
@@ -35,7 +35,7 @@ console.log(newAccount)
 ### Get Transaction
 ```ts
 
-import Web3 from '../mod.ts'
+import Web3 from 'https://deno.land/x/web3/mod.ts'
 import { PROVIDER_URL } from './.env.ts'
 
 const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
