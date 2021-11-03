@@ -7,7 +7,7 @@ Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we hav
 ### Get Balance
 ```ts
 
-import Web3 from '../packages/web3/src/index.js'
+import Web3 from '../mod.ts'
 import { PROVIDER_URL } from './.env.ts'
 
 const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
@@ -21,7 +21,7 @@ console.log(`the balance is ${balance} wei`)
 ### Create Balance
 ```ts
 
-import Web3 from '../packages/web3/src/index.js'
+import Web3 from '../mod.ts'
 import { PROVIDER_URL } from './.env.ts'
 
 const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
@@ -29,6 +29,22 @@ const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
 const newAccount = await (web3 as any).eth.accounts.create()
 
 console.log(newAccount)
+
+```
+
+### Get Transaction
+```ts
+
+import Web3 from '../mod.ts'
+import { PROVIDER_URL } from './.env.ts'
+
+const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
+
+const transactionHash = "0x0d558d490c89fc94ddfebd284e39da5c1bcff15d18c4e9fd2eb37a202d20c703"
+
+const transaction = (await (web3.eth as any).getTransaction(transactionHash))
+
+console.log(transaction)
 
 ```
 
