@@ -5,12 +5,21 @@ Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we hav
 ## Usage Example
 
 ### Get Balance
+
+```sh 
+
+deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/get-balance.ts https://mainnet.infura.io/v3/<your-project-id>
+
+```
+
+
 ```ts
 
 import Web3 from 'https://deno.land/x/web3/mod.ts'
-import { PROVIDER_URL } from './.env.ts'
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
+const providerURL = Deno.args[0]
+
+const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
 
 const balance = await (web3 as any).eth.getBalance("0x7a915e362353d72570dcf90aa5baa1c5b341c7aa")
 
@@ -19,12 +28,20 @@ console.log(`the balance is ${balance} wei`)
 ```
 
 ### Create Balance
+
+```sh 
+
+deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
+
+```
+
 ```ts
 
 import Web3 from 'https://deno.land/x/web3/mod.ts'
-import { PROVIDER_URL } from './.env.ts'
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
+const providerURL = Deno.args[0]
+
+const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
 
 const newAccount = await (web3 as any).eth.accounts.create()
 
@@ -33,12 +50,20 @@ console.log(newAccount)
 ```
 
 ### Get Transaction
+
+```sh 
+
+deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/get-transaction.ts https://mainnet.infura.io/v3/<your-project-id>
+
+```
+
 ```ts
 
 import Web3 from 'https://deno.land/x/web3/mod.ts'
-import { PROVIDER_URL } from './.env.ts'
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(PROVIDER_URL))
+const providerURL = Deno.args[0]
+
+const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
 
 const transactionHash = "0x0d558d490c89fc94ddfebd284e39da5c1bcff15d18c4e9fd2eb37a202d20c703"
 
