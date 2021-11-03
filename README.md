@@ -27,28 +27,6 @@ console.log(`the balance is ${balance} wei`)
 
 ```
 
-### Create Balance
-
-```sh 
-
-deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
-
-```
-
-```ts
-
-import Web3 from 'https://deno.land/x/web3/mod.ts'
-
-const providerURL = Deno.args[0]
-
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
-
-const newAccount = await (web3 as any).eth.accounts.create()
-
-console.log(newAccount)
-
-```
-
 ### Get Transaction
 
 ```sh 
@@ -74,6 +52,27 @@ console.log(transaction)
 ```
 
 
+### Create Account
+
+```sh 
+
+deno run --location=http://localhost --allow-all https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
+
+```
+
+```ts
+
+import Web3 from 'https://deno.land/x/web3/mod.ts'
+
+const providerURL = Deno.args[0]
+
+const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
+
+const newAccount = await (web3 as any).eth.accounts.create()
+
+console.log(newAccount)
+
+```
 
 ## Contributions
 Feel free to contribute by raising Pull Requests. If you are a contributor at https://github.com/ethereum or https://github.com/chainsafe let us know if you want to move this repository to the corresponding organization.
