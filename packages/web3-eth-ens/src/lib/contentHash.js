@@ -32,20 +32,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import contentHash from 'https://jspm.dev/content-hash';
 
 function decode(encoded) {
-  var decoded = null;
-  var protocolType = null;
-  var error = null;
+  let decoded = null;
+  let protocolType = null;
+  let error = null;
 
   if (encoded && encoded.error) {
     return {
       protocolType: null,
-      decoded: encoded.error
+      decoded: encoded.error,
     };
   }
   if (encoded) {
     try {
       decoded = contentHash.decode(encoded);
-      var codec = contentHash.getCodec(encoded);
+      const codec = contentHash.getCodec(encoded);
       if (codec === 'ipfs-ns') {
         protocolType = 'ipfs';
       } else if (codec === 'swarm-ns') {
@@ -62,17 +62,18 @@ function decode(encoded) {
     }
   }
   return {
-    protocolType: protocolType,
-    decoded: decoded,
-    error: error
+    protocolType,
+    decoded,
+    error,
   };
 }
 
 function encode(text) {
-  var content, contentType;
-  var encoded = false;
-  if (!!text) {
-    var matched = text.match(/^(ipfs|bzz|onion|onion3):\/\/(.*)/) || text.match(/\/(ipfs)\/(.*)/);
+  let content; let 
+    contentType;
+  let encoded = false;
+  if (text) {
+    const matched = text.match(/^(ipfs|bzz|onion|onion3):\/\/(.*)/) || text.match(/\/(ipfs)\/(.*)/);
     if (matched) {
       contentType = matched[1];
       content = matched[2];
@@ -80,20 +81,20 @@ function encode(text) {
 
     try {
       if (contentType === 'ipfs') {
-        if(content.length >= 4) {
-          encoded = '0x' + contentHash.fromIpfs(content);
+        if (content.length >= 4) {
+          encoded = `0x${contentHash.fromIpfs(content)}`;
         }
       } else if (contentType === 'bzz') {
-        if(content.length >= 4) {
-          encoded = '0x' + contentHash.fromSwarm(content);
+        if (content.length >= 4) {
+          encoded = `0x${contentHash.fromSwarm(content)}`;
         }
       } else if (contentType === 'onion') {
-        if(content.length === 16) {
-          encoded = '0x' + contentHash.encode('onion', content);
+        if (content.length === 16) {
+          encoded = `0x${contentHash.encode('onion', content)}`;
         }
       } else if (contentType === 'onion3') {
-        if(content.length === 56) {
-          encoded = '0x' + contentHash.encode('onion3', content);
+        if (content.length === 56) {
+          encoded = `0x${contentHash.encode('onion3', content)}`;
         }
       } else {
         throw new Error('Could not encode content hash: unsupported content type');
@@ -106,6 +107,6 @@ function encode(text) {
 }
 
 export default {
-  decode: decode,
-  encode: encode
+  decode,
+  encode,
 };

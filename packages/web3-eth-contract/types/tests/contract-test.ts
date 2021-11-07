@@ -18,7 +18,7 @@
  * @date 2018
  */
 
-import { Contract } from 'web3-eth-contract';
+import { Contract } from 'https://deno.land/x/web3/packages/web3-eth-contract/src/index.js';
 
 const contract = new Contract([]);
 
@@ -72,21 +72,21 @@ contract.clone();
 
 // $ExpectType ContractSendMethod
 contract.deploy({
-    data: '0x12345...',
-    arguments: [123, 'My String']
+  data: '0x12345...',
+  arguments: [123, 'My String'],
 });
 
 // $ExpectType void
 contract.once(
-    'MyEvent',
-    {
-        filter: {
-            myIndexedParam: [20, 23],
-            myOtherIndexedParam: '0x123456789...'
-        },
-        fromBlock: 0
+  'MyEvent',
+  {
+    filter: {
+      myIndexedParam: [20, 23],
+      myOtherIndexedParam: '0x123456789...',
     },
-    (error, event) => {}
+    fromBlock: 0,
+  },
+  (error, event) => {},
 );
 
 // $ExpectType void
@@ -97,9 +97,9 @@ contract.getPastEvents('MyEvent');
 
 // $ExpectType Promise<EventData[]>
 contract.getPastEvents('MyEvent', {
-    filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
-    fromBlock: 0,
-    toBlock: 'latest'
+  filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
+  fromBlock: 0,
+  toBlock: 'latest',
 });
 
 // $ExpectType Promise<EventData[]>
@@ -107,16 +107,16 @@ contract.getPastEvents('MyEvent', {});
 
 // $ExpectType Promise<EventData[]>
 contract.getPastEvents(
-    'MyEvent',
-    {
-        filter: {
-            myIndexedParam: [20, 23],
-            myOtherIndexedParam: '0x123456789...'
-        },
-        fromBlock: 0,
-        toBlock: 'latest'
+  'MyEvent',
+  {
+    filter: {
+      myIndexedParam: [20, 23],
+      myOtherIndexedParam: '0x123456789...',
     },
-    (error, events) => {}
+    fromBlock: 0,
+    toBlock: 'latest',
+  },
+  (error, events) => {},
 );
 
 // $ExpectType Promise<EventData[]>
@@ -124,51 +124,51 @@ contract.getPastEvents('MyEvent', (error, events) => {});
 
 // $ExpectType Promise<number>
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .estimateGas();
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .estimateGas();
 
 // $ExpectType Promise<number>
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .estimateGas({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' });
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .estimateGas({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' });
 
 // $ExpectType Promise<number>
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .estimateGas((err: Error, gas: number) => {});
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .estimateGas((err: Error, gas: number) => {});
 
 // $ExpectType string
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .encodeABI();
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .encodeABI();
 
 // $ExpectType PromiEvent<Contract>
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' });
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' });
 
 // $ExpectType PromiEvent<Contract>
 contract
-    .deploy({
-        data: '0x12345...',
-        arguments: [123, 'My String']
-    })
-    .send(
-        { from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' },
-        (err: Error, transactionHash: string) => {}
-    );
+  .deploy({
+    data: '0x12345...',
+    arguments: [123, 'My String'],
+  })
+  .send(
+    { from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' },
+    (err: Error, transactionHash: string) => {},
+  );

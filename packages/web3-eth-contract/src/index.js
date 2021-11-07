@@ -19,7 +19,7 @@
  *
  * To initialize a contract use:
  *
- *  var Contract = require('https://github.com/ntrotner/web3-deno/raw/main/packages/web3-eth-contract/src/index.js');
+ *  var Contract = require('https://deno.land/x/web3/packages/web3-eth-contract/src/index.js');
  *  Contract.setProvider('ws://localhost:8546');
  *  var contract = new Contract(abi, address, ...);
  *
@@ -27,18 +27,15 @@
  * @date 2017
  */
 
+'use strict';
 
-"use strict";
-
-import core from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core/src/index.js';
-import Method from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-method/src/index.js';
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
-import {subscription as Subscription} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-subscriptions/src/index.js';
-import {formatters} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
-import {errors} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
-import promiEvent from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-promievent/src/index.js';
-import abi from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-eth-abi/src/index.js';
-
+import core from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import { subscription as Subscription } from 'https://deno.land/x/web3/packages/web3-core-subscriptions/src/index.js';
+import { formatters, errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import promiEvent from 'https://deno.land/x/web3/packages/web3-core-promievent/src/index.js';
+import abi from 'https://deno.land/x/web3/packages/web3-eth-abi/src/index.js';
 
 /**
  * Should be called to create new contract instance
@@ -49,266 +46,259 @@ import abi from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-et
  * @param {String} address
  * @param {Object} options
  */
-var Contract = function Contract(jsonInterface, address, options) {
-    var _this = this,
-        args = Array.prototype.slice.call(arguments);
+const Contract = function Contract(jsonInterface, address, options) {
+  const _this = this;
+  const args = Array.prototype.slice.call(arguments);
 
-    if(!(this instanceof Contract)) {
-        throw new Error('Please use the "new" keyword to instantiate a web3.eth.Contract() object!');
+  if (!(this instanceof Contract)) {
+    throw new Error('Please use the "new" keyword to instantiate a web3.eth.Contract() object!');
+  }
+
+  this.setProvider = function () {
+    core.packageInit(_this, arguments);
+
+    _this.clearSubscriptions = _this._requestManager.clearSubscriptions;
+  };
+
+  // sets _requestmanager
+  core.packageInit(this, [this.constructor]);
+
+  this.clearSubscriptions = this._requestManager.clearSubscriptions;
+
+  if (!jsonInterface || !(Array.isArray(jsonInterface))) {
+    throw errors.ContractMissingABIError();
+  }
+
+  // create the options object
+  this.options = {};
+
+  const lastArg = args[args.length - 1];
+  if (!!lastArg && typeof lastArg === 'object' && !Array.isArray(lastArg)) {
+    options = lastArg;
+
+    this.options = { ...this.options, ...this._getOrSetDefaultOptions(options) };
+    if (!!address && typeof address === 'object') {
+      address = null;
     }
+  }
 
-    this.setProvider = function () {
-        core.packageInit(_this, arguments);
+  // set address
+  Object.defineProperty(this.options, 'address', {
+    set(value) {
+      if (value) {
+        _this._address = utils.toChecksumAddress(formatters.inputAddressFormatter(value));
+      }
+    },
+    get() {
+      return _this._address;
+    },
+    enumerable: true,
+  });
 
-        _this.clearSubscriptions = _this._requestManager.clearSubscriptions;
-    };
+  // add method and event signatures, when the jsonInterface gets set
+  Object.defineProperty(this.options, 'jsonInterface', {
+    set(value) {
+      _this.methods = {};
+      _this.events = {};
 
-    // sets _requestmanager
-    core.packageInit(this, [this.constructor]);
+      _this._jsonInterface = value.map((method) => {
+        let func;
+        let funcName;
 
-    this.clearSubscriptions = this._requestManager.clearSubscriptions;
+        // make constant and payable backwards compatible
+        method.constant = (method.stateMutability === 'view' || method.stateMutability === 'pure' || method.constant);
+        method.payable = (method.stateMutability === 'payable' || method.payable);
 
-    if(!jsonInterface || !(Array.isArray(jsonInterface))) {
-        throw errors.ContractMissingABIError();
-    }
-
-    // create the options object
-    this.options = {};
-
-    var lastArg = args[args.length - 1];
-    if(!!lastArg && typeof lastArg === 'object' && !Array.isArray(lastArg)) {
-        options = lastArg;
-
-        this.options = { ...this.options, ...this._getOrSetDefaultOptions(options)};
-        if(!!address && typeof address === 'object') {
-            address = null;
+        if (method.name) {
+          funcName = utils._jsonInterfaceMethodToString(method);
         }
-    }
 
-    // set address
-    Object.defineProperty(this.options, 'address', {
-        set: function(value){
-            if(value) {
-                _this._address = utils.toChecksumAddress(formatters.inputAddressFormatter(value));
-            }
-        },
-        get: function(){
-            return _this._address;
-        },
-        enumerable: true
-    });
+        // function
+        if (method.type === 'function') {
+          method.signature = abi.encodeFunctionSignature(funcName);
+          func = _this._createTxObject.bind({
+            method,
+            parent: _this,
+          });
 
-    // add method and event signatures, when the jsonInterface gets set
-    Object.defineProperty(this.options, 'jsonInterface', {
-        set: function(value){
-            _this.methods = {};
-            _this.events = {};
-
-            _this._jsonInterface = value.map(function(method) {
-                var func,
-                    funcName;
-
-                // make constant and payable backwards compatible
-                method.constant = (method.stateMutability === "view" || method.stateMutability === "pure" || method.constant);
-                method.payable = (method.stateMutability === "payable" || method.payable);
-
-
-                if (method.name) {
-                    funcName = utils._jsonInterfaceMethodToString(method);
-                }
-
-
-                // function
-                if (method.type === 'function') {
-                    method.signature = abi.encodeFunctionSignature(funcName);
-                    func = _this._createTxObject.bind({
-                        method: method,
-                        parent: _this
-                    });
-
-
-                    // add method only if not one already exists
-                    if(!_this.methods[method.name]) {
-                        _this.methods[method.name] = func;
-                    } else {
-                        var cascadeFunc = _this._createTxObject.bind({
-                            method: method,
-                            parent: _this,
-                            nextMethod: _this.methods[method.name]
-                        });
-                        _this.methods[method.name] = cascadeFunc;
-                    }
-
-                    // definitely add the method based on its signature
-                    _this.methods[method.signature] = func;
-
-                    // add method by name
-                    _this.methods[funcName] = func;
-
-
-                // event
-                } else if (method.type === 'event') {
-                    method.signature = abi.encodeEventSignature(funcName);
-                    var event = _this._on.bind(_this, method.signature);
-
-                    // add method only if not already exists
-                    if(!_this.events[method.name] || _this.events[method.name].name === 'bound ')
-                        _this.events[method.name] = event;
-
-                    // definitely add the method based on its signature
-                    _this.events[method.signature] = event;
-
-                    // add event by name
-                    _this.events[funcName] = event;
-                }
-
-
-                return method;
+          // add method only if not one already exists
+          if (!_this.methods[method.name]) {
+            _this.methods[method.name] = func;
+          } else {
+            const cascadeFunc = _this._createTxObject.bind({
+              method,
+              parent: _this,
+              nextMethod: _this.methods[method.name],
             });
+            _this.methods[method.name] = cascadeFunc;
+          }
 
-            // add allEvents
-            _this.events.allEvents = _this._on.bind(_this, 'allevents');
+          // definitely add the method based on its signature
+          _this.methods[method.signature] = func;
 
-            return _this._jsonInterface;
-        },
-        get: function(){
-            return _this._jsonInterface;
-        },
-        enumerable: true
-    });
+          // add method by name
+          _this.methods[funcName] = func;
 
-    // get default account from the Class
-    var defaultAccount = this.constructor.defaultAccount;
-    var defaultBlock = this.constructor.defaultBlock || 'latest';
+          // event
+        } else if (method.type === 'event') {
+          method.signature = abi.encodeEventSignature(funcName);
+          const event = _this._on.bind(_this, method.signature);
 
-    Object.defineProperty(this, 'handleRevert', {
-        get: function () {
-            if (_this.options.handleRevert === false || _this.options.handleRevert === true) {
-                return _this.options.handleRevert;
-            }
+          // add method only if not already exists
+          if (!_this.events[method.name] || _this.events[method.name].name === 'bound ') _this.events[method.name] = event;
 
-            return this.constructor.handleRevert;
-        },
-        set: function (val) {
-            _this.options.handleRevert = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'defaultCommon', {
-        get: function () {
-            return _this.options.common || this.constructor.defaultCommon;
-        },
-        set: function (val) {
-            _this.options.common = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'defaultHardfork', {
-        get: function () {
-            return _this.options.hardfork || this.constructor.defaultHardfork;
-        },
-        set: function (val) {
-            _this.options.hardfork = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'defaultChain', {
-        get: function () {
-            return _this.options.chain || this.constructor.defaultChain;
-        },
-        set: function (val) {
-            _this.options.chain = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'transactionPollingTimeout', {
-        get: function () {
-            if (_this.options.transactionPollingTimeout === 0) {
-                return _this.options.transactionPollingTimeout;
-            }
+          // definitely add the method based on its signature
+          _this.events[method.signature] = event;
 
-            return _this.options.transactionPollingTimeout || this.constructor.transactionPollingTimeout;
-        },
-        set: function (val) {
-            _this.options.transactionPollingTimeout = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'transactionConfirmationBlocks', {
-        get: function () {
-            if (_this.options.transactionConfirmationBlocks === 0) {
-                return _this.options.transactionConfirmationBlocks;
-            }
+          // add event by name
+          _this.events[funcName] = event;
+        }
 
-            return _this.options.transactionConfirmationBlocks || this.constructor.transactionConfirmationBlocks;
-        },
-        set: function (val) {
-            _this.options.transactionConfirmationBlocks = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'transactionBlockTimeout', {
-        get: function () {
-            if (_this.options.transactionBlockTimeout === 0) {
-                return _this.options.transactionBlockTimeout;
-            }
+        return method;
+      });
 
-            return _this.options.transactionBlockTimeout || this.constructor.transactionBlockTimeout;
-        },
-        set: function (val) {
-            _this.options.transactionBlockTimeout = val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'blockHeaderTimeout', {
-        get: function () {
-            if (_this.options.blockHeaderTimeout === 0) {
-                return _this.options.blockHeaderTimeout;
-            }
+      // add allEvents
+      _this.events.allEvents = _this._on.bind(_this, 'allevents');
 
-            return _this.options.blockHeaderTimeout || this.constructor.blockHeaderTimeout;
-        },
-        set: function (val) {
-            _this.options.blockHeaderTimeout = val;
-        },
-        enumerable: true
-    });    
-    Object.defineProperty(this, 'defaultAccount', {
-        get: function () {
-            return defaultAccount;
-        },
-        set: function (val) {
-            if(val) {
-                defaultAccount = utils.toChecksumAddress(formatters.inputAddressFormatter(val));
-            }
+      return _this._jsonInterface;
+    },
+    get() {
+      return _this._jsonInterface;
+    },
+    enumerable: true,
+  });
 
-            return val;
-        },
-        enumerable: true
-    });
-    Object.defineProperty(this, 'defaultBlock', {
-        get: function () {
-            return defaultBlock;
-        },
-        set: function (val) {
-            defaultBlock = val;
+  // get default account from the Class
+  let { defaultAccount } = this.constructor;
+  let defaultBlock = this.constructor.defaultBlock || 'latest';
 
-            return val;
-        },
-        enumerable: true
-    });
+  Object.defineProperty(this, 'handleRevert', {
+    get() {
+      if (_this.options.handleRevert === false || _this.options.handleRevert === true) {
+        return _this.options.handleRevert;
+      }
 
-    // properties
-    this.methods = {};
-    this.events = {};
+      return this.constructor.handleRevert;
+    },
+    set(val) {
+      _this.options.handleRevert = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'defaultCommon', {
+    get() {
+      return _this.options.common || this.constructor.defaultCommon;
+    },
+    set(val) {
+      _this.options.common = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'defaultHardfork', {
+    get() {
+      return _this.options.hardfork || this.constructor.defaultHardfork;
+    },
+    set(val) {
+      _this.options.hardfork = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'defaultChain', {
+    get() {
+      return _this.options.chain || this.constructor.defaultChain;
+    },
+    set(val) {
+      _this.options.chain = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'transactionPollingTimeout', {
+    get() {
+      if (_this.options.transactionPollingTimeout === 0) {
+        return _this.options.transactionPollingTimeout;
+      }
 
-    this._address = null;
-    this._jsonInterface = [];
+      return _this.options.transactionPollingTimeout || this.constructor.transactionPollingTimeout;
+    },
+    set(val) {
+      _this.options.transactionPollingTimeout = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'transactionConfirmationBlocks', {
+    get() {
+      if (_this.options.transactionConfirmationBlocks === 0) {
+        return _this.options.transactionConfirmationBlocks;
+      }
 
-    // set getter/setter properties
-    this.options.address = address;
-    this.options.jsonInterface = jsonInterface;
+      return _this.options.transactionConfirmationBlocks || this.constructor.transactionConfirmationBlocks;
+    },
+    set(val) {
+      _this.options.transactionConfirmationBlocks = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'transactionBlockTimeout', {
+    get() {
+      if (_this.options.transactionBlockTimeout === 0) {
+        return _this.options.transactionBlockTimeout;
+      }
 
+      return _this.options.transactionBlockTimeout || this.constructor.transactionBlockTimeout;
+    },
+    set(val) {
+      _this.options.transactionBlockTimeout = val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'blockHeaderTimeout', {
+    get() {
+      if (_this.options.blockHeaderTimeout === 0) {
+        return _this.options.blockHeaderTimeout;
+      }
+
+      return _this.options.blockHeaderTimeout || this.constructor.blockHeaderTimeout;
+    },
+    set(val) {
+      _this.options.blockHeaderTimeout = val;
+    },
+    enumerable: true,
+  });    
+  Object.defineProperty(this, 'defaultAccount', {
+    get() {
+      return defaultAccount;
+    },
+    set(val) {
+      if (val) {
+        defaultAccount = utils.toChecksumAddress(formatters.inputAddressFormatter(val));
+      }
+
+      return val;
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'defaultBlock', {
+    get() {
+      return defaultBlock;
+    },
+    set(val) {
+      defaultBlock = val;
+
+      return val;
+    },
+    enumerable: true,
+  });
+
+  // properties
+  this.methods = {};
+  this.events = {};
+
+  this._address = null;
+  this._jsonInterface = [];
+
+  // set getter/setter properties
+  this.options.address = address;
+  this.options.jsonInterface = jsonInterface;
 };
 
 /**
@@ -322,13 +312,12 @@ var Contract = function Contract(jsonInterface, address, options) {
  *
  * @returns void
  */
-Contract.setProvider = function(provider, accounts) {
-    // Contract.currentProvider = provider;
-    core.packageInit(this, [provider]);
+Contract.setProvider = function (provider, accounts) {
+  // Contract.currentProvider = provider;
+  core.packageInit(this, [provider]);
 
-    this._ethAccounts = accounts;
+  this._ethAccounts = accounts;
 };
-
 
 /**
  * Get the callback and modify the array if necessary
@@ -338,9 +327,9 @@ Contract.setProvider = function(provider, accounts) {
  * @return {Function} the callback
  */
 Contract.prototype._getCallback = function getCallback(args) {
-    if (args && !!args[args.length- 1 ] && typeof args[args.length - 1] === 'function') {
-        return args.pop(); // modify the args array!
-    }
+  if (args && !!args[args.length - 1] && typeof args[args.length - 1] === 'function') {
+    return args.pop(); // modify the args array!
+  }
 };
 
 /**
@@ -351,12 +340,11 @@ Contract.prototype._getCallback = function getCallback(args) {
  * @param {String} event
  * @return {Object} the contract instance
  */
-Contract.prototype._checkListener = function(type, event){
-    if(event === type) {
-        throw errors.ContractReservedEventError(type);
-    }
+Contract.prototype._checkListener = function (type, event) {
+  if (event === type) {
+    throw errors.ContractReservedEventError(type);
+  }
 };
-
 
 /**
  * Use default values, if options are not available
@@ -366,21 +354,20 @@ Contract.prototype._checkListener = function(type, event){
  * @return {Object} the options with gaps filled by defaults
  */
 Contract.prototype._getOrSetDefaultOptions = function getOrSetDefaultOptions(options) {
-    var gasPrice = options.gasPrice ? String(options.gasPrice): null;
-    var from = options.from ? utils.toChecksumAddress(formatters.inputAddressFormatter(options.from)) : null;
+  const gasPrice = options.gasPrice ? String(options.gasPrice) : null;
+  const from = options.from ? utils.toChecksumAddress(formatters.inputAddressFormatter(options.from)) : null;
 
-    options.data = options.data || this.options.data;
+  options.data = options.data || this.options.data;
 
-    options.from = from || this.options.from;
-    options.gasPrice = gasPrice || this.options.gasPrice;
-    options.gas = options.gas || options.gasLimit || this.options.gas;
+  options.from = from || this.options.from;
+  options.gasPrice = gasPrice || this.options.gasPrice;
+  options.gas = options.gas || options.gasLimit || this.options.gas;
 
-    // TODO replace with only gasLimit?
-    delete options.gasLimit;
+  // TODO replace with only gasLimit?
+  delete options.gasLimit;
 
-    return options;
+  return options;
 };
-
 
 /**
  * Should be used to encode indexed params and options to one final object
@@ -391,63 +378,55 @@ Contract.prototype._getOrSetDefaultOptions = function getOrSetDefaultOptions(opt
  * @return {Object} everything combined together and encoded
  */
 Contract.prototype._encodeEventABI = function (event, options) {
-    options = options || {};
-    var filter = options.filter || {},
-        result = {};
+  options = options || {};
+  const filter = options.filter || {};
+  const result = {};
 
-    ['fromBlock', 'toBlock'].filter(function (f) {
-        return options[f] !== undefined;
-    }).forEach(function (f) {
-        result[f] = formatters.inputBlockNumberFormatter(options[f]);
-    });
+  ['fromBlock', 'toBlock'].filter((f) => options[f] !== undefined).forEach((f) => {
+    result[f] = formatters.inputBlockNumberFormatter(options[f]);
+  });
 
-    // use given topics
-    if(Array.isArray(options.topics)) {
-        result.topics = options.topics;
+  // use given topics
+  if (Array.isArray(options.topics)) {
+    result.topics = options.topics;
 
     // create topics based on filter
-    } else {
+  } else {
+    result.topics = [];
 
-        result.topics = [];
-
-        // add event signature
-        if (event && !event.anonymous && event.name !== 'ALLEVENTS') {
-            result.topics.push(event.signature);
-        }
-
-        // add event topics (indexed arguments)
-        if (event.name !== 'ALLEVENTS') {
-            var indexedTopics = event.inputs.filter(function (i) {
-                return i.indexed === true;
-            }).map(function (i) {
-                var value = filter[i.name];
-                if (!value) {
-                    return null;
-                }
-
-                // TODO: https://github.com/ethereum/web3.js/issues/344
-                // TODO: deal properly with components
-
-                if (Array.isArray(value)) {
-                    return value.map(function (v) {
-                        return abi.encodeParameter(i.type, v);
-                    });
-                }
-                return abi.encodeParameter(i.type, value);
-            });
-
-            result.topics = result.topics.concat(indexedTopics);
-        }
-
-        if(!result.topics.length)
-            delete result.topics;
+    // add event signature
+    if (event && !event.anonymous && event.name !== 'ALLEVENTS') {
+      result.topics.push(event.signature);
     }
 
-    if(this.options.address) {
-        result.address = this.options.address.toLowerCase();
+    // add event topics (indexed arguments)
+    if (event.name !== 'ALLEVENTS') {
+      const indexedTopics = event.inputs.filter((i) => i.indexed === true).map((i) => {
+        const value = filter[i.name];
+        if (!value) {
+          return null;
+        }
+
+        // TODO: https://github.com/ethereum/web3.js/issues/344
+        // TODO: deal properly with components
+
+        if (Array.isArray(value)) {
+          return value.map((v) => abi.encodeParameter(i.type, v));
+        }
+        return abi.encodeParameter(i.type, value);
+      });
+
+      result.topics = result.topics.concat(indexedTopics);
     }
 
-    return result;
+    if (!result.topics.length) delete result.topics;
+  }
+
+  if (this.options.address) {
+    result.address = this.options.address.toLowerCase();
+  }
+
+  return result;
 };
 
 /**
@@ -458,57 +437,54 @@ Contract.prototype._encodeEventABI = function (event, options) {
  * @return {Object} result object with decoded indexed && not indexed params
  */
 Contract.prototype._decodeEventABI = function (data) {
-    var event = this;
+  let event = this;
 
-    data.data = data.data || '';
-    data.topics = data.topics || [];
-    var result = formatters.outputLogFormatter(data);
+  data.data = data.data || '';
+  data.topics = data.topics || [];
+  const result = formatters.outputLogFormatter(data);
 
-    // if allEvents get the right event
-    if(event.name === 'ALLEVENTS') {
-        event = event.jsonInterface.find(function (intf) {
-            return (intf.signature === data.topics[0]);
-        }) || {anonymous: true};
+  // if allEvents get the right event
+  if (event.name === 'ALLEVENTS') {
+    event = event.jsonInterface.find((intf) => (intf.signature === data.topics[0])) || { anonymous: true };
+  }
+
+  // create empty inputs if none are present (e.g. anonymous events on allEvents)
+  event.inputs = event.inputs || [];
+
+  // Handle case where an event signature shadows the current ABI with non-identical
+  // arg indexing. If # of topics doesn't match, event is anon.
+  if (!event.anonymous) {
+    let indexedInputs = 0;
+    event.inputs.forEach((input) => (input.indexed ? indexedInputs++ : null));
+
+    if (indexedInputs > 0 && (data.topics.length !== indexedInputs + 1)) {
+      event = {
+        anonymous: true,
+        inputs: [],
+      };
     }
+  }
 
-    // create empty inputs if none are present (e.g. anonymous events on allEvents)
-    event.inputs = event.inputs || [];
+  const argTopics = event.anonymous ? data.topics : data.topics.slice(1);
 
-    // Handle case where an event signature shadows the current ABI with non-identical
-    // arg indexing. If # of topics doesn't match, event is anon.
-    if (!event.anonymous){
-        let indexedInputs = 0;
-        event.inputs.forEach(input => input.indexed ? indexedInputs++ : null);
+  result.returnValues = abi.decodeLog(event.inputs, data.data, argTopics);
+  delete result.returnValues.__length__;
 
-        if (indexedInputs > 0 && (data.topics.length !== indexedInputs + 1)){
-            event = {
-                anonymous: true,
-                inputs: []
-            };
-        }
-    }
+  // add name
+  result.event = event.name;
 
-    var argTopics = event.anonymous ? data.topics : data.topics.slice(1);
+  // add signature
+  result.signature = (event.anonymous || !data.topics[0]) ? null : data.topics[0];
 
-    result.returnValues = abi.decodeLog(event.inputs, data.data, argTopics);
-    delete result.returnValues.__length__;
+  // move the data and topics to "raw"
+  result.raw = {
+    data: result.data,
+    topics: result.topics,
+  };
+  delete result.data;
+  delete result.topics;
 
-    // add name
-    result.event = event.name;
-
-    // add signature
-    result.signature = (event.anonymous || !data.topics[0]) ? null : data.topics[0];
-
-    // move the data and topics to "raw"
-    result.raw = {
-        data: result.data,
-        topics: result.topics
-    };
-    delete result.data;
-    delete result.topics;
-
-
-    return result;
+  return result;
 };
 
 /**
@@ -520,51 +496,44 @@ Contract.prototype._decodeEventABI = function (data) {
  * @param {String} the encoded ABI
  */
 Contract.prototype._encodeMethodABI = function _encodeMethodABI() {
-    var methodSignature = this._method.signature,
-        args = this.arguments || [];
+  const methodSignature = this._method.signature;
+  const args = this.arguments || [];
 
-    var signature = false,
-        paramsABI = this._parent.options.jsonInterface.filter(function (json) {
-            return ((methodSignature === 'constructor' && json.type === methodSignature) ||
-                ((json.signature === methodSignature || json.signature === methodSignature.replace('0x','') || json.name === methodSignature) && json.type === 'function'));
-        }).map(function (json) {
-            var inputLength = (Array.isArray(json.inputs)) ? json.inputs.length : 0;
+  let signature = false;
+  const paramsABI = this._parent.options.jsonInterface.filter((json) => ((methodSignature === 'constructor' && json.type === methodSignature)
+                || ((json.signature === methodSignature || json.signature === methodSignature.replace('0x', '') || json.name === methodSignature) && json.type === 'function'))).map((json) => {
+    const inputLength = (Array.isArray(json.inputs)) ? json.inputs.length : 0;
 
-            if (inputLength !== args.length) {
-                throw new Error('The number of arguments is not matching the methods required number. You need to pass '+ inputLength +' arguments.');
-            }
-
-            if (json.type === 'function') {
-                signature = json.signature;
-            }
-            return Array.isArray(json.inputs) ? json.inputs : [];
-        }).map(function (inputs) {
-            return abi.encodeParameters(inputs, args).replace('0x','');
-        })[0] || '';
-
-    // return constructor
-    if(methodSignature === 'constructor') {
-        if(!this._deployData)
-            throw new Error('The contract has no contract data option set. This is necessary to append the constructor parameters.');
-
-        if(!this._deployData.startsWith('0x')) {
-            this._deployData = '0x' + this._deployData;
-        }
-
-        return this._deployData + paramsABI;
-
+    if (inputLength !== args.length) {
+      throw new Error(`The number of arguments is not matching the methods required number. You need to pass ${inputLength} arguments.`);
     }
 
-    // return method
-    var returnValue = (signature) ? signature + paramsABI : paramsABI;
+    if (json.type === 'function') {
+      signature = json.signature;
+    }
+    return Array.isArray(json.inputs) ? json.inputs : [];
+  }).map((inputs) => abi.encodeParameters(inputs, args).replace('0x', ''))[0] || '';
 
-    if(!returnValue) {
-        throw new Error('Couldn\'t find a matching contract method named "'+ this._method.name +'".');
+  // return constructor
+  if (methodSignature === 'constructor') {
+    if (!this._deployData) throw new Error('The contract has no contract data option set. This is necessary to append the constructor parameters.');
+
+    if (!this._deployData.startsWith('0x')) {
+      this._deployData = `0x${this._deployData}`;
     }
 
-    return returnValue;
+    return this._deployData + paramsABI;
+  }
+
+  // return method
+  const returnValue = (signature) ? signature + paramsABI : paramsABI;
+
+  if (!returnValue) {
+    throw new Error(`Couldn't find a matching contract method named "${this._method.name}".`);
+  }
+
+  return returnValue;
 };
-
 
 /**
  * Decode method return values
@@ -575,21 +544,20 @@ Contract.prototype._encodeMethodABI = function _encodeMethodABI() {
  * @return {Object} decoded output return values
  */
 Contract.prototype._decodeMethodReturn = function (outputs, returnValues) {
-    if (!returnValues) {
-        return null;
-    }
+  if (!returnValues) {
+    return null;
+  }
 
-    returnValues = returnValues.length >= 2 ? returnValues.slice(2) : returnValues;
-    var result = abi.decodeParameters(outputs, returnValues);
+  returnValues = returnValues.length >= 2 ? returnValues.slice(2) : returnValues;
+  const result = abi.decodeParameters(outputs, returnValues);
 
-    if (result.__length__ === 1) {
-        return result[0];
-    }
+  if (result.__length__ === 1) {
+    return result[0];
+  }
 
-    delete result.__length__;
-    return result;
+  delete result.__length__;
+  return result;
 };
-
 
 /**
  * Deploys a contract and fire events based on its state: transactionHash, receipt
@@ -601,34 +569,29 @@ Contract.prototype._decodeMethodReturn = function (outputs, returnValues) {
  * @param {Function} callback
  * @return {Object} EventEmitter possible events are "error", "transactionHash" and "receipt"
  */
-Contract.prototype.deploy = function(options, callback){
+Contract.prototype.deploy = function (options, callback) {
+  options = options || {};
 
-    options = options || {};
+  options.arguments = options.arguments || [];
+  options = this._getOrSetDefaultOptions(options);
 
-    options.arguments = options.arguments || [];
-    options = this._getOrSetDefaultOptions(options);
-
-
-    // throw error, if no "data" is specified
-    if(!options.data) {
-        if (typeof callback === 'function'){
-            return callback(errors.ContractMissingDeployDataError());
-        }
-        throw errors.ContractMissingDeployDataError();
+  // throw error, if no "data" is specified
+  if (!options.data) {
+    if (typeof callback === 'function') {
+      return callback(errors.ContractMissingDeployDataError());
     }
+    throw errors.ContractMissingDeployDataError();
+  }
 
-    var constructor = this.options.jsonInterface.find((method) => {
-        return (method.type === 'constructor');
-    }) || {};
-    constructor.signature = 'constructor';
+  const constructor = this.options.jsonInterface.find((method) => (method.type === 'constructor')) || {};
+  constructor.signature = 'constructor';
 
-    return this._createTxObject.apply({
-        method: constructor,
-        parent: this,
-        deployData: options.data,
-        _ethAccounts: this.constructor._ethAccounts
-    }, options.arguments);
-
+  return this._createTxObject.apply({
+    method: constructor,
+    parent: this,
+    deployData: options.data,
+    _ethAccounts: this.constructor._ethAccounts,
+  }, options.arguments);
 };
 
 /**
@@ -640,36 +603,34 @@ Contract.prototype.deploy = function(options, callback){
  * @param {Function} callback
  * @return {Object} the event options object
  */
-Contract.prototype._generateEventOptions = function() {
-    var args = Array.prototype.slice.call(arguments);
+Contract.prototype._generateEventOptions = function () {
+  const args = Array.prototype.slice.call(arguments);
 
-    // get the callback
-    var callback = this._getCallback(args);
+  // get the callback
+  const callback = this._getCallback(args);
 
-    // get the options
-    var options = (!!args[args.length - 1] && typeof args[args.length - 1]) === 'object' ? args.pop() : {};
+  // get the options
+  const options = (!!args[args.length - 1] && typeof args[args.length - 1]) === 'object' ? args.pop() : {};
 
-    var eventName = (typeof args[0] === 'string') ? args[0] : 'allevents';
-    var event = (eventName.toLowerCase() === 'allevents') ? {
-            name: 'ALLEVENTS',
-            jsonInterface: this.options.jsonInterface
-        } : this.options.jsonInterface.find(function (json) {
-            return (json.type === 'event' && (json.name === eventName || json.signature === '0x'+ eventName.replace('0x','')));
-        });
+  const eventName = (typeof args[0] === 'string') ? args[0] : 'allevents';
+  const event = (eventName.toLowerCase() === 'allevents') ? {
+    name: 'ALLEVENTS',
+    jsonInterface: this.options.jsonInterface,
+  } : this.options.jsonInterface.find((json) => (json.type === 'event' && (json.name === eventName || json.signature === `0x${eventName.replace('0x', '')}`)));
 
-    if (!event) {
-        throw errors.ContractEventDoesNotExistError(eventName);
-    }
+  if (!event) {
+    throw errors.ContractEventDoesNotExistError(eventName);
+  }
 
-    if (!utils.isAddress(this.options.address)) {
-        throw errors.ContractNoAddressDefinedError();
-    }
+  if (!utils.isAddress(this.options.address)) {
+    throw errors.ContractNoAddressDefinedError();
+  }
 
-    return {
-        params: this._encodeEventABI(event, options),
-        event: event,
-        callback: callback
-    };
+  return {
+    params: this._encodeEventABI(event, options),
+    event,
+    callback,
+  };
 };
 
 /**
@@ -678,10 +639,9 @@ Contract.prototype._generateEventOptions = function() {
  * @method clone
  * @return {Object} the event subscription
  */
-Contract.prototype.clone = function() {
-    return new this.constructor(this.options.jsonInterface, this.options.address, this.options);
+Contract.prototype.clone = function () {
+  return new this.constructor(this.options.jsonInterface, this.options.address, this.options);
 };
-
 
 /**
  * Adds event listeners and creates a subscription, and remove it once its fired.
@@ -692,29 +652,28 @@ Contract.prototype.clone = function() {
  * @param {Function} callback
  * @return {Object} the event subscription
  */
-Contract.prototype.once = function(event, options, callback) {
-    var args = Array.prototype.slice.call(arguments);
+Contract.prototype.once = function (event, options, callback) {
+  const args = Array.prototype.slice.call(arguments);
 
-    // get the callback
-    callback = this._getCallback(args);
+  // get the callback
+  callback = this._getCallback(args);
 
-    if (!callback) {
-        throw errors.ContractOnceRequiresCallbackError();
+  if (!callback) {
+    throw errors.ContractOnceRequiresCallbackError();
+  }
+
+  // don't allow fromBlock
+  if (options) delete options.fromBlock;
+
+  // don't return as once shouldn't provide "on"
+  this._on(event, options, (err, res, sub) => {
+    sub.unsubscribe();
+    if (typeof callback === 'function') {
+      callback(err, res, sub);
     }
+  });
 
-    // don't allow fromBlock
-    if (options)
-        delete options.fromBlock;
-
-    // don't return as once shouldn't provide "on"
-    this._on(event, options, function (err, res, sub) {
-        sub.unsubscribe();
-        if(typeof callback === 'function'){
-            callback(err, res, sub);
-        }
-    });
-
-    return undefined;
+  return undefined;
 };
 
 /**
@@ -728,46 +687,46 @@ Contract.prototype.once = function(event, options, callback) {
  *
  * @return {Object} the event subscription
  */
-Contract.prototype._on = function(){
-    var subOptions = this._generateEventOptions.apply(this, arguments);
+Contract.prototype._on = function () {
+  const subOptions = this._generateEventOptions.apply(this, arguments);
 
-    if (subOptions.params && subOptions.params.toBlock) {
-        delete subOptions.params.toBlock;
-        console.warn('Invalid option: toBlock. Use getPastEvents for specific range.');
-    }
+  if (subOptions.params && subOptions.params.toBlock) {
+    delete subOptions.params.toBlock;
+    console.warn('Invalid option: toBlock. Use getPastEvents for specific range.');
+  }
 
-    // prevent the event "newListener" and "removeListener" from being overwritten
-    this._checkListener('newListener', subOptions.event.name);
-    this._checkListener('removeListener', subOptions.event.name);
+  // prevent the event "newListener" and "removeListener" from being overwritten
+  this._checkListener('newListener', subOptions.event.name);
+  this._checkListener('removeListener', subOptions.event.name);
 
-    // TODO check if listener already exists? and reuse subscription if options are the same.
+  // TODO check if listener already exists? and reuse subscription if options are the same.
 
-    // create new subscription
-    var subscription = new Subscription({
-        subscription: {
-            params: 1,
-            inputFormatter: [formatters.inputLogFormatter],
-            outputFormatter: this._decodeEventABI.bind(subOptions.event),
-            // DUBLICATE, also in web3-eth
-            subscriptionHandler: function (output) {
-                if(output.removed) {
-                    this.emit('changed', output);
-                } else {
-                    this.emit('data', output);
-                }
+  // create new subscription
+  const subscription = new Subscription({
+    subscription: {
+      params: 1,
+      inputFormatter: [formatters.inputLogFormatter],
+      outputFormatter: this._decodeEventABI.bind(subOptions.event),
+      // DUBLICATE, also in web3-eth
+      subscriptionHandler(output) {
+        if (output.removed) {
+          this.emit('changed', output);
+        } else {
+          this.emit('data', output);
+        }
 
-                if (typeof this.callback === 'function') {
-                    this.callback(null, output, this);
-                }
-            }
-        },
-        type: 'eth',
-        requestManager: this._requestManager
-    });
+        if (typeof this.callback === 'function') {
+          this.callback(null, output, this);
+        }
+      },
+    },
+    type: 'eth',
+    requestManager: this._requestManager,
+  });
 
-    subscription.subscribe('logs', subOptions.params, subOptions.callback || function () {});
+  subscription.subscribe('logs', subOptions.params, subOptions.callback || (() => {}));
 
-    return subscription;
+  return subscription;
 };
 
 /**
@@ -779,24 +738,23 @@ Contract.prototype._on = function(){
  * @param {Function} callback
  * @return {Object} the promievent
  */
-Contract.prototype.getPastEvents = function(){
-    var subOptions = this._generateEventOptions.apply(this, arguments);
+Contract.prototype.getPastEvents = function () {
+  const subOptions = this._generateEventOptions.apply(this, arguments);
 
-    var getPastLogs = new Method({
-        name: 'getPastLogs',
-        call: 'eth_getLogs',
-        params: 1,
-        inputFormatter: [formatters.inputLogFormatter],
-        outputFormatter: this._decodeEventABI.bind(subOptions.event)
-    });
-    getPastLogs.setRequestManager(this._requestManager);
-    var call = getPastLogs.buildCall();
+  let getPastLogs = new Method({
+    name: 'getPastLogs',
+    call: 'eth_getLogs',
+    params: 1,
+    inputFormatter: [formatters.inputLogFormatter],
+    outputFormatter: this._decodeEventABI.bind(subOptions.event),
+  });
+  getPastLogs.setRequestManager(this._requestManager);
+  const call = getPastLogs.buildCall();
 
-    getPastLogs = null;
+  getPastLogs = null;
 
-    return call(subOptions.params, subOptions.callback);
+  return call(subOptions.params, subOptions.callback);
 };
-
 
 /**
  * returns the an object with call, send, estimate functions
@@ -804,42 +762,39 @@ Contract.prototype.getPastEvents = function(){
  * @method _createTxObject
  * @returns {Object} an object with functions to call the methods
  */
-Contract.prototype._createTxObject =  function _createTxObject(){
-    var args = Array.prototype.slice.call(arguments);
-    var txObject = {};
+Contract.prototype._createTxObject = function _createTxObject() {
+  const args = Array.prototype.slice.call(arguments);
+  const txObject = {};
 
-    if(this.method.type === 'function') {
+  if (this.method.type === 'function') {
+    txObject.call = this.parent._executeMethod.bind(txObject, 'call');
+    txObject.call.request = this.parent._executeMethod.bind(txObject, 'call', true); // to make batch requests
+  }
 
-        txObject.call = this.parent._executeMethod.bind(txObject, 'call');
-        txObject.call.request = this.parent._executeMethod.bind(txObject, 'call', true); // to make batch requests
+  txObject.send = this.parent._executeMethod.bind(txObject, 'send');
+  txObject.send.request = this.parent._executeMethod.bind(txObject, 'send', true); // to make batch requests
+  txObject.encodeABI = this.parent._encodeMethodABI.bind(txObject);
+  txObject.estimateGas = this.parent._executeMethod.bind(txObject, 'estimate');
+  txObject.createAccessList = this.parent._executeMethod.bind(txObject, 'createAccessList');
 
+  if (args && this.method.inputs && args.length !== this.method.inputs.length) {
+    if (this.nextMethod) {
+      return this.nextMethod.apply(null, args);
     }
+    throw errors.InvalidNumberOfParams(args.length, this.method.inputs.length, this.method.name);
+  }
 
-    txObject.send = this.parent._executeMethod.bind(txObject, 'send');
-    txObject.send.request = this.parent._executeMethod.bind(txObject, 'send', true); // to make batch requests
-    txObject.encodeABI = this.parent._encodeMethodABI.bind(txObject);
-    txObject.estimateGas = this.parent._executeMethod.bind(txObject, 'estimate');
-    txObject.createAccessList = this.parent._executeMethod.bind(txObject, 'createAccessList');
+  txObject.arguments = args || [];
+  txObject._method = this.method;
+  txObject._parent = this.parent;
+  txObject._ethAccounts = this.parent.constructor._ethAccounts || this._ethAccounts;
 
-    if (args && this.method.inputs && args.length !== this.method.inputs.length) {
-        if (this.nextMethod) {
-            return this.nextMethod.apply(null, args);
-        }
-        throw errors.InvalidNumberOfParams(args.length, this.method.inputs.length, this.method.name);
-    }
+  if (this.deployData) {
+    txObject._deployData = this.deployData;
+  }
 
-    txObject.arguments = args || [];
-    txObject._method = this.method;
-    txObject._parent = this.parent;
-    txObject._ethAccounts = this.parent.constructor._ethAccounts || this._ethAccounts;
-
-    if(this.deployData) {
-        txObject._deployData = this.deployData;
-    }
-
-    return txObject;
+  return txObject;
 };
-
 
 /**
  * Generates the options for the execute call
@@ -849,38 +804,34 @@ Contract.prototype._createTxObject =  function _createTxObject(){
  * @param {Promise} defer
  */
 Contract.prototype._processExecuteArguments = function _processExecuteArguments(args, defer) {
-    var processedArgs = {};
+  const processedArgs = {};
 
-    processedArgs.type = args.shift();
+  processedArgs.type = args.shift();
 
-    // get the callback
-    processedArgs.callback = this._parent._getCallback(args);
+  // get the callback
+  processedArgs.callback = this._parent._getCallback(args);
 
-    // get block number to use for call
-    if(processedArgs.type === 'call' && args[args.length - 1] !== true && (typeof args[args.length - 1] === 'string' || isFinite(args[args.length - 1])))
-        processedArgs.defaultBlock = args.pop();
+  // get block number to use for call
+  if (processedArgs.type === 'call' && args[args.length - 1] !== true && (typeof args[args.length - 1] === 'string' || isFinite(args[args.length - 1]))) processedArgs.defaultBlock = args.pop();
 
-    // get the options
-    processedArgs.options = (!!args[args.length - 1] && typeof args[args.length - 1]) === 'object' ? args.pop() : {};
+  // get the options
+  processedArgs.options = (!!args[args.length - 1] && typeof args[args.length - 1]) === 'object' ? args.pop() : {};
 
-    // get the generateRequest argument for batch requests
-    processedArgs.generateRequest = (args[args.length - 1] === true)? args.pop() : false;
+  // get the generateRequest argument for batch requests
+  processedArgs.generateRequest = (args[args.length - 1] === true) ? args.pop() : false;
 
-    processedArgs.options = this._parent._getOrSetDefaultOptions(processedArgs.options);
-    processedArgs.options.data = this.encodeABI();
+  processedArgs.options = this._parent._getOrSetDefaultOptions(processedArgs.options);
+  processedArgs.options.data = this.encodeABI();
 
-    // add contract address
-    if(!this._deployData && !utils.isAddress(this._parent.options.address))
-        throw errors.ContractNoAddressDefinedError();
+  // add contract address
+  if (!this._deployData && !utils.isAddress(this._parent.options.address)) throw errors.ContractNoAddressDefinedError();
 
-    if(!this._deployData)
-        processedArgs.options.to = this._parent.options.address;
+  if (!this._deployData) processedArgs.options.to = this._parent.options.address;
 
-    // return error, if no "data" is specified
-    if(!processedArgs.options.data)
-        return utils._fireError(new Error('Couldn\'t find a matching contract method, or the number of parameters is wrong.'), defer.eventEmitter, defer.reject, processedArgs.callback);
+  // return error, if no "data" is specified
+  if (!processedArgs.options.data) return utils._fireError(new Error('Couldn\'t find a matching contract method, or the number of parameters is wrong.'), defer.eventEmitter, defer.reject, processedArgs.callback);
 
-    return processedArgs;
+  return processedArgs;
 };
 
 /**
@@ -890,177 +841,168 @@ Contract.prototype._processExecuteArguments = function _processExecuteArguments(
  * @param {String} type the type this execute function should execute
  * @param {Boolean} makeRequest if true, it simply returns the request parameters, rather than executing it
  */
-Contract.prototype._executeMethod = function _executeMethod(){
-    var _this = this,
-        args = this._parent._processExecuteArguments.call(this, Array.prototype.slice.call(arguments), defer),
-        defer = promiEvent((args.type !== 'send')),
-        ethAccounts = _this.constructor._ethAccounts || _this._ethAccounts;
+Contract.prototype._executeMethod = function _executeMethod() {
+  const _this = this;
+  const args = this._parent._processExecuteArguments.call(this, Array.prototype.slice.call(arguments), defer);
+  var defer = promiEvent((args.type !== 'send'));
+  const ethAccounts = _this.constructor._ethAccounts || _this._ethAccounts;
 
-    // simple return request for batch requests
-    if(args.generateRequest) {
+  // simple return request for batch requests
+  if (args.generateRequest) {
+    const payload = {
+      params: [formatters.inputCallFormatter.call(this._parent, args.options)],
+      callback: args.callback,
+    };
 
-        var payload = {
-            params: [formatters.inputCallFormatter.call(this._parent, args.options)],
-            callback: args.callback
-        };
-
-        if(args.type === 'call') {
-            payload.params.push(formatters.inputDefaultBlockNumberFormatter.call(this._parent, args.defaultBlock));
-            payload.method = 'eth_call';
-            payload.format = this._parent._decodeMethodReturn.bind(null, this._method.outputs);
-        } else {
-            payload.method = 'eth_sendTransaction';
-        }
-
-        return payload;
-
+    if (args.type === 'call') {
+      payload.params.push(formatters.inputDefaultBlockNumberFormatter.call(this._parent, args.defaultBlock));
+      payload.method = 'eth_call';
+      payload.format = this._parent._decodeMethodReturn.bind(null, this._method.outputs);
+    } else {
+      payload.method = 'eth_sendTransaction';
     }
 
-    switch (args.type) {
-        case 'createAccessList':
+    return payload;
+  }
 
-            // return error, if no "from" is specified
-            if(!utils.isAddress(args.options.from)) {
-                return utils._fireError(errors.ContractNoFromAddressDefinedError(), defer.eventEmitter, defer.reject, args.callback);
-            }
+  switch (args.type) {
+  case 'createAccessList':
 
-            var createAccessList = (new Method({
-                name: 'createAccessList',
-                call: 'eth_createAccessList',
-                params: 2,
-                inputFormatter: [formatters.inputTransactionFormatter, formatters.inputDefaultBlockNumberFormatter],
-                requestManager: _this._parent._requestManager,
-                accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
-                defaultAccount: _this._parent.defaultAccount,
-                defaultBlock: _this._parent.defaultBlock
-            })).createFunction();
+    // return error, if no "from" is specified
+    if (!utils.isAddress(args.options.from)) {
+      return utils._fireError(errors.ContractNoFromAddressDefinedError(), defer.eventEmitter, defer.reject, args.callback);
+    }
 
-            return createAccessList(args.options, args.callback);
+    var createAccessList = (new Method({
+      name: 'createAccessList',
+      call: 'eth_createAccessList',
+      params: 2,
+      inputFormatter: [formatters.inputTransactionFormatter, formatters.inputDefaultBlockNumberFormatter],
+      requestManager: _this._parent._requestManager,
+      accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
+      defaultAccount: _this._parent.defaultAccount,
+      defaultBlock: _this._parent.defaultBlock,
+    })).createFunction();
 
-        case 'estimate':
+    return createAccessList(args.options, args.callback);
 
-            var estimateGas = (new Method({
-                name: 'estimateGas',
-                call: 'eth_estimateGas',
-                params: 1,
-                inputFormatter: [formatters.inputCallFormatter],
-                outputFormatter: utils.hexToNumber,
-                requestManager: _this._parent._requestManager,
-                accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
-                defaultAccount: _this._parent.defaultAccount,
-                defaultBlock: _this._parent.defaultBlock
-            })).createFunction();
+  case 'estimate':
 
-            return estimateGas(args.options, args.callback);
+    var estimateGas = (new Method({
+      name: 'estimateGas',
+      call: 'eth_estimateGas',
+      params: 1,
+      inputFormatter: [formatters.inputCallFormatter],
+      outputFormatter: utils.hexToNumber,
+      requestManager: _this._parent._requestManager,
+      accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
+      defaultAccount: _this._parent.defaultAccount,
+      defaultBlock: _this._parent.defaultBlock,
+    })).createFunction();
 
-        case 'call':
+    return estimateGas(args.options, args.callback);
 
-            // TODO check errors: missing "from" should give error on deploy and send, call ?
+  case 'call':
 
-            var call = (new Method({
-                name: 'call',
-                call: 'eth_call',
-                params: 2,
-                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter],
-                // add output formatter for decoding
-                outputFormatter: function (result) {
-                    return _this._parent._decodeMethodReturn(_this._method.outputs, result);
-                },
-                requestManager: _this._parent._requestManager,
-                accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
-                defaultAccount: _this._parent.defaultAccount,
-                defaultBlock: _this._parent.defaultBlock,
-                handleRevert: _this._parent.handleRevert,
-                abiCoder: abi
-            })).createFunction();
+    // TODO check errors: missing "from" should give error on deploy and send, call ?
 
-            return call(args.options, args.defaultBlock, args.callback);
+    var call = (new Method({
+      name: 'call',
+      call: 'eth_call',
+      params: 2,
+      inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter],
+      // add output formatter for decoding
+      outputFormatter(result) {
+        return _this._parent._decodeMethodReturn(_this._method.outputs, result);
+      },
+      requestManager: _this._parent._requestManager,
+      accounts: ethAccounts, // is eth.accounts (necessary for wallet signing)
+      defaultAccount: _this._parent.defaultAccount,
+      defaultBlock: _this._parent.defaultBlock,
+      handleRevert: _this._parent.handleRevert,
+      abiCoder: abi,
+    })).createFunction();
 
-        case 'send':
+    return call(args.options, args.defaultBlock, args.callback);
 
-            // return error, if no "from" is specified
-            if(!utils.isAddress(args.options.from)) {
-                return utils._fireError(errors.ContractNoFromAddressDefinedError(), defer.eventEmitter, defer.reject, args.callback);
-            }
+  case 'send':
 
-            if (typeof this._method.payable === 'boolean' && !this._method.payable && args.options.value && args.options.value > 0) {
-                return utils._fireError(new Error('Can not send value to non-payable contract method or constructor'), defer.eventEmitter, defer.reject, args.callback);
-            }
+    // return error, if no "from" is specified
+    if (!utils.isAddress(args.options.from)) {
+      return utils._fireError(errors.ContractNoFromAddressDefinedError(), defer.eventEmitter, defer.reject, args.callback);
+    }
 
+    if (typeof this._method.payable === 'boolean' && !this._method.payable && args.options.value && args.options.value > 0) {
+      return utils._fireError(new Error('Can not send value to non-payable contract method or constructor'), defer.eventEmitter, defer.reject, args.callback);
+    }
 
-            // make sure receipt logs are decoded
-            var extraFormatters = {
-                receiptFormatter: function (receipt) {
-                    if (Array.isArray(receipt.logs)) {
+    // make sure receipt logs are decoded
+    var extraFormatters = {
+      receiptFormatter(receipt) {
+        if (Array.isArray(receipt.logs)) {
+          // decode logs
+          const events = receipt.logs.map((log) => _this._parent._decodeEventABI.call({
+            name: 'ALLEVENTS',
+            jsonInterface: _this._parent.options.jsonInterface,
+          }, log));
 
-                        // decode logs
-                        var events = receipt.logs.map((log) => {
-                            return _this._parent._decodeEventABI.call({
-                                name: 'ALLEVENTS',
-                                jsonInterface: _this._parent.options.jsonInterface
-                            }, log);
-                        });
-
-                        // make log names keys
-                        receipt.events = {};
-                        var count = 0;
-                        events.forEach(function (ev) {
-                            if (ev.event) {
-                                // if > 1 of the same event, don't overwrite any existing events
-                                if (receipt.events[ev.event]) {
-                                    if (Array.isArray(receipt.events[ ev.event ])) {
-                                        receipt.events[ ev.event ].push(ev);
-                                    } else {
-                                        receipt.events[ev.event] = [receipt.events[ev.event], ev];
-                                    }
-                                } else {
-                                    receipt.events[ ev.event ] = ev;
-                                }
-                            } else {
-                                receipt.events[count] = ev;
-                                count++;
-                            }
-                        });
-
-                        delete receipt.logs;
-                    }
-                    return receipt;
-                },
-                contractDeployFormatter: function (receipt) {
-                    var newContract = _this._parent.clone();
-                    newContract.options.address = receipt.contractAddress;
-                    return newContract;
+          // make log names keys
+          receipt.events = {};
+          let count = 0;
+          events.forEach((ev) => {
+            if (ev.event) {
+              // if > 1 of the same event, don't overwrite any existing events
+              if (receipt.events[ev.event]) {
+                if (Array.isArray(receipt.events[ev.event])) {
+                  receipt.events[ev.event].push(ev);
+                } else {
+                  receipt.events[ev.event] = [receipt.events[ev.event], ev];
                 }
-            };
+              } else {
+                receipt.events[ev.event] = ev;
+              }
+            } else {
+              receipt.events[count] = ev;
+              count++;
+            }
+          });
 
-            var sendTransaction = (new Method({
-                name: 'sendTransaction',
-                call: 'eth_sendTransaction',
-                params: 1,
-                inputFormatter: [formatters.inputTransactionFormatter],
-                requestManager: _this._parent._requestManager,
-                accounts: _this.constructor._ethAccounts || _this._ethAccounts, // is eth.accounts (necessary for wallet signing)
-                defaultAccount: _this._parent.defaultAccount,
-                defaultBlock: _this._parent.defaultBlock,
-                transactionBlockTimeout: _this._parent.transactionBlockTimeout,
-                transactionConfirmationBlocks: _this._parent.transactionConfirmationBlocks,
-                transactionPollingTimeout: _this._parent.transactionPollingTimeout,
-                defaultCommon: _this._parent.defaultCommon,
-                defaultChain: _this._parent.defaultChain,
-                defaultHardfork: _this._parent.defaultHardfork,
-                handleRevert: _this._parent.handleRevert,
-                extraFormatters: extraFormatters,
-                abiCoder: abi
-            })).createFunction();
+          delete receipt.logs;
+        }
+        return receipt;
+      },
+      contractDeployFormatter(receipt) {
+        const newContract = _this._parent.clone();
+        newContract.options.address = receipt.contractAddress;
+        return newContract;
+      },
+    };
 
-            return sendTransaction(args.options, args.callback);
+    var sendTransaction = (new Method({
+      name: 'sendTransaction',
+      call: 'eth_sendTransaction',
+      params: 1,
+      inputFormatter: [formatters.inputTransactionFormatter],
+      requestManager: _this._parent._requestManager,
+      accounts: _this.constructor._ethAccounts || _this._ethAccounts, // is eth.accounts (necessary for wallet signing)
+      defaultAccount: _this._parent.defaultAccount,
+      defaultBlock: _this._parent.defaultBlock,
+      transactionBlockTimeout: _this._parent.transactionBlockTimeout,
+      transactionConfirmationBlocks: _this._parent.transactionConfirmationBlocks,
+      transactionPollingTimeout: _this._parent.transactionPollingTimeout,
+      defaultCommon: _this._parent.defaultCommon,
+      defaultChain: _this._parent.defaultChain,
+      defaultHardfork: _this._parent.defaultHardfork,
+      handleRevert: _this._parent.handleRevert,
+      extraFormatters,
+      abiCoder: abi,
+    })).createFunction();
 
-        default:
-            throw new Error('Method "' + args.type + '" not implemented.');
+    return sendTransaction(args.options, args.callback);
 
-    }
-
-
+  default:
+    throw new Error(`Method "${args.type}" not implemented.`);
+  }
 };
 
 export default Contract;

@@ -20,21 +20,21 @@
  * @date 2019
  */
 
-import {Subscriptions, Subscription} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-subscriptions/src/index.js';
+import { Subscriptions, Subscription } from 'https://deno.land/x/web3/packages/web3-core-subscriptions/src/index.js';
 
 const subscriptions = new Subscriptions({
-    name: '',
-    type: '',
-    subscriptions:
+  name: '',
+  type: '',
+  subscriptions:
         {
-            test: {
-                subscriptionName: '',
-                inputFormatter: [() => {}],
-                outputFormatter: () => {},
-                params: 0,
-                subscriptionHandler: () => {}
-            }
-        }
+          test: {
+            subscriptionName: '',
+            inputFormatter: [() => {}],
+            outputFormatter: () => {},
+            params: 0,
+            subscriptionHandler: () => {},
+          },
+        },
 });
 
 // $ExpectType string
@@ -55,7 +55,7 @@ subscriptions.attachToObject({});
 // $ExpectType () => any
 subscriptions.buildCall();
 
-const subscription = new Subscription({subscription: '', type: '', requestManager: null});
+const subscription = new Subscription({ subscription: '', type: '', requestManager: null });
 
 // $ExpectType string
 subscription.id;

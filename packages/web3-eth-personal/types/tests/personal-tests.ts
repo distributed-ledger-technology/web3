@@ -19,8 +19,8 @@
  * @date 2018
  */
 
-import { RLPEncodedTransaction } from 'web3-core';
-import { Personal } from 'web3-eth-personal';
+import { RLPEncodedTransaction } from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import { Personal } from 'https://deno.land/x/web3/packages/web3-eth-personal/src/index.js';
 
 // $ExpectType Personal
 const personal_empty = new Personal();
@@ -50,7 +50,7 @@ personal.setProvider('https://localhost:2100');
 new personal.BatchRequest();
 
 // $ExpectType any
-personal.extend({property: 'test', methods: [{name: 'method', call: 'method'}]});
+personal.extend({ property: 'test', methods: [{ name: 'method', call: 'method' }] });
 
 // $ExpectType Promise<string>
 personal.newAccount('test password');
@@ -59,100 +59,100 @@ personal.newAccount('test password', (error: Error, address: string) => {});
 
 // $ExpectType Promise<string>
 personal.sign(
-    'Hello world',
-    '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-    'test password!'
+  'Hello world',
+  '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+  'test password!',
 );
 // $ExpectType Promise<string>
 personal.sign(
-    'Hello world',
-    '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-    'test password!',
-    (error: Error, signature: string) => {}
+  'Hello world',
+  '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+  'test password!',
+  (error: Error, signature: string) => {},
 );
 
 // $ExpectType Promise<string>
 personal.ecRecover('Hello world', '0x30755ed65396facf86c53e6217c52b4daebe72aa');
 // $ExpectType Promise<string>
 personal.ecRecover(
-    'Hello world',
-    '0x30755ed65396facf86c53e6217c52b4daebe72aa',
-    (error: Error, address: string) => {}
+  'Hello world',
+  '0x30755ed65396facf86c53e6217c52b4daebe72aa',
+  (error: Error, address: string) => {},
 );
 
 // $ExpectType Promise<RLPEncodedTransaction>
 personal.signTransaction(
-    {
-        from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
-        gasPrice: '20000000000',
-        gas: '21000',
-        to: '0x3535353535353535353535353535353535353535',
-        value: '1000000000000000000',
-        data: ''
-    },
-    'test password'
+  {
+    from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
+    gasPrice: '20000000000',
+    gas: '21000',
+    to: '0x3535353535353535353535353535353535353535',
+    value: '1000000000000000000',
+    data: '',
+  },
+  'test password',
 );
 // $ExpectType Promise<RLPEncodedTransaction>
 personal.signTransaction(
-    {
-        from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
-        gasPrice: '20000000000',
-        gas: '21000',
-        to: '0x3535353535353535353535353535353535353535',
-        value: '1000000000000000000',
-        data: ''
-    },
-    'test password',
-    (error: Error, RLPEncodedTransaction: RLPEncodedTransaction) => {}
+  {
+    from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
+    gasPrice: '20000000000',
+    gas: '21000',
+    to: '0x3535353535353535353535353535353535353535',
+    value: '1000000000000000000',
+    data: '',
+  },
+  'test password',
+  (error: Error, RLPEncodedTransaction: RLPEncodedTransaction) => {},
 );
 
 // $ExpectType Promise<string>
 personal.sendTransaction(
-    {
-        from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
-        gasPrice: '20000000000',
-        gas: '21000',
-        to: '0x3535353535353535353535353535353535353535',
-        value: '1000000000000000000',
-        data: ''
-    },
-    'test password'
+  {
+    from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
+    gasPrice: '20000000000',
+    gas: '21000',
+    to: '0x3535353535353535353535353535353535353535',
+    value: '1000000000000000000',
+    data: '',
+  },
+  'test password',
 );
 
 // $ExpectType Promise<string>
 personal.sendTransaction(
-    {
-        from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
-        gasPrice: '20000000000',
-        gas: '21000',
-        to: '0x3535353535353535353535353535353535353535',
-        value: '1000000000000000000',
-        data: ''
-    },
-    'test password',
-    (error: Error, transactionHash: string) => {}
+  {
+    from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
+    gasPrice: '20000000000',
+    gas: '21000',
+    to: '0x3535353535353535353535353535353535353535',
+    value: '1000000000000000000',
+    data: '',
+  },
+  'test password',
+  (error: Error, transactionHash: string) => {},
 );
 
 // $ExpectType Promise<boolean>
 personal.unlockAccount(
-    '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-    'test password!',
-    600
+  '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+  'test password!',
+  600,
 );
 // $ExpectType Promise<boolean>
 personal.unlockAccount(
-    '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-    'test password!',
-    600,
-    (error: Error) => {}
+  '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+  'test password!',
+  600,
+  (error: Error) => {},
 );
 
 // $ExpectType Promise<boolean>
 personal.lockAccount('0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe');
 // $ExpectType Promise<boolean>
 personal.lockAccount(
-    '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
-    (error: Error, sucess: boolean) => {}
+  '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe',
+  (error: Error, sucess: boolean) => {},
 );
 
 // $ExpectType Promise<string[]>

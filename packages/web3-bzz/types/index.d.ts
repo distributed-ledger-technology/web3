@@ -18,12 +18,16 @@
  */
 
 export class Bzz {
-    constructor();
-    constructor(provider: any);
+  constructor();
+
+  constructor(provider: any);
 
     readonly givenProvider: any;
+
     static readonly givenProvider: any;
+
     readonly currentProvider: any;
+
     setProvider(provider: any): boolean;
 
     upload(data: any): Promise<string>;

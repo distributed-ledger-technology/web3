@@ -20,68 +20,63 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
-import swarm from "https://jspm.dev/swarm-js";
+import swarm from 'https://jspm.dev/swarm-js';
 
+const Bzz = function Bzz(provider) {
+  this.givenProvider = Bzz.givenProvider;
 
-var Bzz = function Bzz(provider) {
+  if (provider && provider._requestManager) {
+    provider = provider.currentProvider;
+  }
 
-    this.givenProvider = Bzz.givenProvider;
+  // only allow file picker when in browser
+  if (typeof document !== 'undefined') {
+    this.pick = swarm.pick;
+  }
 
-    if (provider && provider._requestManager) {
-        provider = provider.currentProvider;
-    }
-
-    // only allow file picker when in browser
-    if(typeof document !== 'undefined') {
-        this.pick = swarm.pick;
-    }
-
-    this.setProvider(provider);
+  this.setProvider(provider);
 };
 
 // set default ethereum provider
 /* jshint ignore:start */
 Bzz.givenProvider = null;
 if (typeof ethereum !== 'undefined' && ethereum.bzz) {
-    Bzz.givenProvider = ethereum.bzz;
+  Bzz.givenProvider = ethereum.bzz;
 }
 /* jshint ignore:end */
 
-Bzz.prototype.setProvider = function(provider) {
-    // is ethereum provider
-    if(!!provider && typeof provider === 'object' && typeof provider.bzz === 'string') {
-        provider = provider.bzz;
+Bzz.prototype.setProvider = function (provider) {
+  // is ethereum provider
+  if (!!provider && typeof provider === 'object' && typeof provider.bzz === 'string') {
+    provider = provider.bzz;
     // is no string, set default
-    }
-    // else if(!_.isString(provider)) {
-    //      provider = 'http://swarm-gateways.net'; // default to gateway
-    // }
+  }
+  // else if(!_.isString(provider)) {
+  //      provider = 'http://swarm-gateways.net'; // default to gateway
+  // }
 
+  if (typeof provider === 'string') {
+    this.currentProvider = provider;
+  } else {
+    this.currentProvider = null;
 
-    if(typeof provider === 'string') {
-        this.currentProvider = provider;
-    } else {
-        this.currentProvider = null;
+    const noProviderError = new Error('No provider set, please set one using bzz.setProvider().');
 
-        var noProviderError = new Error('No provider set, please set one using bzz.setProvider().');
+    this.download = this.upload = this.isAvailable = function () {
+      throw noProviderError;
+    };
 
-        this.download = this.upload = this.isAvailable = function(){
-            throw noProviderError;
-        };
+    return false;
+  }
 
-        return false;
-    }
+  // add functions
+  this.download = swarm.at(provider).download;
+  this.upload = swarm.at(provider).upload;
+  this.isAvailable = swarm.at(provider).isAvailable;
 
-    // add functions
-    this.download = swarm.at(provider).download;
-    this.upload = swarm.at(provider).upload;
-    this.isAvailable = swarm.at(provider).isAvailable;
-
-    return true;
+  return true;
 };
 
-
 export default Bzz;
-
