@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {toTwosComplement} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { toTwosComplement } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 toTwosComplement(4);

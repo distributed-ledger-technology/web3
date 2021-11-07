@@ -18,7 +18,8 @@
  * @date 2018
  */
 
-"use strict";
+'use strict';
 
 import ENS from './ENS.js';
+
 export default ENS;

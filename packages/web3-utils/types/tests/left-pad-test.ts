@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {leftPad} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { leftPad } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 const bigNumber = new BN(3);
 // $ExpectType string

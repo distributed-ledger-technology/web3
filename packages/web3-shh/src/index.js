@@ -20,185 +20,178 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
-import core from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core/src/index.js';
-import {subscriptions as Subscriptions} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-subscriptions/src/index.js';
-import Method from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-method/src/index.js';
+import core from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3/packages/web3-core-subscriptions/src/index.js';
+import Method from 'https://deno.land/x/web3/packages/web3-core-method/src/index.js';
 
-// var formatters = require('https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js').formatters;
-import Net from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-net/src/index.js';
+// var formatters = require('https://deno.land/x/web3/packages/web3-core-helpers/src/index.js').formatters;
+import Net from 'https://deno.land/x/web3/packages/web3-net/src/index.js';
 
+const Shh = function Shh() {
+  const _this = this;
 
-var Shh = function Shh() {
+  // sets _requestmanager
+  core.packageInit(this, arguments);
 
+  // overwrite package setRequestManager
+  const { setRequestManager } = this;
+  this.setRequestManager = function (manager) {
+    setRequestManager(manager);
 
-    var _this = this;
+    _this.net.setRequestManager(manager);
 
-    // sets _requestmanager
-    core.packageInit(this, arguments);
+    return true;
+  };
 
-    // overwrite package setRequestManager
-    var setRequestManager = this.setRequestManager;
-    this.setRequestManager = function (manager) {
-        setRequestManager(manager);
+  // overwrite setProvider
+  const { setProvider } = this;
+  this.setProvider = function () {
+    setProvider.apply(_this, arguments);
 
-        _this.net.setRequestManager(manager);
+    _this.setRequestManager(_this._requestManager);
+  };
 
-        return true;
-    };
+  this.net = new Net(this);
 
-    // overwrite setProvider
-    var setProvider = this.setProvider;
-    this.setProvider = function () {
-        setProvider.apply(_this, arguments);
+  [
+    new Subscriptions({
+      name: 'subscribe',
+      type: 'shh',
+      subscriptions: {
+        messages: {
+          params: 1,
+          // inputFormatter: [formatters.inputPostFormatter],
+          // outputFormatter: formatters.outputPostFormatter
+        },
+      },
+    }),
 
-        _this.setRequestManager(_this._requestManager);
-    };
+    new Method({
+      name: 'getVersion',
+      call: 'shh_version',
+      params: 0,
+    }),
+    new Method({
+      name: 'getInfo',
+      call: 'shh_info',
+      params: 0,
+    }),
+    new Method({
+      name: 'setMaxMessageSize',
+      call: 'shh_setMaxMessageSize',
+      params: 1,
+    }),
+    new Method({
+      name: 'setMinPoW',
+      call: 'shh_setMinPoW',
+      params: 1,
+    }),
+    new Method({
+      name: 'markTrustedPeer',
+      call: 'shh_markTrustedPeer',
+      params: 1,
+    }),
+    new Method({
+      name: 'newKeyPair',
+      call: 'shh_newKeyPair',
+      params: 0,
+    }),
+    new Method({
+      name: 'addPrivateKey',
+      call: 'shh_addPrivateKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'deleteKeyPair',
+      call: 'shh_deleteKeyPair',
+      params: 1,
+    }),
+    new Method({
+      name: 'hasKeyPair',
+      call: 'shh_hasKeyPair',
+      params: 1,
+    }),
+    new Method({
+      name: 'getPublicKey',
+      call: 'shh_getPublicKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'getPrivateKey',
+      call: 'shh_getPrivateKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'newSymKey',
+      call: 'shh_newSymKey',
+      params: 0,
+    }),
+    new Method({
+      name: 'addSymKey',
+      call: 'shh_addSymKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'generateSymKeyFromPassword',
+      call: 'shh_generateSymKeyFromPassword',
+      params: 1,
+    }),
+    new Method({
+      name: 'hasSymKey',
+      call: 'shh_hasSymKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'getSymKey',
+      call: 'shh_getSymKey',
+      params: 1,
+    }),
+    new Method({
+      name: 'deleteSymKey',
+      call: 'shh_deleteSymKey',
+      params: 1,
+    }),
 
-    this.net = new Net(this);
+    new Method({
+      name: 'newMessageFilter',
+      call: 'shh_newMessageFilter',
+      params: 1,
+    }),
+    new Method({
+      name: 'getFilterMessages',
+      call: 'shh_getFilterMessages',
+      params: 1,
+    }),
+    new Method({
+      name: 'deleteMessageFilter',
+      call: 'shh_deleteMessageFilter',
+      params: 1,
+    }),
 
-    [
-        new Subscriptions({
-            name: 'subscribe',
-            type: 'shh',
-            subscriptions: {
-                'messages': {
-                    params: 1
-                    // inputFormatter: [formatters.inputPostFormatter],
-                    // outputFormatter: formatters.outputPostFormatter
-                }
-            }
-        }),
+    new Method({
+      name: 'post',
+      call: 'shh_post',
+      params: 1,
+      inputFormatter: [null],
+    }),
 
-        new Method({
-            name: 'getVersion',
-            call: 'shh_version',
-            params: 0
-        }),
-        new Method({
-            name: 'getInfo',
-            call: 'shh_info',
-            params: 0
-        }),
-        new Method({
-            name: 'setMaxMessageSize',
-            call: 'shh_setMaxMessageSize',
-            params: 1
-        }),
-        new Method({
-            name: 'setMinPoW',
-            call: 'shh_setMinPoW',
-            params: 1
-        }),
-        new Method({
-            name: 'markTrustedPeer',
-            call: 'shh_markTrustedPeer',
-            params: 1
-        }),
-        new Method({
-            name: 'newKeyPair',
-            call: 'shh_newKeyPair',
-            params: 0
-        }),
-        new Method({
-            name: 'addPrivateKey',
-            call: 'shh_addPrivateKey',
-            params: 1
-        }),
-        new Method({
-            name: 'deleteKeyPair',
-            call: 'shh_deleteKeyPair',
-            params: 1
-        }),
-        new Method({
-            name: 'hasKeyPair',
-            call: 'shh_hasKeyPair',
-            params: 1
-        }),
-        new Method({
-            name: 'getPublicKey',
-            call: 'shh_getPublicKey',
-            params: 1
-        }),
-        new Method({
-            name: 'getPrivateKey',
-            call: 'shh_getPrivateKey',
-            params: 1
-        }),
-        new Method({
-            name: 'newSymKey',
-            call: 'shh_newSymKey',
-            params: 0
-        }),
-        new Method({
-            name: 'addSymKey',
-            call: 'shh_addSymKey',
-            params: 1
-        }),
-        new Method({
-            name: 'generateSymKeyFromPassword',
-            call: 'shh_generateSymKeyFromPassword',
-            params: 1
-        }),
-        new Method({
-            name: 'hasSymKey',
-            call: 'shh_hasSymKey',
-            params: 1
-        }),
-        new Method({
-            name: 'getSymKey',
-            call: 'shh_getSymKey',
-            params: 1
-        }),
-        new Method({
-            name: 'deleteSymKey',
-            call: 'shh_deleteSymKey',
-            params: 1
-        }),
-
-        new Method({
-            name: 'newMessageFilter',
-            call: 'shh_newMessageFilter',
-            params: 1
-        }),
-        new Method({
-            name: 'getFilterMessages',
-            call: 'shh_getFilterMessages',
-            params: 1
-        }),
-        new Method({
-            name: 'deleteMessageFilter',
-            call: 'shh_deleteMessageFilter',
-            params: 1
-        }),
-
-        new Method({
-            name: 'post',
-            call: 'shh_post',
-            params: 1,
-            inputFormatter: [null]
-        }),
-
-        new Method({
-            name: 'unsubscribe',
-            call: 'shh_unsubscribe',
-            params: 1
-        })
-    ].forEach(function(method) {
-        method.attachToObject(_this);
-        method.setRequestManager(_this._requestManager);
-    });
+    new Method({
+      name: 'unsubscribe',
+      call: 'shh_unsubscribe',
+      params: 1,
+    }),
+  ].forEach((method) => {
+    method.attachToObject(_this);
+    method.setRequestManager(_this._requestManager);
+  });
 };
 
 Shh.prototype.clearSubscriptions = function () {
-     this._requestManager.clearSubscriptions();
+  this._requestManager.clearSubscriptions();
 };
 
 core.addProviders(Shh);
 
-
-
 export default Shh;
-
-

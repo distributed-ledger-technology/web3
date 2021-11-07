@@ -20,89 +20,89 @@
  * @date 2018
  */
 
-import {jsonInterfaceMethodToString, AbiItem} from 'web3-utils';
+import { jsonInterfaceMethodToString, AbiItem } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 const abiItem: AbiItem = {
-    anonymous: false,
-    constant: true,
-    inputs: [
+  anonymous: false,
+  constant: true,
+  inputs: [
+    {
+      name: 'testMe',
+      type: 'uint256[3]',
+    },
+    {
+      name: 'inputA',
+      type: 'tuple',
+      components: [
         {
-            name: 'testMe',
-            type: 'uint256[3]'
+          name: 'a',
+          type: 'uint8',
         },
         {
-            name: 'inputA',
-            type: 'tuple',
-            components: [
-                {
-                    name: 'a',
-                    type: 'uint8'
-                },
-                {
-                    name: 'b',
-                    type: 'uint8'
-                }
-            ]
+          name: 'b',
+          type: 'uint8',
+        },
+      ],
+    },
+    {
+      name: 'inputB',
+      type: 'tuple[]',
+      components: [
+        {
+          name: 'a1',
+          type: 'uint256',
         },
         {
-            name: 'inputB',
-            type: 'tuple[]',
-            components: [
-                {
-                    name: 'a1',
-                    type: 'uint256'
-                },
-                {
-                    name: 'a2',
-                    type: 'uint256'
-                }
-            ]
+          name: 'a2',
+          type: 'uint256',
+        },
+      ],
+    },
+    {
+      name: 'inputC',
+      type: 'uint8',
+      indexed: false,
+    },
+  ],
+  name: 'testName',
+  outputs: [
+    {
+      name: 'test',
+      type: 'uint256',
+    },
+    {
+      name: 'outputA',
+      type: 'tuple',
+      components: [
+        {
+          name: 'a',
+          type: 'uint8',
         },
         {
-            name: 'inputC',
-            type: 'uint8',
-            indexed: false
-        }
-    ],
-    name: "testName",
-    outputs: [
+          name: 'b',
+          type: 'uint8',
+        },
+      ],
+    },
+    {
+      name: 'outputB',
+      type: 'tuple[]',
+      components: [
         {
-            name: "test",
-            type: "uint256"
+          name: 'a1',
+          type: 'uint256',
         },
         {
-            name: 'outputA',
-            type: 'tuple',
-            components: [
-                {
-                    name: 'a',
-                    type: 'uint8'
-                },
-                {
-                    name: 'b',
-                    type: 'uint8'
-                }
-            ]
+          name: 'a2',
+          type: 'uint256',
         },
-        {
-            name: 'outputB',
-            type: 'tuple[]',
-            components: [
-                {
-                    name: 'a1',
-                    type: 'uint256'
-                },
-                {
-                    name: 'a2',
-                    type: 'uint256'
-                }
-            ]
-        }
-    ],
-    payable: false,
-    stateMutability: "pure",
-    type: "function",
-    gas: 175875
+      ],
+    },
+  ],
+  payable: false,
+  stateMutability: 'pure',
+  type: 'function',
+  gas: 175875,
 };
 // $ExpectType string
 jsonInterfaceMethodToString(abiItem);

@@ -18,32 +18,32 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
 /**
  * Source: https://docs.ens.domains/ens-deployments
  *
  * @type {{addresses: {main: string, rinkeby: string, goerli: string, ropsten: string}}}
  */
-var config = {
-    addresses: {
-        main: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-        ropsten: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-        rinkeby: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-        goerli: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
-    },
-    // These ids obtained at ensdomains docs:
-    // https://docs.ens.domains/contract-developer-guide/writing-a-resolver
-    interfaceIds: {
-        addr: "0x3b3b57de",
-        setAddr: "0x3b3b57de",
-        pubkey: "0xc8690233",
-        setPubkey: "0xc8690233",
-        contenthash: "0xbc1c58d1",
-        setContenthash: "0xbc1c58d1",
-        content: "0xd8389dc5",
-        setContent: "0xd8389dc5"
-    }
+const config = {
+  addresses: {
+    main: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    ropsten: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    rinkeby: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    goerli: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+  },
+  // These ids obtained at ensdomains docs:
+  // https://docs.ens.domains/contract-developer-guide/writing-a-resolver
+  interfaceIds: {
+    addr: '0x3b3b57de',
+    setAddr: '0x3b3b57de',
+    pubkey: '0xc8690233',
+    setPubkey: '0xc8690233',
+    contenthash: '0xbc1c58d1',
+    setContenthash: '0xbc1c58d1',
+    content: '0xd8389dc5',
+    setContent: '0xd8389dc5',
+  },
 };
 
 export default config;

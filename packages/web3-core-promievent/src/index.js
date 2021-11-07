@@ -20,7 +20,7 @@
  * @date 2016
  */
 
-"use strict";
+'use strict';
 
 import EventEmitter from 'https://jspm.dev/eventemitter3';
 
@@ -29,46 +29,46 @@ import EventEmitter from 'https://jspm.dev/eventemitter3';
  *
  * @method eventifiedPromise
  */
-var PromiEvent = function PromiEvent(justPromise) {
-    var resolve, reject,
-        eventEmitter = new Promise(function() {
-            resolve = arguments[0];
-            reject = arguments[1];
-        });
+const PromiEvent = function PromiEvent(justPromise) {
+  let resolve; let reject;
+  const eventEmitter = new Promise(function () {
+    resolve = arguments[0];
+    reject = arguments[1];
+  });
 
-    if(justPromise) {
-        return {
-            resolve: resolve,
-            reject: reject,
-            eventEmitter: eventEmitter
-        };
-    }
-
-    // get eventEmitter
-    var emitter = new EventEmitter();
-
-    // add eventEmitter to the promise
-    eventEmitter._events = emitter._events;
-    eventEmitter.emit = emitter.emit;
-    eventEmitter.on = emitter.on;
-    eventEmitter.once = emitter.once;
-    eventEmitter.off = emitter.off;
-    eventEmitter.listeners = emitter.listeners;
-    eventEmitter.addListener = emitter.addListener;
-    eventEmitter.removeListener = emitter.removeListener;
-    eventEmitter.removeAllListeners = emitter.removeAllListeners;
-
+  if (justPromise) {
     return {
-        resolve: resolve,
-        reject: reject,
-        eventEmitter: eventEmitter
+      resolve,
+      reject,
+      eventEmitter,
     };
+  }
+
+  // get eventEmitter
+  const emitter = new EventEmitter();
+
+  // add eventEmitter to the promise
+  eventEmitter._events = emitter._events;
+  eventEmitter.emit = emitter.emit;
+  eventEmitter.on = emitter.on;
+  eventEmitter.once = emitter.once;
+  eventEmitter.off = emitter.off;
+  eventEmitter.listeners = emitter.listeners;
+  eventEmitter.addListener = emitter.addListener;
+  eventEmitter.removeListener = emitter.removeListener;
+  eventEmitter.removeAllListeners = emitter.removeAllListeners;
+
+  return {
+    resolve,
+    reject,
+    eventEmitter,
+  };
 };
 
-PromiEvent.resolve = function(value) {
-    var promise = PromiEvent(true);
-    promise.resolve(value);
-    return promise.eventEmitter;
+PromiEvent.resolve = function (value) {
+  const promise = PromiEvent(true);
+  promise.resolve(value);
+  return promise.eventEmitter;
 };
 
 export default PromiEvent;
