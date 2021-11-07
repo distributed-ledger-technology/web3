@@ -19,19 +19,29 @@
  */
 
 import * as net from 'net';
-import { provider, RLPEncodedTransaction, TransactionConfig, BatchRequest, Providers, Extension } from 'web3-core';
+import {
+  provider, RLPEncodedTransaction, TransactionConfig, BatchRequest, Providers, Extension, 
+} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
 
 export class Personal {
-    constructor();
-    constructor(provider: provider);
-    constructor(provider: provider, net: net.Socket);
+  constructor();
+
+  constructor(provider: provider);
+
+  constructor(provider: provider, net: net.Socket);
 
     readonly givenProvider: any;
+
     static readonly givenProvider: any;
+
     static readonly providers: Providers;
+
     readonly currentProvider: provider;
+
     defaultAccount: string | null;
+
     defaultBlock: string | number;
+
     BatchRequest: new () => BatchRequest;
 
     setProvider(provider: provider): boolean;

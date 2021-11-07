@@ -22,75 +22,67 @@
  * @date 2015
  */
 
-import {errors} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 
-import XMLHttpRequest from 'https://jspm.dev/xhr2-cookies' // jshint ignore: line
-import * as _http2 from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
-import * as _https2 from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
-
-var _http = "default" in _http2 ? _http2.default : _http2;
-var _https = "default" in _https2 ? _https2.default : _https2;
-
-var http = _http;
-var https = _https;
-var XHR2 = XMLHttpRequest.XMLHttpRequest
-
+import 'https://deno.land/x/xhr@0.1.0/mod.ts'; // jshint ignore: line
+import http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
+import https from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
 
 /**
  * HttpProvider should be used to send rpc calls over http
  */
-var HttpProvider = function HttpProvider(host, options) {
-    options = options || {};
+const HttpProvider = function HttpProvider(host, options) {
+  options = options || {};
 
-    this.withCredentials = options.withCredentials || false;
-    this.timeout = options.timeout || 0;
-    this.headers = options.headers;
-    this.agent = options.agent;
-    this.connected = false;
+  this.withCredentials = options.withCredentials || false;
+  this.timeout = options.timeout || 0;
+  this.headers = options.headers;
+  this.agent = options.agent;
+  this.connected = false;
 
-    // keepAlive is true unless explicitly set to false
-    const keepAlive = options.keepAlive !== false;
-    this.host = host || 'http://localhost:8545';
-    if (!this.agent) {
-        if (this.host.substring(0,5) === "https://jspm.dev/https") {
-            this.httpsAgent = new https.Agent({ keepAlive });
-        } else {
-            this.httpAgent = new http.Agent({ keepAlive });
-        }
+  // keepAlive is true unless explicitly set to false
+  const keepAlive = options.keepAlive !== false;
+  this.host = host || 'http://localhost:8545';
+  if (!this.agent) {
+    if (this.host.substring(0, 5) === 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https') {
+      this.httpsAgent = new https.Agent({ keepAlive });
+    } else {
+      this.httpAgent = new http.Agent({ keepAlive });
     }
+  }
 };
 
-HttpProvider.prototype._prepareRequest = function(){
-    var request;
+HttpProvider.prototype._prepareRequest = function () {
+  let request;
 
-    // the current runtime is a browser
-    if (false) {
-        request = new XMLHttpRequest();
-    } else {
-        request = new XHR2();
-        var agents = {httpsAgent: this.httpsAgent, httpAgent: this.httpAgent, baseUrl: this.baseUrl};
+  // the current runtime is a browser
+  if (typeof XMLHttpRequest !== 'undefined') {
+    request = new XMLHttpRequest();
+  } else {
+    request = new XHR2();
+    const agents = { httpsAgent: this.httpsAgent, httpAgent: this.httpAgent, baseUrl: this.baseUrl };
 
-        if (this.agent) {
-            agents.httpsAgent = this.agent.https;
-            agents.httpAgent = this.agent.http;
-            agents.baseUrl = this.agent.baseUrl;
-        }
-
-        request.nodejsSet(agents);
+    if (this.agent) {
+      agents.httpsAgent = this.agent.https;
+      agents.httpAgent = this.agent.http;
+      agents.baseUrl = this.agent.baseUrl;
     }
 
-    request.open('POST', this.host, true);
-    request.setRequestHeader('Content-Type','application/json');
-    request.timeout = this.timeout;
-    request.withCredentials = this.withCredentials;
+    request.nodejsSet(agents);
+  }
 
-    if(this.headers) {
-        this.headers.forEach(function(header) {
-            request.setRequestHeader(header.name, header.value);
-        });
-    }
+  request.open('POST', this.host, true);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.timeout = this.timeout;
+  request.withCredentials = this.withCredentials;
 
-    return request;
+  if (this.headers) {
+    this.headers.forEach((header) => {
+      request.setRequestHeader(header.name, header.value);
+    });
+  }
+
+  return request;
 };
 
 /**
@@ -101,40 +93,40 @@ HttpProvider.prototype._prepareRequest = function(){
  * @param {Function} callback triggered on end with (err, result)
  */
 HttpProvider.prototype.send = function (payload, callback) {
-    var _this = this;
-    var request = this._prepareRequest();
+  const _this = this;
+  const request = this._prepareRequest();
 
-    request.onreadystatechange = function() {
-        if (request.readyState === 4 && request.timeout !== 1) {
-            var result = request.responseText;
-            var error = null;
+  request.onreadystatechange = function () {
+    if (request.readyState === 4 && request.timeout !== 1) {
+      let result = request.responseText;
+      let error = null;
 
-            try {
-                result = JSON.parse(result);
-            } catch(e) {
-                error = errors.InvalidResponse(request.responseText);
-            }
+      try {
+        result = JSON.parse(result);
+      } catch (e) {
+        error = errors.InvalidResponse(request.responseText);
+      }
 
-            _this.connected = true;
-            callback(error, result);
-        }
-    };
-
-    request.ontimeout = function() {
-        _this.connected = false;
-        callback(errors.ConnectionTimeout(this.timeout));
-    };
-
-    try {
-        request.send(JSON.stringify(payload));
-    } catch(error) {
-        this.connected = false;
-        callback(errors.InvalidConnection(this.host));
+      _this.connected = true;
+      callback(error, result);
     }
+  };
+
+  request.ontimeout = function () {
+    _this.connected = false;
+    callback(errors.ConnectionTimeout(this.timeout));
+  };
+
+  try {
+    request.send(JSON.stringify(payload));
+  } catch (error) {
+    this.connected = false;
+    callback(errors.InvalidConnection(this.host));
+  }
 };
 
 HttpProvider.prototype.disconnect = function () {
-    //NO OP
+  // NO OP
 };
 
 /**
@@ -144,7 +136,7 @@ HttpProvider.prototype.disconnect = function () {
  * @returns {boolean}
  */
 HttpProvider.prototype.supportsSubscriptions = function () {
-    return false;
+  return false;
 };
 
 export default HttpProvider;

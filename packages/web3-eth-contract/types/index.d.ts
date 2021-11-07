@@ -18,27 +18,39 @@
  */
 
 import BN = require('bn.js');
-import {Common, PromiEvent, provider, hardfork, chain, BlockNumber, PastLogsOptions, LogsOptions} from 'web3-core';
-import {AbiItem} from 'web3-utils';
+import {
+  Common, PromiEvent, provider, hardfork, chain, BlockNumber, PastLogsOptions, LogsOptions, 
+} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+import { AbiItem } from 'https://deno.land/x/web3/packages/web3-utils/types/index.d.ts';
 
 // TODO: Add generic type!
 export class Contract {
-    constructor(
+  constructor(
         jsonInterface: AbiItem[],
         address?: string,
         options?: ContractOptions
     );
 
     private _address: string;
+
     private _jsonInterface: AbiItem[];
+
     defaultAccount: string | null;
+
     defaultBlock: BlockNumber;
+
     defaultCommon: Common;
+
     defaultHardfork: hardfork;
+
     defaultChain: chain;
+
     transactionPollingTimeout: number;
+
     transactionConfirmationBlocks: number;
+
     transactionBlockTimeout: number;
+
     handleRevert: boolean;
 
     options: Options;
@@ -53,6 +65,7 @@ export class Contract {
         event: string,
         callback: (error: Error, event: EventData) => void
     ): void;
+
     once(
         event: string,
         options: EventOptions,
@@ -62,12 +75,15 @@ export class Contract {
     events: any;
 
     getPastEvents(event: string): Promise<EventData[]>;
+
     getPastEvents(
         event: string,
         options: PastEventOptions,
         callback: (error: Error, event: EventData) => void
     ): Promise<EventData[]>;
+
     getPastEvents(event: string, options: PastEventOptions): Promise<EventData[]>;
+
     getPastEvents(
         event: string,
         callback: (error: Error, event: EventData) => void

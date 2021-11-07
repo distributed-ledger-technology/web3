@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {toChecksumAddress} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { toChecksumAddress } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 toChecksumAddress('0x8ee7f17bb3f88b01247c21ab6603880b64ae53e811f5e01138822e558cf1ab51');

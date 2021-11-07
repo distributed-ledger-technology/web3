@@ -20,12 +20,12 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {getSignatureParameters} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { getSignatureParameters } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType { r: string; s: string; v: number; }
 getSignatureParameters(
-    '0x90dc0e49b5a80eef86fcedcb863dcc727aeae5c11187c001fd3d18780ead2cc7701ba1986099a49164702f3d8b2c8dbbd45a6d1beb37d212d21fb1be4bb762a400'
+  '0x90dc0e49b5a80eef86fcedcb863dcc727aeae5c11187c001fd3d18780ead2cc7701ba1986099a49164702f3d8b2c8dbbd45a6d1beb37d212d21fb1be4bb762a400',
 );
 // $ExpectError
 getSignatureParameters(345);

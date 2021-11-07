@@ -18,20 +18,21 @@
  * @date 2018
  */
 
-"use strict";
+'use strict';
 
-import PromiEvent from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-promievent/src/index.js';
+import PromiEvent from 'https://deno.land/x/web3/packages/web3-core-promievent/src/index.js';
 import namehash from 'https://jspm.dev/eth-ens-namehash';
-import {errors} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 import config from '../config.js';
-let interfaceIds = config.interfaceIds;
+
+const { interfaceIds } = config;
 
 /**
  * @param {Registry} registry
  * @constructor
  */
 function ResolverMethodHandler(registry) {
-    this.registry = registry;
+  this.registry = registry;
 }
 
 /**
@@ -44,23 +45,23 @@ function ResolverMethodHandler(registry) {
  * @returns {Object}
  */
 ResolverMethodHandler.prototype.method = function (ensName, methodName, methodArguments, outputFormatter, callback) {
-    return {
-        call: this.call.bind({
-            ensName: ensName,
-            methodName: methodName,
-            methodArguments: methodArguments,
-            callback: callback,
-            parent: this,
-            outputFormatter: outputFormatter
-        }),
-        send: this.send.bind({
-            ensName: ensName,
-            methodName: methodName,
-            methodArguments: methodArguments,
-            callback: callback,
-            parent: this
-        })
-    };
+  return {
+    call: this.call.bind({
+      ensName,
+      methodName,
+      methodArguments,
+      callback,
+      parent: this,
+      outputFormatter,
+    }),
+    send: this.send.bind({
+      ensName,
+      methodName,
+      methodArguments,
+      callback,
+      parent: this,
+    }),
+  };
 };
 
 /**
@@ -69,27 +70,26 @@ ResolverMethodHandler.prototype.method = function (ensName, methodName, methodAr
  * @returns {eventifiedPromise}
  */
 ResolverMethodHandler.prototype.call = function (callback) {
-    var self = this;
-    var promiEvent = new PromiEvent();
-    var preparedArguments = this.parent.prepareArguments(this.ensName, this.methodArguments);
-    var outputFormatter = this.outputFormatter || null;
+  const self = this;
+  const promiEvent = new PromiEvent();
+  const preparedArguments = this.parent.prepareArguments(this.ensName, this.methodArguments);
+  const outputFormatter = this.outputFormatter || null;
 
-    this.parent.registry.getResolver(this.ensName).then(async function (resolver) {
-        await self.parent.checkInterfaceSupport(resolver, self.methodName);
-        self.parent.handleCall(promiEvent, resolver.methods[self.methodName], preparedArguments, outputFormatter, callback);
-    }).catch(function(error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+  this.parent.registry.getResolver(this.ensName).then(async (resolver) => {
+    await self.parent.checkInterfaceSupport(resolver, self.methodName);
+    self.parent.handleCall(promiEvent, resolver.methods[self.methodName], preparedArguments, outputFormatter, callback);
+  }).catch((error) => {
+    if (typeof callback === 'function') {
+      callback(error, null);
 
-            return;
-        }
+      return;
+    }
 
-        promiEvent.reject(error);
-    });
+    promiEvent.reject(error);
+  });
 
-    return promiEvent.eventEmitter;
+  return promiEvent.eventEmitter;
 };
-
 
 /**
  * Executes send
@@ -99,24 +99,24 @@ ResolverMethodHandler.prototype.call = function (callback) {
  * @returns {eventifiedPromise}
  */
 ResolverMethodHandler.prototype.send = function (sendOptions, callback) {
-    var self = this;
-    var promiEvent = new PromiEvent();
-    var preparedArguments = this.parent.prepareArguments(this.ensName, this.methodArguments);
+  const self = this;
+  const promiEvent = new PromiEvent();
+  const preparedArguments = this.parent.prepareArguments(this.ensName, this.methodArguments);
 
-    this.parent.registry.getResolver(this.ensName).then(async function (resolver) {
-        await self.parent.checkInterfaceSupport(resolver, self.methodName);
-        self.parent.handleSend(promiEvent, resolver.methods[self.methodName], preparedArguments, sendOptions, callback);
-    }).catch(function(error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+  this.parent.registry.getResolver(this.ensName).then(async (resolver) => {
+    await self.parent.checkInterfaceSupport(resolver, self.methodName);
+    self.parent.handleSend(promiEvent, resolver.methods[self.methodName], preparedArguments, sendOptions, callback);
+  }).catch((error) => {
+    if (typeof callback === 'function') {
+      callback(error, null);
 
-            return;
-        }
+      return;
+    }
 
-        promiEvent.reject(error);
-    });
+    promiEvent.reject(error);
+  });
 
-    return promiEvent.eventEmitter;
+  return promiEvent.eventEmitter;
 };
 
 /**
@@ -129,31 +129,31 @@ ResolverMethodHandler.prototype.send = function (sendOptions, callback) {
  * @returns {eventifiedPromise}
  */
 ResolverMethodHandler.prototype.handleCall = function (promiEvent, method, preparedArguments, outputFormatter, callback) {
-    method.apply(this, preparedArguments).call()
-        .then(function (result) {
-            if (outputFormatter){
-                result = outputFormatter(result);
-            }
+  method.apply(this, preparedArguments).call()
+    .then((result) => {
+      if (outputFormatter) {
+        result = outputFormatter(result);
+      }
 
-            if (typeof callback === 'function') {
-                // It's required to pass the receipt to the second argument to be backwards compatible and to have the required consistency
-                callback(result, result);
+      if (typeof callback === 'function') {
+        // It's required to pass the receipt to the second argument to be backwards compatible and to have the required consistency
+        callback(result, result);
 
-                return;
-            }
+        return;
+      }
 
-            promiEvent.resolve(result);
-        }).catch(function (error) {
-            if (typeof callback === 'function') {
-                callback(error, null);
+      promiEvent.resolve(result);
+    }).catch((error) => {
+      if (typeof callback === 'function') {
+        callback(error, null);
 
-                return;
-            }
+        return;
+      }
 
-            promiEvent.reject(error);
-        });
+      promiEvent.reject(error);
+    });
 
-    return promiEvent;
+  return promiEvent;
 };
 
 /**
@@ -167,41 +167,41 @@ ResolverMethodHandler.prototype.handleCall = function (promiEvent, method, prepa
  * @returns {eventifiedPromise}
  */
 ResolverMethodHandler.prototype.handleSend = function (promiEvent, method, preparedArguments, sendOptions, callback) {
-    method.apply(this, preparedArguments).send(sendOptions)
-        .on('sending', function () {
-            promiEvent.eventEmitter.emit('sending');
-        })
-        .on('sent', function () {
-            promiEvent.eventEmitter.emit('sent');
-        })
-        .on('transactionHash', function (hash) {
-            promiEvent.eventEmitter.emit('transactionHash', hash);
-        })
-        .on('confirmation', function (confirmationNumber, receipt) {
-            promiEvent.eventEmitter.emit('confirmation', confirmationNumber, receipt);
-        })
-        .on('receipt', function (receipt) {
-            promiEvent.eventEmitter.emit('receipt', receipt);
-            promiEvent.resolve(receipt);
+  method.apply(this, preparedArguments).send(sendOptions)
+    .on('sending', () => {
+      promiEvent.eventEmitter.emit('sending');
+    })
+    .on('sent', () => {
+      promiEvent.eventEmitter.emit('sent');
+    })
+    .on('transactionHash', (hash) => {
+      promiEvent.eventEmitter.emit('transactionHash', hash);
+    })
+    .on('confirmation', (confirmationNumber, receipt) => {
+      promiEvent.eventEmitter.emit('confirmation', confirmationNumber, receipt);
+    })
+    .on('receipt', (receipt) => {
+      promiEvent.eventEmitter.emit('receipt', receipt);
+      promiEvent.resolve(receipt);
 
-            if (typeof callback === 'function') {
-                // It's required to pass the receipt to the second argument to be backwards compatible and to have the required consistency
-                callback(receipt, receipt);
-            }
-        })
-        .on('error', function (error) {
-            promiEvent.eventEmitter.emit('error', error);
+      if (typeof callback === 'function') {
+        // It's required to pass the receipt to the second argument to be backwards compatible and to have the required consistency
+        callback(receipt, receipt);
+      }
+    })
+    .on('error', (error) => {
+      promiEvent.eventEmitter.emit('error', error);
 
-            if (typeof callback === 'function') {
-                callback(error, null);
+      if (typeof callback === 'function') {
+        callback(error, null);
 
-                return;
-            }
+        return;
+      }
 
-            promiEvent.reject(error);
-        });
+      promiEvent.reject(error);
+    });
 
-    return promiEvent;
+  return promiEvent;
 };
 
 /**
@@ -213,15 +213,15 @@ ResolverMethodHandler.prototype.handleSend = function (promiEvent, method, prepa
  * @returns {array}
  */
 ResolverMethodHandler.prototype.prepareArguments = function (name, methodArguments) {
-    var node = namehash.hash(name);
+  const node = namehash.hash(name);
 
-    if (methodArguments.length > 0) {
-        methodArguments.unshift(node);
+  if (methodArguments.length > 0) {
+    methodArguments.unshift(node);
 
-        return methodArguments;
-    }
+    return methodArguments;
+  }
 
-    return [node];
+  return [node];
 };
 
 /**
@@ -233,22 +233,22 @@ ResolverMethodHandler.prototype.prepareArguments = function (name, methodArgumen
  * @returns {Promise}
  */
 ResolverMethodHandler.prototype.checkInterfaceSupport = async function (resolver, methodName) {
-    // Skip validation for undocumented interface ids (ex: multihash)
-    if (!interfaceIds[methodName]) return;
+  // Skip validation for undocumented interface ids (ex: multihash)
+  if (!interfaceIds[methodName]) return;
 
-    var supported = false;
-    try {
-        supported = await resolver
-            .methods
-            .supportsInterface(interfaceIds[methodName])
-            .call();
-    } catch(err) {
-        console.warn('Could not verify interface of resolver contract at "' + resolver.options.address + '". ');
-    }
+  let supported = false;
+  try {
+    supported = await resolver
+      .methods
+      .supportsInterface(interfaceIds[methodName])
+      .call();
+  } catch (err) {
+    console.warn(`Could not verify interface of resolver contract at "${resolver.options.address}". `);
+  }
 
-    if (!supported){
-        throw errors.ResolverMethodMissingError(resolver.options.address, methodName);
-    }
+  if (!supported) {
+    throw errors.ResolverMethodMissingError(resolver.options.address, methodName);
+  }
 };
 
 export default ResolverMethodHandler;

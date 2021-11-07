@@ -18,36 +18,55 @@
  */
 
 import * as net from 'net';
-import { Bzz } from 'web3-bzz';
-import { BatchRequest, provider, Providers, Extension } from 'web3-core';
-import { Eth } from 'web3-eth';
-import { Personal } from 'web3-eth-personal';
-import { Network } from 'web3-net';
-import { Shh } from 'web3-shh';
-import { Utils } from 'web3-utils';
+import { Bzz } from 'https://deno.land/x/web3/packages/web3-bzz/types/index.d.ts';
+import {
+  BatchRequest, provider, Providers, Extension, 
+} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+import { Eth } from 'https://deno.land/x/web3/packages/web3-eth/types/index.d.ts';
+import { Personal } from 'https://deno.land/x/web3/packages/web3-eth-personal/types/index.d.ts';
+import { Network } from 'https://deno.land/x/web3/packages/web3-net/types/index.d.ts';
+import { Shh } from 'https://deno.land/x/web3/packages/web3-shh/types/index.d.ts';
+import { Utils } from 'https://deno.land/x/web3/packages/web3-utils/types/index.d.ts';
 
 export default class Web3 {
-    constructor();
-    constructor(provider: provider);
-    constructor(provider: provider, net: net.Socket);
+  constructor();
+
+  constructor(provider: provider);
+
+  constructor(provider: provider, net: net.Socket);
 
     static modules: Modules;
+
     readonly givenProvider: any;
+
     static readonly givenProvider: any;
+
     defaultAccount: string | null;
+
     defaultBlock: string | number;
+
     readonly currentProvider: provider;
+
     setProvider(provider: provider): boolean;
+
     BatchRequest: new () => BatchRequest;
+
     static readonly providers: Providers;
 
     utils: Utils;
+
     eth: Eth;
+
     shh: Shh;
+
     bzz: Bzz;
+
     version: string;
+
     static readonly version: string;
+
     static readonly utils: Utils;
+
     extend(extension: Extension): any;
 }
 

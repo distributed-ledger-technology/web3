@@ -22,7 +22,7 @@
 import * as http from 'http';
 import * as https from 'https';
 
-import { HttpProviderBase, JsonRpcResponse } from 'web3-core-helpers';
+import { HttpProviderBase, JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/types/index.d.ts';
 
 export interface HttpHeader {
     name: string;
@@ -47,9 +47,13 @@ export class HttpProvider extends HttpProviderBase {
     host: string;
 
     withCredentials: boolean;
+
     timeout: number;
+
     headers?: HttpHeader[];
+
     agent?: HttpProviderAgent;
+
     connected: boolean;
 
     constructor(host?: string, options?: HttpProviderOptions);
@@ -61,6 +65,8 @@ export class HttpProvider extends HttpProviderBase {
             result: JsonRpcResponse | undefined
         ) => void
     ): void;
+
     disconnect(): boolean;
+
     supportsSubscriptions(): boolean;
 }

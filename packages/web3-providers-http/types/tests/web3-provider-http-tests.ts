@@ -20,25 +20,25 @@
  * @date 2018
  */
 
-import * as http from 'http';
-import * as https from 'https';
+import * as http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
+import * as https from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
 import { HttpProvider } from 'web3-providers';
-import { JsonRpcResponse } from 'web3-core-helpers';
+import { JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 
 const httpProvider = new HttpProvider('http://localhost:8545', {
-    timeout: 20000,
-    headers: [
-        {
-            name: 'Access-Control-Allow-Origin',
-            value: '*'
-        }
-    ],
-    withCredentials: false,
-    agent: {
-        baseUrl: 'base',
-        http: new http.Agent({}),
-        https: new https.Agent({})
-    }
+  timeout: 20000,
+  headers: [
+    {
+      name: 'Access-Control-Allow-Origin',
+      value: '*',
+    },
+  ],
+  withCredentials: false,
+  agent: {
+    baseUrl: 'base',
+    http: new http.Agent({}),
+    https: new https.Agent({}),
+  },
 });
 
 // $ExpectType void

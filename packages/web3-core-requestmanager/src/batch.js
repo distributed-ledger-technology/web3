@@ -20,14 +20,14 @@
  * @date 2015
  */
 
-"use strict";
+'use strict';
 
+import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 import Jsonrpc from './jsonrpc.js';
-import {errors} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
 
-var Batch = function (requestManager) {
-    this.requestManager = requestManager;
-    this.requests = [];
+const Batch = function (requestManager) {
+  this.requestManager = requestManager;
+  this.requests = [];
 };
 
 /**
@@ -37,7 +37,7 @@ var Batch = function (requestManager) {
  * @param {Object} jsonrpc requet object
  */
 Batch.prototype.add = function (request) {
-    this.requests.push(request);
+  this.requests.push(request);
 };
 
 /**
@@ -46,30 +46,27 @@ Batch.prototype.add = function (request) {
  * @method execute
  */
 Batch.prototype.execute = function () {
-    var requests = this.requests;
-    this.requestManager.sendBatch(requests, function (err, results) {
-        results = results || [];
-        requests.map(function (request, index) {
-            return results[index] || {};
-        }).forEach(function (result, index) {
-            if (requests[index].callback) {
-                if (result && result.error) {
-                    return requests[index].callback(errors.ErrorResponse(result));
-                }
+  const { requests } = this;
+  this.requestManager.sendBatch(requests, (err, results) => {
+    results = results || [];
+    requests.map((request, index) => results[index] || {}).forEach((result, index) => {
+      if (requests[index].callback) {
+        if (result && result.error) {
+          return requests[index].callback(errors.ErrorResponse(result));
+        }
 
-                if (!Jsonrpc.isValidResponse(result)) {
-                    return requests[index].callback(errors.InvalidResponse(result));
-                }
+        if (!Jsonrpc.isValidResponse(result)) {
+          return requests[index].callback(errors.InvalidResponse(result));
+        }
 
-                try {
-                    requests[index].callback(null, requests[index].format ? requests[index].format(result.result) : result.result);
-                } catch (err) {
-                    requests[index].callback(err);
-                }
-            }
-        });
+        try {
+          requests[index].callback(null, requests[index].format ? requests[index].format(result.result) : result.result);
+        } catch (err) {
+          requests[index].callback(err);
+        }
+      }
     });
+  });
 };
 
 export default Batch;
-
