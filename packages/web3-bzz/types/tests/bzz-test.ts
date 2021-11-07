@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { Bzz } from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-bzz/src/index.js';
+import { Bzz } from 'https://deno.land/x/web3/packages/web3-bzz/src/index.js';
 
 // $ExpectType Bzz
 const bzz_empty = new Bzz();
@@ -44,17 +44,17 @@ bzz.setProvider('https://localhost:2100');
 bzz.upload('test file');
 
 const dir = {
-    '/foo.txt': { type: 'text/plain', data: 'sample file' },
-    '/bar.txt': { type: 'text/plain', data: 'another file' }
+  '/foo.txt': { type: 'text/plain', data: 'sample file' },
+  '/bar.txt': { type: 'text/plain', data: 'another file' },
 };
 
 // $ExpectType Promise<string>
 bzz.upload(dir);
 // $ExpectType Promise<string>
 bzz.upload({
-    path: '/path/to/thing',
-    kind: 'directory',
-    defaultFile: '/index.html'
+  path: '/path/to/thing',
+  kind: 'directory',
+  defaultFile: '/index.html',
 });
 
 // ExpectType Promise<any>;

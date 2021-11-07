@@ -20,13 +20,12 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
 import errors from './errors.js';
 import formatters from './formatters.js';
 
 export {
-    errors,
-    formatters
+  errors,
+  formatters,
 };
-

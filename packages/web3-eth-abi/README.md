@@ -19,7 +19,7 @@ npm install web3-eth-abi
 ## Usage
 
 ```js
-const Web3EthAbi = require('web3-eth-abi');
+const Web3EthAbi = require('https://deno.land/x/web3/packages/web3-eth-abi/src/index.js');
 
 Web3EthAbi.encodeFunctionSignature('myMethod(uint256,string)');
 > '0x24ee0097'

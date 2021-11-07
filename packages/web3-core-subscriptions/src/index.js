@@ -20,56 +20,51 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
 import Subscription from './subscription.js';
 
-
-var Subscriptions = function Subscriptions(options) {
-    this.name = options.name;
-    this.type = options.type;
-    this.subscriptions = options.subscriptions || {};
-    this.requestManager = null;
+const Subscriptions = function Subscriptions(options) {
+  this.name = options.name;
+  this.type = options.type;
+  this.subscriptions = options.subscriptions || {};
+  this.requestManager = null;
 };
-
 
 Subscriptions.prototype.setRequestManager = function (rm) {
-    this.requestManager = rm;
+  this.requestManager = rm;
 };
-
 
 Subscriptions.prototype.attachToObject = function (obj) {
-    var func = this.buildCall();
-    var name = this.name.split('.');
-    if (name.length > 1) {
-        obj[name[0]] = obj[name[0]] || {};
-        obj[name[0]][name[1]] = func;
-    } else {
-        obj[name[0]] = func;
+  const func = this.buildCall();
+  const name = this.name.split('.');
+  if (name.length > 1) {
+    obj[name[0]] = obj[name[0]] || {};
+    obj[name[0]][name[1]] = func;
+  } else {
+    obj[name[0]] = func;
+  }
+};
+
+Subscriptions.prototype.buildCall = function () {
+  const _this = this;
+
+  return function () {
+    if (!_this.subscriptions[arguments[0]]) {
+      console.warn(`Subscription ${JSON.stringify(arguments[0])} doesn't exist. Subscribing anyway.`);
     }
+
+    const subscription = new Subscription({
+      subscription: _this.subscriptions[arguments[0]] || {}, // Subscript might not exist
+      requestManager: _this.requestManager,
+      type: _this.type,
+    });
+
+    return subscription.subscribe.apply(subscription, arguments);
+  };
 };
-
-
-Subscriptions.prototype.buildCall = function() {
-    var _this = this;
-
-    return function(){
-        if(!_this.subscriptions[arguments[0]]) {
-            console.warn('Subscription '+ JSON.stringify(arguments[0]) +' doesn\'t exist. Subscribing anyway.');
-        }
-
-        var subscription = new Subscription({
-            subscription: _this.subscriptions[arguments[0]] || {}, // Subscript might not exist
-            requestManager: _this.requestManager,
-            type: _this.type
-        });
-
-        return subscription.subscribe.apply(subscription, arguments);
-    };
-};
-
 
 export {
-    Subscriptions as subscriptions,
-    Subscription as subscription
+  Subscriptions as subscriptions,
+  Subscription as subscription,
 };

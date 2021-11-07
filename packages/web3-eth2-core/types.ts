@@ -1,4 +1,4 @@
- import { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'https://jspm.dev/axios';
 
 export interface ETH2BaseOpts {
     protectProvider?: boolean
@@ -25,13 +25,22 @@ export interface BaseAPISchema {
 
 export declare class ETH2Core {
     private _httpClient;
+
     [key: string]: ETH2Function | any;
+
     name: string;
+
     provider: string | undefined;
+
     protectProvider: boolean;
+
     constructor(provider: string, schema: BaseAPISchema, opts?: ETH2BaseOpts);
+
     static createHttpClient(baseUrl: string): AxiosInstance;
+
     setProvider(provider: string): void;
+
     private routeBuilder;
+
     private buildAPIWrappersFromSchema;
 }

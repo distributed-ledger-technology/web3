@@ -20,15 +20,15 @@
 
 import * as net from 'net';
 import {
-    HttpProviderBase,
-    HttpProviderOptions,
-    IpcProviderBase,
-    WebsocketProviderBase,
-    WebsocketProviderOptions,
-    JsonRpcPayload,
-    JsonRpcResponse
-} from 'web3-core-helpers';
-import { Method } from 'web3-core-method';
+  HttpProviderBase,
+  HttpProviderOptions,
+  IpcProviderBase,
+  WebsocketProviderBase,
+  WebsocketProviderOptions,
+  JsonRpcPayload,
+  JsonRpcResponse,
+} from 'https://deno.land/x/web3/packages/web3-core-helpers/types/index.d.ts';
+import { Method } from 'https://deno.land/x/web3/packages/web3-core-method/types/index.d.ts';
 import BN = require('bn.js');
 import BigNumber from 'bignumber.js';
 
@@ -242,14 +242,20 @@ export interface Log {
 // had to move `web3-net` due to other modules in `1.x` not referencing
 
 export class NetworkBase {
-    constructor();
-    constructor(provider: provider);
-    constructor(provider: provider, net: net.Socket);
+  constructor();
+
+  constructor(provider: provider);
+
+  constructor(provider: provider, net: net.Socket);
 
     readonly givenProvider: any;
+
     readonly currentProvider: provider;
+
     static readonly givenProvider: any;
+
     static readonly providers: Providers;
+
     BatchRequest: new () => BatchRequest;
 
     setProvider(provider: provider): boolean;
@@ -274,11 +280,14 @@ export class NetworkBase {
 // had to move accounts from web3-eth-accounts due to other modules in 1.x not referencing
 
 export class AccountsBase {
-    constructor();
-    constructor(provider: provider);
-    constructor(provider: provider, net: net.Socket);
+  constructor();
+
+  constructor(provider: provider);
+
+  constructor(provider: provider, net: net.Socket);
 
     readonly givenProvider: any;
+
     readonly currentProvider: provider;
 
     setProvider(provider: provider): boolean;
@@ -300,7 +309,9 @@ export class AccountsBase {
     sign(data: string, privateKey: string): Sign;
 
     recover(signatureObject: SignatureObject): string;
+
     recover(message: string, signature: string, preFixed?: boolean): string;
+
     recover(
         message: string,
         v: string,
@@ -317,9 +328,10 @@ export class AccountsBase {
 }
 
 export class WalletBase {
-    constructor(accounts: AccountsBase);
+  constructor(accounts: AccountsBase);
 
     length: number;
+
     defaultKeyName: string;
 
     [key: number]: Account;
@@ -399,23 +411,23 @@ export interface SignatureObject {
 // put all the `web3-provider` typings in here so we can get to them everywhere as this module does not exist in 1.x
 
 export class BatchRequest {
-    constructor();
+  constructor();
 
-    add(method: Method): void;
+  add(method: Method): void;
 
-    execute(): void;
+  execute(): void;
 }
 
 export class HttpProvider extends HttpProviderBase {
-    constructor(host: string, options?: HttpProviderOptions);
+  constructor(host: string, options?: HttpProviderOptions);
 }
 
 export class IpcProvider extends IpcProviderBase {
-    constructor(path: string, net: net.Server);
+  constructor(path: string, net: net.Server);
 }
 
 export class WebsocketProvider extends WebsocketProviderBase {
-    constructor(host: string, options?: WebsocketProviderOptions);
+  constructor(host: string, options?: WebsocketProviderOptions);
 }
 
 export interface PastLogsOptions extends LogsOptions {

@@ -1,26 +1,26 @@
 import {
-    Slot,
-    Root,
-    Genesis,
-    Fork,
-    FinalityCheckpoints,
-    Validator,
-    ValidatorResponse,
-    ValidatorBalance,
-    Epoch,
-    BeaconCommitteeResponse,
-    SignedBeaconHeaderResponse,
-    Attestation,
-    CommitteeIndex,
-    IndexedAttestation,
-    ProposerSlashing,
-    SignedVoluntaryExit
-  } from '@chainsafe/lodestar-types'
+  Slot,
+  Root,
+  Genesis,
+  Fork,
+  FinalityCheckpoints,
+  Validator,
+  ValidatorResponse,
+  ValidatorBalance,
+  Epoch,
+  BeaconCommitteeResponse,
+  SignedBeaconHeaderResponse,
+  Attestation,
+  CommitteeIndex,
+  IndexedAttestation,
+  ProposerSlashing,
+  SignedVoluntaryExit,
+} from '@chainsafe/lodestar-types';
   
-  export type StateId = 'head' | 'genesis' | 'finalized' | 'justified' | Slot | Root
-  export type BlockId = 'head' | 'genesis' | 'finalized' | Slot | Root
+export type StateId = 'head' | 'genesis' | 'finalized' | 'justified' | Slot | Root
+export type BlockId = 'head' | 'genesis' | 'finalized' | Slot | Root
   
-  export interface ETH2BeaconChain {
+export interface ETH2BeaconChain {
     getGenesis(): Promise<Genesis | null>
     getHashRoot(params: {stateId: StateId}): Promise<{ root: Root }>
     getForkData(params: {stateId: StateId}): Promise<Fork>
@@ -44,4 +44,3 @@ import {
     getSignedVoluntaryExits(): Promise<SignedVoluntaryExit[]>
     submitVoluntaryExit(): Promise<void>
   }
-  

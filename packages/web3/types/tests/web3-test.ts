@@ -17,10 +17,10 @@
  * @date 2018
  */
 
-import Web3 from 'web3';
+import Web3 from 'https://deno.land/x/web3/packages/web3/src/index.js';
 import * as net from 'net';
-import { AbstractProvider, RequestArguments } from 'web3-core';
-import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
+import { AbstractProvider, RequestArguments } from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import { JsonRpcPayload, JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 
 // $ExpectType Utils
 Web3.utils;
@@ -47,7 +47,7 @@ let web3 = new Web3('https://localhost:5000/');
 web3.currentProvider;
 
 // $ExpectType any
-web3.extend({property: 'test', methods: [{name: 'method', call: 'method'}]});
+web3.extend({ property: 'test', methods: [{ name: 'method', call: 'method' }] });
 
 // $ExpectType any
 web3.givenProvider;
@@ -89,23 +89,25 @@ web3 = new Web3('https://localhost:5000/', netSocket);
 web3 = new Web3();
 
 class CustomProvider1 implements AbstractProvider {
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
+  sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
 }
 
 // $ExpectType Web3
 web3 = new Web3(new CustomProvider1());
 
 class CustomProvider2 implements AbstractProvider {
-    send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
+  send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
+
+  sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
 }
 
 // $ExpectType Web3
 web3 = new Web3(new CustomProvider2());
 
 class CustomProvider3 implements AbstractProvider {
-    async request(args: RequestArguments) {}
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
+  async request(args: RequestArguments) {}
+
+  sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {}
 }
 
 // $ExpectType Web3

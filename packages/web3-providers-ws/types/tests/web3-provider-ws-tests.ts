@@ -20,14 +20,14 @@
  * @date 2018
  */
 
-import { WebsocketProviderOptions, JsonRpcResponse } from 'web3-core-helpers';
+import { WebsocketProviderOptions, JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 import { WebsocketProvider } from 'web3-providers';
 
 const options: WebsocketProviderOptions = {
-    timeout: 30000,
-    headers: {
-        authorization: 'Basic username:password'
-    }
+  timeout: 30000,
+  headers: {
+    authorization: 'Basic username:password',
+  },
 };
 
 const wsProvider = new WebsocketProvider('ws://localhost:8545', options);

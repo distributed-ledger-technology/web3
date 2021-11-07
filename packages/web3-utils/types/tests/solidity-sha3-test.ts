@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {soliditySha3} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { soliditySha3 } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType string | null
 soliditySha3('234564535', '0xfff23243', true, -10);
@@ -34,11 +34,11 @@ soliditySha3(0xea);
 // $ExpectType string | null
 soliditySha3(new BN(3));
 // $ExpectType string | null
-soliditySha3({type: 'uint256', value: '234'});
+soliditySha3({ type: 'uint256', value: '234' });
 // $ExpectType string | null
-soliditySha3({t: 'uint', v: new BN('234')});
+soliditySha3({ t: 'uint', v: new BN('234') });
 // $ExpectType string | null
-soliditySha3({t: 'string', v: 'Hello!%'}, {t: 'int8', v: -23}, {t: 'address', v: '0x85F43D8a49eeB85d32Cf465507DD71d507100C1d'});
+soliditySha3({ t: 'string', v: 'Hello!%' }, { t: 'int8', v: -23 }, { t: 'address', v: '0x85F43D8a49eeB85d32Cf465507DD71d507100C1d' });
 // $ExpectType string | null
 soliditySha3('0x407D73d8a49eeb85D32Cf465507dd71d507100c1');
 
