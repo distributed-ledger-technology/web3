@@ -2,7 +2,7 @@
 
 Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we have received in the context of [this issue](https://github.com/ChainSafe/web3.js/issues/3700), Deno is ready for web3 with this module.   
 
-## Usage Examples
+## Usage Example 
 
 ### Get Balance
 
