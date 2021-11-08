@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { Network } from 'web3-net';
+import { Network } from 'https://deno.land/x/web3/packages/web3-net/src/index.js';
 
 // $ExpectType Network
 const network_empty = new Network();
@@ -41,30 +41,30 @@ network.setProvider('https://localhost:2100');
 new network.BatchRequest();
 
 // $ExpectType any
-network.extend({property: 'test', methods: [{name: 'method', call: 'method'}]});
+network.extend({ property: 'test', methods: [{ name: 'method', call: 'method' }] });
 
 // $ExpectType Promise<string>
 network.getNetworkType((error, returnValue) => {
-    console.log(returnValue);
+  console.log(returnValue);
 });
 
 // $ExpectType Promise<number>
 network.getId();
 // $ExpectType Promise<number>
 network.getId((error: Error, id: number) => {
-    console.log(id);
+  console.log(id);
 });
 
 // $ExpectType Promise<boolean>
 network.isListening();
 // $ExpectType Promise<boolean>
 network.isListening((error: Error, listening: boolean) => {
-    console.log(listening);
+  console.log(listening);
 });
 
 // $ExpectType Promise<number>
 network.getPeerCount();
 // $ExpectType Promise<number>
 network.getPeerCount((error: Error, peerCount: number) => {
-    console.log(peerCount);
+  console.log(peerCount);
 });

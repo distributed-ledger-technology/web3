@@ -22,82 +22,110 @@ import * as http from 'http';
 import * as https from 'https';
 
 export class formatters {
-    static outputBigNumberFormatter(number: number): number;
+  static outputBigNumberFormatter(number: number): number;
 
-    static inputSignFormatter(data: string): string;
+  static inputSignFormatter(data: string): string;
 
-    static inputAddressFormatter(address: string): string;
+  static inputAddressFormatter(address: string): string;
 
-    static isPredefinedBlockNumber(blockNumber: string): boolean;
+  static isPredefinedBlockNumber(blockNumber: string): boolean;
 
-    static inputDefaultBlockNumberFormatter(blockNumber: string): string;
+  static inputDefaultBlockNumberFormatter(blockNumber: string): string;
 
-    static inputBlockNumberFormatter(blockNumber: string | number): string | number;
+  static inputBlockNumberFormatter(blockNumber: string | number): string | number;
 
-    static outputBlockFormatter(block: any): any; // TODO: Create Block interface
+  static outputBlockFormatter(block: any): any; // TODO: Create Block interface
 
-    static txInputFormatter(txObject: any): any;
+  static txInputFormatter(txObject: any): any;
 
-    static inputCallFormatter(txObject: any): any;
+  static inputCallFormatter(txObject: any): any;
 
-    static inputTransactionFormatter(txObject: any): any;
+  static inputTransactionFormatter(txObject: any): any;
 
-    static outputTransactionFormatter(receipt: any): any;
+  static outputTransactionFormatter(receipt: any): any;
 
-    static outputTransactionReceiptFormatter(receipt: any): any;
+  static outputTransactionReceiptFormatter(receipt: any): any;
 
-    static inputLogFormatter(log: any): any;
+  static inputLogFormatter(log: any): any;
 
-    static outputLogFormatter(log: any): any;
+  static outputLogFormatter(log: any): any;
 
-    static inputPostFormatter(post: any): any; // TODO: Create Post interface
+  static inputPostFormatter(post: any): any; // TODO: Create Post interface
 
-    static outputPostFormatter(post: any): any; // TODO: Create Post interface
+  static outputPostFormatter(post: any): any; // TODO: Create Post interface
 
-    static outputSyncingFormatter(result: any): any; // TODO: Create SyncLog interface
+  static outputSyncingFormatter(result: any): any; // TODO: Create SyncLog interface
 }
 
 export class errors {
-    static ErrorResponse(result: Error): Error;
-    static InvalidNumberOfParams(
+  static ErrorResponse(result: Error): Error;
+
+  static InvalidNumberOfParams(
         got: number,
         expected: number,
         method: string
     ): Error;
-    static InvalidConnection(host: string, event?: WebSocketEvent): ConnectionError;
-    static InvalidProvider(): Error;
-    static InvalidResponse(result: Error): Error;
-    static ConnectionTimeout(ms: string): Error;
-    static ConnectionNotOpenError(): Error;
-    static ConnectionCloseError(event: WebSocketEvent | boolean): Error | ConnectionError;
-    static MaxAttemptsReachedOnReconnectingError(): Error;
-    static PendingRequestsOnReconnectingError(): Error;
-    static ConnectionError(msg: string, event?: WebSocketEvent): ConnectionError;
-    static RevertInstructionError(reason: string, signature: string): RevertInstructionError
-    static TransactionRevertInstructionError(reason: string, signature: string, receipt: object): TransactionRevertInstructionError
-    static TransactionError(message: string, receipt: object): TransactionError
-    static NoContractAddressFoundError(receipt: object): TransactionError
-    static ContractCodeNotStoredError(receipt: object): TransactionError
-    static TransactionRevertedWithoutReasonError(receipt: object): TransactionError
-    static TransactionOutOfGasError(receipt: object): TransactionError
-    static ResolverMethodMissingError(address: string, name: string): Error
-    static ContractMissingABIError(): Error
-    static ContractOnceRequiresCallbackError(): Error
-    static ContractEventDoesNotExistError(eventName: string): Error
-    static ContractReservedEventError(type: string): Error
-    static ContractMissingDeployDataError(): Error
-    static ContractNoAddressDefinedError(): Error
-    static ContractNoFromAddressDefinedError(): Error
+
+  static InvalidConnection(host: string, event?: WebSocketEvent): ConnectionError;
+
+  static InvalidProvider(): Error;
+
+  static InvalidResponse(result: Error): Error;
+
+  static ConnectionTimeout(ms: string): Error;
+
+  static ConnectionNotOpenError(): Error;
+
+  static ConnectionCloseError(event: WebSocketEvent | boolean): Error | ConnectionError;
+
+  static MaxAttemptsReachedOnReconnectingError(): Error;
+
+  static PendingRequestsOnReconnectingError(): Error;
+
+  static ConnectionError(msg: string, event?: WebSocketEvent): ConnectionError;
+
+  static RevertInstructionError(reason: string, signature: string): RevertInstructionError
+
+  static TransactionRevertInstructionError(reason: string, signature: string, receipt: object): TransactionRevertInstructionError
+
+  static TransactionError(message: string, receipt: object): TransactionError
+
+  static NoContractAddressFoundError(receipt: object): TransactionError
+
+  static ContractCodeNotStoredError(receipt: object): TransactionError
+
+  static TransactionRevertedWithoutReasonError(receipt: object): TransactionError
+
+  static TransactionOutOfGasError(receipt: object): TransactionError
+
+  static ResolverMethodMissingError(address: string, name: string): Error
+
+  static ContractMissingABIError(): Error
+
+  static ContractOnceRequiresCallbackError(): Error
+
+  static ContractEventDoesNotExistError(eventName: string): Error
+
+  static ContractReservedEventError(type: string): Error
+
+  static ContractMissingDeployDataError(): Error
+
+  static ContractNoAddressDefinedError(): Error
+
+  static ContractNoFromAddressDefinedError(): Error
 }
 
 export class WebsocketProviderBase {
-    constructor(host: string, options?: WebsocketProviderOptions);
+  constructor(host: string, options?: WebsocketProviderOptions);
 
-    isConnecting(): boolean;
+  isConnecting(): boolean;
 
     requestQueue: Map<string, RequestItem>;
+
     responseQueue: Map<string, RequestItem>;
+
     connected: boolean;
+
     connection: any;
 
     supportsSubscriptions(): boolean;
@@ -125,11 +153,14 @@ export class WebsocketProviderBase {
 }
 
 export class IpcProviderBase {
-    constructor(path: string, net: net.Server);
+  constructor(path: string, net: net.Server);
 
     responseCallbacks: any;
+
     notificationCallbacks: any;
+
     connected: boolean;
+
     connection: any;
 
     addDefaultEvents(): void;
@@ -155,9 +186,10 @@ export class IpcProviderBase {
 }
 
 export class HttpProviderBase {
-    constructor(host: string, options?: HttpProviderOptions);
+  constructor(host: string, options?: HttpProviderOptions);
 
     host: string;
+
     connected: boolean;
 
     supportsSubscriptions(): boolean;

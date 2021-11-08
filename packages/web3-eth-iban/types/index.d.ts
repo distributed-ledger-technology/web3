@@ -21,37 +21,37 @@
  */
 
 export class Iban {
-    constructor(
+  constructor(
         iban: string
     )
 
-    static toAddress(iban: string): string;
+  static toAddress(iban: string): string;
 
-    static toIban(address: string): string;
+  static toIban(address: string): string;
 
-    static fromAddress(address: string): Iban;
+  static fromAddress(address: string): Iban;
 
-    static fromBban(bban: string): Iban;
+  static fromBban(bban: string): Iban;
 
-    static createIndirect(options: IndirectOptions): Iban;
+  static createIndirect(options: IndirectOptions): Iban;
 
-    static isValid(iban: string): boolean;
+  static isValid(iban: string): boolean;
 
-    isValid(): boolean;
+  isValid(): boolean;
 
-    isDirect(): boolean;
+  isDirect(): boolean;
 
-    isIndirect(): boolean;
+  isIndirect(): boolean;
 
-    checksum(): string;
+  checksum(): string;
 
-    institution(): string;
+  institution(): string;
 
-    client(): string;
+  client(): string;
 
-    toAddress(): string;
+  toAddress(): string;
 
-    toString(): string;
+  toString(): string;
 }
 
 export interface IndirectOptions {

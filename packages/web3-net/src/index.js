@@ -20,48 +20,42 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
-import core from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core/src/index.js';
-import Method from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-method/src/index.js';
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
+import core from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
+const Net = function () {
+  const _this = this;
 
-var Net = function () {
-    var _this = this;
+  // sets _requestmanager
+  core.packageInit(this, arguments);
 
-    // sets _requestmanager
-    core.packageInit(this, arguments);
-
-
-    [
-        new Method({
-            name: 'getId',
-            call: 'net_version',
-            params: 0,
-            outputFormatter: parseInt
-        }),
-        new Method({
-            name: 'isListening',
-            call: 'net_listening',
-            params: 0
-        }),
-        new Method({
-            name: 'getPeerCount',
-            call: 'net_peerCount',
-            params: 0,
-            outputFormatter: utils.hexToNumber
-        })
-    ].forEach(function(method) {
-        method.attachToObject(_this);
-        method.setRequestManager(_this._requestManager);
-    });
-
+  [
+    new Method({
+      name: 'getId',
+      call: 'net_version',
+      params: 0,
+      outputFormatter: parseInt,
+    }),
+    new Method({
+      name: 'isListening',
+      call: 'net_listening',
+      params: 0,
+    }),
+    new Method({
+      name: 'getPeerCount',
+      call: 'net_peerCount',
+      params: 0,
+      outputFormatter: utils.hexToNumber,
+    }),
+  ].forEach((method) => {
+    method.attachToObject(_this);
+    method.setRequestManager(_this._requestManager);
+  });
 };
 
 core.addProviders(Net);
 
-
 export default Net;
-
-

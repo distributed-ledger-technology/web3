@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {encodePacked} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { encodePacked } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType string | null
 encodePacked('234564535', '0xfff23243', true, -10);
@@ -34,11 +34,11 @@ encodePacked(0xea);
 // $ExpectType string | null
 encodePacked(new BN(3));
 // $ExpectType string | null
-encodePacked({type: 'uint256', value: '234'});
+encodePacked({ type: 'uint256', value: '234' });
 // $ExpectType string | null
-encodePacked({t: 'uint', v: new BN('234')});
+encodePacked({ t: 'uint', v: new BN('234') });
 // $ExpectType string | null
-encodePacked({t: 'string', v: 'Hello!%'}, {t: 'int8', v: -23}, {t: 'address', v: '0x85F43D8a49eeB85d32Cf465507DD71d507100C1d'});
+encodePacked({ t: 'string', v: 'Hello!%' }, { t: 'int8', v: -23 }, { t: 'address', v: '0x85F43D8a49eeB85d32Cf465507DD71d507100C1d' });
 // $ExpectType string | null
 encodePacked('0x407D73d8a49eeb85D32Cf465507dd71d507100c1');
 

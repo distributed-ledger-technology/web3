@@ -25,53 +25,51 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
+import core from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import Eth from 'https://deno.land/x/web3/packages/web3-eth/src/index.js';
+import Net from 'https://deno.land/x/web3/packages/web3-net/src/index.js';
+import Personal from 'https://deno.land/x/web3/packages/web3-eth-personal/src/index.js';
+import Shh from 'https://deno.land/x/web3/packages/web3-shh/src/index.js';
+import Bzz from 'https://deno.land/x/web3/packages/web3-bzz/src/index.js';
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
-import core from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core/src/index.js';
-import Eth from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-eth/src/index.js';
-import Net from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-net/src/index.js';
-import Personal from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-eth-personal/src/index.js';
-import Shh from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-shh/src/index.js';
-import Bzz from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-bzz/src/index.js';
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
+const Web3 = function Web3() {
+  const _this = this;
 
-var Web3 = function Web3() {
-    var _this = this;
+  // sets _requestmanager etc
+  core.packageInit(this, arguments);
 
-    // sets _requestmanager etc
-    core.packageInit(this, arguments);
+  this.utils = utils;
 
-    this.utils = utils;
+  this.eth = new Eth(this);
+  this.shh = new Shh(this);
+  this.bzz = new Bzz(this);
 
-    this.eth = new Eth(this);
-    this.shh = new Shh(this);
-    this.bzz = new Bzz(this);
+  // overwrite package setProvider
+  const { setProvider } = this;
+  this.setProvider = function (provider, net) {
+    /* jshint unused: false */
+    setProvider.apply(_this, arguments);
 
-    // overwrite package setProvider
-    var setProvider = this.setProvider;
-    this.setProvider = function (provider, net) {
-        /*jshint unused: false */
-        setProvider.apply(_this, arguments);
+    _this.eth.setRequestManager(_this._requestManager);
+    _this.shh.setRequestManager(_this._requestManager);
+    _this.bzz.setProvider(provider);
 
-        _this.eth.setRequestManager(_this._requestManager);
-        _this.shh.setRequestManager(_this._requestManager);
-        _this.bzz.setProvider(provider);
-
-        return true;
-    };
+    return true;
+  };
 };
 
 Web3.utils = utils;
 Web3.modules = {
-    Eth: Eth,
-    Net: Net,
-    Personal: Personal,
-    Shh: Shh,
-    Bzz: Bzz
+  Eth,
+  Net,
+  Personal,
+  Shh,
+  Bzz,
 };
 
 core.addProviders(Web3);
 
 export default Web3;
-

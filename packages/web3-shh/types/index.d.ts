@@ -18,18 +18,26 @@
  */
 
 import * as net from 'net';
-import { BatchRequest, provider, Providers, Extension } from 'web3-core';
-import { Network } from 'web3-net';
+import {
+  BatchRequest, provider, Providers, Extension, 
+} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+import { Network } from 'https://deno.land/x/web3/packages/web3-net/types/index.d.ts';
 
 export class Shh {
-    constructor();
-    constructor(provider: provider);
-    constructor(provider: provider, net: net.Socket);
+  constructor();
+
+  constructor(provider: provider);
+
+  constructor(provider: provider, net: net.Socket);
 
     readonly givenProvider: any;
+
     static readonly givenProvider: any;
+
     static readonly providers: Providers;
+
     readonly currentProvider: provider;
+
     BatchRequest: new () => BatchRequest;
 
     setProvider(provider: provider): boolean;
