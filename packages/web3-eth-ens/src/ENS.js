@@ -18,11 +18,11 @@
  * @date 2018
  */
 
-"use strict";
+'use strict';
 
+import { formatters } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 import config from './config.js';
-import {formatters} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
 import Registry from './contracts/Registry.js';
 import ResolverMethodHandler from './lib/ResolverMethodHandler.js';
 import contenthash from './lib/contentHash.js';
@@ -35,40 +35,40 @@ import contenthash from './lib/contentHash.js';
  * @constructor
  */
 function ENS(eth) {
-    this.eth = eth;
-    var registryAddress = null;
-    this._detectedAddress = null;
-    this._lastSyncCheck = null;
+  this.eth = eth;
+  let registryAddress = null;
+  this._detectedAddress = null;
+  this._lastSyncCheck = null;
 
-    Object.defineProperty(this, 'registry', {
-        get: function () {
-            return new Registry(this);
-        },
-        enumerable: true
-    });
+  Object.defineProperty(this, 'registry', {
+    get() {
+      return new Registry(this);
+    },
+    enumerable: true,
+  });
 
-    Object.defineProperty(this, 'resolverMethodHandler', {
-        get: function () {
-            return new ResolverMethodHandler(this.registry);
-        },
-        enumerable: true
-    });
+  Object.defineProperty(this, 'resolverMethodHandler', {
+    get() {
+      return new ResolverMethodHandler(this.registry);
+    },
+    enumerable: true,
+  });
 
-    Object.defineProperty(this, 'registryAddress', {
-        get: function () {
-            return registryAddress;
-        },
-        set: function (value) {
-            if (value === null) {
-                registryAddress = value;
+  Object.defineProperty(this, 'registryAddress', {
+    get() {
+      return registryAddress;
+    },
+    set(value) {
+      if (value === null) {
+        registryAddress = value;
 
-                return;
-            }
+        return;
+      }
 
-            registryAddress = formatters.inputAddressFormatter(value);
-        },
-        enumerable: true
-    });
+      registryAddress = formatters.inputAddressFormatter(value);
+    },
+    enumerable: true,
+  });
 }
 
 /**
@@ -84,21 +84,21 @@ function ENS(eth) {
  * @returns {Promise<boolean>}
  */
 ENS.prototype.supportsInterface = function (name, interfaceId, callback) {
-    return this.getResolver(name).then(function (resolver) {
-        if (!utils.isHexStrict(interfaceId)) {
-            interfaceId = utils.sha3(interfaceId).slice(0,10);
-        }
+  return this.getResolver(name).then((resolver) => {
+    if (!utils.isHexStrict(interfaceId)) {
+      interfaceId = utils.sha3(interfaceId).slice(0, 10);
+    }
 
-        return resolver.methods.supportsInterface(interfaceId).call(callback);
-    }).catch(function(error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+    return resolver.methods.supportsInterface(interfaceId).call(callback);
+  }).catch((error) => {
+    if (typeof callback === 'function') {
+      callback(error, null);
 
-            return;
-        }
+      return;
+    }
 
-        throw error;
-    });
+    throw error;
+  });
 };
 
 /**
@@ -115,7 +115,7 @@ ENS.prototype.supportsInterface = function (name, interfaceId, callback) {
  * @returns {Promise<Contract>}
  */
 ENS.prototype.resolver = function (name, callback) {
-    return this.registry.resolver(name, callback);
+  return this.registry.resolver(name, callback);
 };
 
 /**
@@ -130,7 +130,7 @@ ENS.prototype.resolver = function (name, callback) {
  * @returns {Promise<Contract>}
  */
 ENS.prototype.getResolver = function (name, callback) {
-    return this.registry.getResolver(name, callback);
+  return this.registry.getResolver(name, callback);
 };
 
 /**
@@ -147,7 +147,7 @@ ENS.prototype.getResolver = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setResolver = function (name, address, txConfig, callback) {
-    return this.registry.setResolver(name, address, txConfig, callback);
+  return this.registry.setResolver(name, address, txConfig, callback);
 };
 
 /**
@@ -166,7 +166,7 @@ ENS.prototype.setResolver = function (name, address, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setRecord = function (name, owner, resolver, ttl, txConfig, callback) {
-    return this.registry.setRecord(name, owner, resolver, ttl, txConfig, callback);
+  return this.registry.setRecord(name, owner, resolver, ttl, txConfig, callback);
 };
 
 /**
@@ -186,7 +186,7 @@ ENS.prototype.setRecord = function (name, owner, resolver, ttl, txConfig, callba
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setSubnodeRecord = function (name, label, owner, resolver, ttl, txConfig, callback) {
-    return this.registry.setSubnodeRecord(name, label, owner, resolver, ttl, txConfig, callback);
+  return this.registry.setSubnodeRecord(name, label, owner, resolver, ttl, txConfig, callback);
 };
 
 /**
@@ -203,7 +203,7 @@ ENS.prototype.setSubnodeRecord = function (name, label, owner, resolver, ttl, tx
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setApprovalForAll = function (operator, approved, txConfig, callback) {
-    return this.registry.setApprovalForAll(operator, approved, txConfig, callback);
+  return this.registry.setApprovalForAll(operator, approved, txConfig, callback);
 };
 
 /**
@@ -219,7 +219,7 @@ ENS.prototype.setApprovalForAll = function (operator, approved, txConfig, callba
  * @returns {Promise<boolean>}
  */
 ENS.prototype.isApprovedForAll = function (owner, operator, callback) {
-    return this.registry.isApprovedForAll(owner, operator, callback);
+  return this.registry.isApprovedForAll(owner, operator, callback);
 };
 
 /**
@@ -234,7 +234,7 @@ ENS.prototype.isApprovedForAll = function (owner, operator, callback) {
  * @returns {Promise<boolean>}
  */
 ENS.prototype.recordExists = function (name, callback) {
-    return this.registry.recordExists(name, callback);
+  return this.registry.recordExists(name, callback);
 };
 
 /**
@@ -252,7 +252,7 @@ ENS.prototype.recordExists = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setSubnodeOwner = function (name, label, address, txConfig, callback) {
-    return this.registry.setSubnodeOwner(name, label, address, txConfig, callback);
+  return this.registry.setSubnodeOwner(name, label, address, txConfig, callback);
 };
 
 /**
@@ -267,7 +267,7 @@ ENS.prototype.setSubnodeOwner = function (name, label, address, txConfig, callba
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getTTL = function (name, callback) {
-    return this.registry.getTTL(name, callback);
+  return this.registry.getTTL(name, callback);
 };
 
 /**
@@ -284,7 +284,7 @@ ENS.prototype.getTTL = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setTTL = function (name, ttl, txConfig, callback) {
-    return this.registry.setTTL(name, ttl, txConfig, callback);
+  return this.registry.setTTL(name, ttl, txConfig, callback);
 };
 
 /**
@@ -299,7 +299,7 @@ ENS.prototype.setTTL = function (name, ttl, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getOwner = function (name, callback) {
-    return this.registry.getOwner(name, callback);
+  return this.registry.getOwner(name, callback);
 };
 
 /**
@@ -316,7 +316,7 @@ ENS.prototype.getOwner = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setOwner = function (name, address, txConfig, callback) {
-    return this.registry.setOwner(name, address, txConfig, callback);
+  return this.registry.setOwner(name, address, txConfig, callback);
 };
 
 /**
@@ -331,7 +331,7 @@ ENS.prototype.setOwner = function (name, address, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getAddress = function (name, callback) {
-    return this.resolverMethodHandler.method(name, 'addr', []).call(callback);
+  return this.resolverMethodHandler.method(name, 'addr', []).call(callback);
 };
 
 /**
@@ -348,7 +348,7 @@ ENS.prototype.getAddress = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setAddress = function (name, address, txConfig, callback) {
-    return this.resolverMethodHandler.method(name, 'setAddr', [address]).send(txConfig, callback);
+  return this.resolverMethodHandler.method(name, 'setAddr', [address]).send(txConfig, callback);
 };
 
 /**
@@ -363,7 +363,7 @@ ENS.prototype.setAddress = function (name, address, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getPubkey = function (name, callback) {
-    return this.resolverMethodHandler.method(name, 'pubkey', [], null, callback).call(callback);
+  return this.resolverMethodHandler.method(name, 'pubkey', [], null, callback).call(callback);
 };
 
 /**
@@ -381,7 +381,7 @@ ENS.prototype.getPubkey = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setPubkey = function (name, x, y, txConfig, callback) {
-    return this.resolverMethodHandler.method(name, 'setPubkey', [x, y]).send(txConfig, callback);
+  return this.resolverMethodHandler.method(name, 'setPubkey', [x, y]).send(txConfig, callback);
 };
 
 /**
@@ -396,7 +396,7 @@ ENS.prototype.setPubkey = function (name, x, y, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getContent = function (name, callback) {
-    return this.resolverMethodHandler.method(name, 'content', []).call(callback);
+  return this.resolverMethodHandler.method(name, 'content', []).call(callback);
 };
 
 /**
@@ -413,7 +413,7 @@ ENS.prototype.getContent = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setContent = function (name, hash, txConfig, callback) {
-    return this.resolverMethodHandler.method(name, 'setContent', [hash]).send(txConfig, callback);
+  return this.resolverMethodHandler.method(name, 'setContent', [hash]).send(txConfig, callback);
 };
 
 /**
@@ -428,7 +428,7 @@ ENS.prototype.setContent = function (name, hash, txConfig, callback) {
  * @returns {PromiEvent<ContentHash>}
  */
 ENS.prototype.getContenthash = function (name, callback) {
-    return this.resolverMethodHandler.method(name, 'contenthash', [], contenthash.decode).call(callback);
+  return this.resolverMethodHandler.method(name, 'contenthash', [], contenthash.decode).call(callback);
 };
 
 /**
@@ -445,21 +445,21 @@ ENS.prototype.getContenthash = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setContenthash = function (name, hash, txConfig, callback) {
-    var encoded;
-    try {
-        encoded = contenthash.encode(hash);
-    } catch(err){
-        var error = new Error('Could not encode ' + hash + '. See docs for supported hash protocols.');
+  let encoded;
+  try {
+    encoded = contenthash.encode(hash);
+  } catch (err) {
+    const error = new Error(`Could not encode ${hash}. See docs for supported hash protocols.`);
 
-        if (typeof callback === 'function') {
-            callback(error, null);
+    if (typeof callback === 'function') {
+      callback(error, null);
 
-            return;
-        }
-
-        throw error;
+      return;
     }
-    return this.resolverMethodHandler.method(name, 'setContenthash', [encoded]).send(txConfig, callback);
+
+    throw error;
+  }
+  return this.resolverMethodHandler.method(name, 'setContenthash', [encoded]).send(txConfig, callback);
 };
 
 /**
@@ -474,7 +474,7 @@ ENS.prototype.setContenthash = function (name, hash, txConfig, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.getMultihash = function (name, callback) {
-    return this.resolverMethodHandler.method(name, 'multihash', []).call(callback);
+  return this.resolverMethodHandler.method(name, 'multihash', []).call(callback);
 };
 
 /**
@@ -491,7 +491,7 @@ ENS.prototype.getMultihash = function (name, callback) {
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
 ENS.prototype.setMultihash = function (name, hash, txConfig, callback) {
-    return this.resolverMethodHandler.method(name, 'multihash', [hash]).send(txConfig, callback);
+  return this.resolverMethodHandler.method(name, 'multihash', [hash]).send(txConfig, callback);
 };
 
 /**
@@ -501,37 +501,37 @@ ENS.prototype.setMultihash = function (name, hash, txConfig, callback) {
  * @returns {Promise<string>}
  */
 ENS.prototype.checkNetwork = async function () {
-    var now = new Date() / 1000;
+  const now = new Date() / 1000;
 
-    if (!this._lastSyncCheck || (now - this._lastSyncCheck) > 3600) {
-        var block = await this.eth.getBlock('latest');
-        var headAge = now - block.timestamp;
+  if (!this._lastSyncCheck || (now - this._lastSyncCheck) > 3600) {
+    const block = await this.eth.getBlock('latest');
+    const headAge = now - block.timestamp;
 
-        if (headAge > 3600) {
-            throw new Error("Network not synced; last block was " + headAge + " seconds ago");
-        }
-
-        this._lastSyncCheck = now;
+    if (headAge > 3600) {
+      throw new Error(`Network not synced; last block was ${headAge} seconds ago`);
     }
 
-    if (this.registryAddress) {
-        return this.registryAddress;
+    this._lastSyncCheck = now;
+  }
+
+  if (this.registryAddress) {
+    return this.registryAddress;
+  }
+
+  if (!this._detectedAddress) {
+    const networkType = await this.eth.net.getNetworkType();
+    const addr = config.addresses[networkType];
+
+    if (typeof addr === 'undefined') {
+      throw new Error(`ENS is not supported on network ${networkType}`);
     }
 
-    if (!this._detectedAddress) {
-        var networkType = await this.eth.net.getNetworkType();
-        var addr = config.addresses[networkType];
-
-        if (typeof addr === 'undefined') {
-            throw new Error("ENS is not supported on network " + networkType);
-        }
-
-        this._detectedAddress = addr;
-
-        return this._detectedAddress;
-    }
+    this._detectedAddress = addr;
 
     return this._detectedAddress;
+  }
+
+  return this._detectedAddress;
 };
 
 export default ENS;

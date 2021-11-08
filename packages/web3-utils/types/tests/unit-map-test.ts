@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import {unitMap} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
+import { unitMap } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType Units
 unitMap();

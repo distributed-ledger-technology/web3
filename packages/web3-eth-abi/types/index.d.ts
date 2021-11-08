@@ -17,24 +17,24 @@
  * @date 2018
  */
 
-import { AbiInput, AbiItem } from 'web3-utils';
+import { AbiInput, AbiItem } from 'https://deno.land/x/web3/packages/web3-utils/types/index.d.ts';
 
 export class AbiCoder {
-    encodeFunctionSignature(functionName: string | AbiItem): string;
+  encodeFunctionSignature(functionName: string | AbiItem): string;
 
-    encodeEventSignature(functionName: string | AbiItem): string;
+  encodeEventSignature(functionName: string | AbiItem): string;
 
-    encodeParameter(type: any, parameter: any): string;
+  encodeParameter(type: any, parameter: any): string;
 
-    encodeParameters(types: any[], paramaters: any[]): string;
+  encodeParameters(types: any[], paramaters: any[]): string;
 
-    encodeFunctionCall(abiItem: AbiItem, params: string[]): string;
+  encodeFunctionCall(abiItem: AbiItem, params: string[]): string;
 
-    decodeParameter(type: any, hex: string): { [key: string]: any };
+  decodeParameter(type: any, hex: string): { [key: string]: any };
 
-    decodeParameters(types: any[], hex: string): { [key: string]: any };
+  decodeParameters(types: any[], hex: string): { [key: string]: any };
 
-    decodeLog(
+  decodeLog(
         inputs: AbiInput[],
         hex: string,
         topics: string[]

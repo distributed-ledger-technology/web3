@@ -17,7 +17,7 @@
  * @date 2019
  */
 
-import { errors, WebSocketEvent } from 'web3-core-helpers';
+import { errors, WebSocketEvent } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 
 // $ExpectType Error
 errors.ErrorResponse(new Error('hey'));
@@ -46,7 +46,7 @@ errors.MaxAttemptsReachedOnReconnectingError();
 // $ExpectType Error
 errors.PendingRequestsOnReconnectingError();
 
-const event: WebSocketEvent = {code: 100, reason: 'reason'};
+const event: WebSocketEvent = { code: 100, reason: 'reason' };
 // $ExpectType ConnectionError
 errors.ConnectionError('msg', event);
 

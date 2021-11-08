@@ -20,8 +20,8 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
-import {numberToHex} from 'web3-utils';
+import BN = require('https://jspm.dev/bn.js');
+import { numberToHex } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 numberToHex('232');
@@ -35,7 +35,7 @@ numberToHex(['72']);
 // $ExpectError
 numberToHex([4]);
 // $ExpectError
-numberToHex([ 36 ]);
+numberToHex([36]);
 // $ExpectError
 numberToHex({});
 // $ExpectError

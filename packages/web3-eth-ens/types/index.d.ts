@@ -17,10 +17,10 @@
  * @date 2018
  */
 
-import { PromiEvent, TransactionConfig, TransactionReceipt } from 'web3-core';
-import { TransactionRevertInstructionError } from 'web3-core-helpers';
-import { Eth } from 'web3-eth';
-import { Contract } from 'web3-eth-contract';
+import { PromiEvent, TransactionConfig, TransactionReceipt } from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+import { TransactionRevertInstructionError } from 'https://deno.land/x/web3/packages/web3-core-helpers/types/index.d.ts';
+import { Eth } from 'https://deno.land/x/web3/packages/web3-eth/types/index.d.ts';
+import { Contract } from 'https://deno.land/x/web3/packages/web3-eth-contract/types/index.d.ts';
 
 export interface ContentHash {
     protocolType: 'ipfs' | 'bzz' | 'onion' | 'onion3' | null,
@@ -30,9 +30,10 @@ export interface ContentHash {
 
 // TODO: Define as soon as implemented the generic contract
 export class Ens {
-    constructor(eth: Eth);
+  constructor(eth: Eth);
 
     registryAddress: string | null;
+
     registry: Registry;
 
     /**
@@ -43,6 +44,7 @@ export class Ens {
         interfaceId: string,
         callback?: (value: any) => void
     ): Promise<boolean>;
+
     supportsInterface(
         name: string,
         interfaceId: string,
@@ -56,6 +58,7 @@ export class Ens {
         name: string,
         callback?: (error: Error, contract: Contract) => void
     ): Promise<Contract>;
+
     /**
      * @deprecated Please use the "getResolver" method instead of "resolver"
      */
@@ -71,6 +74,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<Contract>;
+
     getResolver(
         name: string,
         callback?: (error: Error, contract: Contract) => void
@@ -125,6 +129,7 @@ export class Ens {
         operator: string,
         callback?: (value: any) => void
     ): Promise<boolean>;
+
     isApprovedForAll(
         owner: string,
         operator: string,
@@ -138,6 +143,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<boolean>;
+
     recordExists(
         name: string,
         callback?: (error: Error, result: boolean) => void
@@ -150,6 +156,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getTTL(
         name: string,
         callback?: (error: Error, ttl: string) => void
@@ -169,6 +176,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getOwner(
         name: string,
         callback?: (error: Error, owner: string) => void
@@ -188,6 +196,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getAddress(
         name: string,
         callback?: (error: Error, address: string) => void
@@ -207,6 +216,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<{ [x: string]: string }>;
+
     getPubkey(
         name: string,
         callback?: (error: Error, result: { [x: string]: string }) => void
@@ -228,6 +238,7 @@ export class Ens {
         key: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getText(
         name: string,
         key: string,
@@ -249,6 +260,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getContent(
         name: string,
         callback?: (error: Error, contentHash: string) => void
@@ -268,6 +280,7 @@ export class Ens {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getMultihash(
         name: string,
         callback?: (error: Error, multihash: string) => void
@@ -287,6 +300,7 @@ export class Ens {
         name: string,
         callback?: (value: ContentHash) => void
     ): Promise<ContentHash>;
+
     getContenthash(
         name: string,
         callback?: (error: Error, contenthash: ContentHash) => void
@@ -301,7 +315,7 @@ export class Ens {
 }
 
 export class Registry {
-    constructor(ens: Ens);
+  constructor(ens: Ens);
 
     ens: Ens;
 
@@ -314,6 +328,7 @@ export class Registry {
         name: string,
         callback?: (error: Error, address: string) => void
     ): Promise<string>;
+
     /**
      * @deprecated Please use the "getOwner" method instead of "owner"
      */
@@ -329,6 +344,7 @@ export class Registry {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getOwner(
         name: string,
         callback?: (error: Error, address: string) => void
@@ -348,6 +364,7 @@ export class Registry {
         name: string,
         callback?: (value: any) => void
     ): Promise<string>;
+
     getTTl(
         name: string,
         callback?: (error: Error, ttl: string) => void
@@ -375,6 +392,7 @@ export class Registry {
         name: string,
         callback?: (error: Error, contract: Contract) => void
     ): Promise<Contract>;
+
     /**
      * @deprecated Please use the "getResolver" method instead of "resolver"
      */
@@ -390,6 +408,7 @@ export class Registry {
         name: string,
         callback?: (value: any) => void
     ): Promise<Contract>;
+
     getResolver(
         name: string,
         callback?: (error: Error, contract: Contract) => void

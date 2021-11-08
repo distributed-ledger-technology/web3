@@ -18,12 +18,16 @@
  */
 
 export class Subscription<T> {
-    constructor(options: SubscriptionOptions);
+  constructor(options: SubscriptionOptions);
 
     id: string;
+
     options: SubscriptionOptions;
+
     callback: () => void;
+
     arguments: any;
+
     lastBlock: number;
 
     subscribe(callback?: (error: Error, result: T) => void): Subscription<T>;
@@ -42,11 +46,14 @@ export class Subscription<T> {
 }
 
 export class Subscriptions {
-    constructor(options: SubscriptionsOptions);
+  constructor(options: SubscriptionsOptions);
 
     name: string;
+
     type: string;
+
     subscriptions: SubscriptionsModel;
+
     readonly requestManager: any;
 
     attachToObject(obj: any): void;

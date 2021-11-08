@@ -20,50 +20,44 @@
  * @date 2017
  */
 
-"use strict";
+'use strict';
 
+import { formatters } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import Method from 'https://deno.land/x/web3/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
 
-import {formatters} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
-import Method from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-method/src/index.js';
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
+const extend = function (pckg) {
+  /* jshint maxcomplexity:5 */
+  const ex = function (extension) {
+    let extendedObject;
+    if (extension.property) {
+      if (!pckg[extension.property]) {
+        pckg[extension.property] = {};
+      }
+      extendedObject = pckg[extension.property];
+    } else {
+      extendedObject = pckg;
+    }
 
-
-var extend = function (pckg) {
-    /* jshint maxcomplexity:5 */
-    var ex = function (extension) {
-
-        var extendedObject;
-        if (extension.property) {
-            if (!pckg[extension.property]) {
-                pckg[extension.property] = {};
-            }
-            extendedObject = pckg[extension.property];
-        } else {
-            extendedObject = pckg;
+    if (extension.methods) {
+      extension.methods.forEach((method) => {
+        if (!(method instanceof Method)) {
+          method = new Method(method);
         }
 
-        if (extension.methods) {
-            extension.methods.forEach(function (method) {
-                if(!(method instanceof Method)) {
-                    method = new Method(method);
-                }
+        method.attachToObject(extendedObject);
+        method.setRequestManager(pckg._requestManager);
+      });
+    }
 
-                method.attachToObject(extendedObject);
-                method.setRequestManager(pckg._requestManager);
-            });
-        }
+    return pckg;
+  };
 
-        return pckg;
-    };
+  ex.formatters = formatters;
+  ex.utils = utils;
+  ex.Method = Method;
 
-    ex.formatters = formatters;
-    ex.utils = utils;
-    ex.Method = Method;
-
-    return ex;
+  return ex;
 };
 
-
-
 export default extend;
-

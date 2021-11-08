@@ -21,16 +21,16 @@
  * @date 2018
  */
 
-import {Buffer} from 'https://deno.land/x/node_buffer@1.1.0/mod.ts';
+import { Buffer } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/buffer';
 
-import utils from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-utils/src/index.js';
-import {AbiCoder as EthersAbiCoder} from 'https://jspm.dev/@ethersproject/abi';
-import {ParamType} from 'https://jspm.dev/@ethersproject/abi';
-var ethersAbiCoder = new EthersAbiCoder(function (type, value) {
-    if (type.match(/^u?int/) && !Array.isArray(value) && (!(!!value && typeof value === 'object') || value.constructor.name !== 'BN')) {
-        return value.toString();
-    }
-    return value;
+import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import { AbiCoder as EthersAbiCoder, ParamType } from 'https://jspm.dev/@ethersproject/abi';
+
+const ethersAbiCoder = new EthersAbiCoder((type, value) => {
+  if (type.match(/^u?int/) && !Array.isArray(value) && (!(!!value && typeof value === 'object') || value.constructor.name !== 'BN')) {
+    return value.toString();
+  }
+  return value;
 });
 
 // result method
@@ -40,7 +40,7 @@ function Result() {
 /**
  * ABICoder prototype should be used to encode/decode solidity params of any type
  */
-var ABICoder = function () {
+const ABICoder = function () {
 };
 
 /**
@@ -51,11 +51,11 @@ var ABICoder = function () {
  * @return {String} encoded function name
  */
 ABICoder.prototype.encodeFunctionSignature = function (functionName) {
-    if (typeof functionName === 'function' || typeof functionName === 'object' && functionName) {
-        functionName = utils._jsonInterfaceMethodToString(functionName);
-    }
+  if (typeof functionName === 'function' || typeof functionName === 'object' && functionName) {
+    functionName = utils._jsonInterfaceMethodToString(functionName);
+  }
 
-    return utils.sha3(functionName).slice(0, 10);
+  return utils.sha3(functionName).slice(0, 10);
 };
 
 /**
@@ -66,11 +66,11 @@ ABICoder.prototype.encodeFunctionSignature = function (functionName) {
  * @return {String} encoded function name
  */
 ABICoder.prototype.encodeEventSignature = function (functionName) {
-    if (typeof functionName === 'function' || typeof functionName === 'object' && functionName) {
-        functionName = utils._jsonInterfaceMethodToString(functionName);
-    }
+  if (typeof functionName === 'function' || typeof functionName === 'object' && functionName) {
+    functionName = utils._jsonInterfaceMethodToString(functionName);
+  }
 
-    return utils.sha3(functionName);
+  return utils.sha3(functionName);
 };
 
 /**
@@ -84,7 +84,7 @@ ABICoder.prototype.encodeEventSignature = function (functionName) {
  * @return {String} encoded plain param
  */
 ABICoder.prototype.encodeParameter = function (type, param) {
-    return this.encodeParameters([type], [param]);
+  return this.encodeParameters([type], [param]);
 };
 
 /**
@@ -98,45 +98,43 @@ ABICoder.prototype.encodeParameter = function (type, param) {
  * @return {String} encoded list of params
  */
 ABICoder.prototype.encodeParameters = function (types, params) {
-    var self = this;
-    types = self.mapTypes(types);
+  const self = this;
+  types = self.mapTypes(types);
 
-    params = params.map(function (param, index) {
-        let type = types[index];
-        if (typeof type === 'object' && type.type) {
-            // We may get a named type of shape {name, type}
-            type = type.type;
+  params = params.map((param, index) => {
+    let type = types[index];
+    if (typeof type === 'object' && type.type) {
+      // We may get a named type of shape {name, type}
+      type = type.type;
+    }
+
+    param = self.formatParam(type, param);
+
+    // Format params for tuples
+    if (typeof type === 'string' && type.includes('tuple')) {
+      const coder = ethersAbiCoder._getCoder(ParamType.from(type));
+      const modifyParams = (coder, param) => {
+        if (coder.name === 'array') {
+          return param.map((p) => modifyParams(
+            ethersAbiCoder._getCoder(ParamType.from(coder.type.replace('[]', ''))),
+            p,
+          ));
         }
+        coder.coders.forEach((c, i) => {
+          if (c.name === 'tuple') {
+            modifyParams(c, param[i]);
+          } else {
+            param[i] = self.formatParam(c.name, param[i]);
+          }
+        });
+      };
+      modifyParams(coder, param);
+    }
 
-        param = self.formatParam(type, param);
+    return param;
+  });
 
-        // Format params for tuples
-        if (typeof type === 'string' && type.includes('tuple')) {
-            const coder = ethersAbiCoder._getCoder(ParamType.from(type));
-            const modifyParams = (coder, param) => {
-                if (coder.name === 'array') {
-                    return param.map(p =>
-                        modifyParams(
-                            ethersAbiCoder._getCoder(ParamType.from(coder.type.replace('[]', ''))),
-                            p
-                        )
-                    );
-                }
-                coder.coders.forEach((c, i) => {
-                    if (c.name === 'tuple') {
-                        modifyParams(c, param[i]);
-                    } else {
-                        param[i] = self.formatParam(c.name, param[i]);
-                    }
-                });
-            };
-            modifyParams(coder, param);
-        }
-
-        return param;
-    });
-
-    return ethersAbiCoder.encode(types, params);
+  return ethersAbiCoder.encode(types, params);
 };
 
 /**
@@ -147,33 +145,33 @@ ABICoder.prototype.encodeParameters = function (types, params) {
  * @return {Array}
  */
 ABICoder.prototype.mapTypes = function (types) {
-    var self = this;
-    var mappedTypes = [];
-    types.forEach(function (type) {
-        // Remap `function` type params to bytes24 since Ethers does not
-        // recognize former type. Solidity docs say `Function` is a bytes24
-        // encoding the contract address followed by the function selector hash.
-        if (typeof type === 'object' && type.type === 'function'){
-            type = Object.assign({}, type, { type: "bytes24" });
-        }
-        if (self.isSimplifiedStructFormat(type)) {
-            var structName = Object.keys(type)[0];
-            mappedTypes.push(
-                Object.assign(
-                    self.mapStructNameAndType(structName),
-                    {
-                        components: self.mapStructToCoderFormat(type[structName])
-                    }
-                )
-            );
+  const self = this;
+  const mappedTypes = [];
+  types.forEach((type) => {
+    // Remap `function` type params to bytes24 since Ethers does not
+    // recognize former type. Solidity docs say `Function` is a bytes24
+    // encoding the contract address followed by the function selector hash.
+    if (typeof type === 'object' && type.type === 'function') {
+      type = { ...type, type: 'bytes24' };
+    }
+    if (self.isSimplifiedStructFormat(type)) {
+      const structName = Object.keys(type)[0];
+      mappedTypes.push(
+        Object.assign(
+          self.mapStructNameAndType(structName),
+          {
+            components: self.mapStructToCoderFormat(type[structName]),
+          },
+        ),
+      );
 
-            return;
-        }
+      return;
+    }
 
-        mappedTypes.push(type);
-    });
+    mappedTypes.push(type);
+  });
 
-    return mappedTypes;
+  return mappedTypes;
 };
 
 /**
@@ -184,7 +182,7 @@ ABICoder.prototype.mapTypes = function (types) {
  * @returns {boolean}
  */
 ABICoder.prototype.isSimplifiedStructFormat = function (type) {
-    return typeof type === 'object' && typeof type.components === 'undefined' && typeof type.name === 'undefined';
+  return typeof type === 'object' && typeof type.components === 'undefined' && typeof type.name === 'undefined';
 };
 
 /**
@@ -195,14 +193,14 @@ ABICoder.prototype.isSimplifiedStructFormat = function (type) {
  * @return {{type: string, name: *}}
  */
 ABICoder.prototype.mapStructNameAndType = function (structName) {
-    var type = 'tuple';
+  let type = 'tuple';
 
-    if (structName.indexOf('[]') > -1) {
-        type = 'tuple[]';
-        structName = structName.slice(0, -2);
-    }
+  if (structName.indexOf('[]') > -1) {
+    type = 'tuple[]';
+    structName = structName.slice(0, -2);
+  }
 
-    return {type: type, name: structName};
+  return { type, name: structName };
 };
 
 /**
@@ -213,29 +211,29 @@ ABICoder.prototype.mapStructNameAndType = function (structName) {
  * @return {Array}
  */
 ABICoder.prototype.mapStructToCoderFormat = function (struct) {
-    var self = this;
-    var components = [];
-    Object.keys(struct).forEach(function (key) {
-        if (typeof struct[key] === 'object') {
-            components.push(
-                Object.assign(
-                    self.mapStructNameAndType(key),
-                    {
-                        components: self.mapStructToCoderFormat(struct[key])
-                    }
-                )
-            );
+  const self = this;
+  const components = [];
+  Object.keys(struct).forEach((key) => {
+    if (typeof struct[key] === 'object') {
+      components.push(
+        Object.assign(
+          self.mapStructNameAndType(key),
+          {
+            components: self.mapStructToCoderFormat(struct[key]),
+          },
+        ),
+      );
 
-            return;
-        }
+      return;
+    }
 
-        components.push({
-            name: key,
-            type: struct[key]
-        });
+    components.push({
+      name: key,
+      type: struct[key],
     });
+  });
 
-    return components;
+  return components;
 };
 
 /**
@@ -247,57 +245,57 @@ ABICoder.prototype.mapStructToCoderFormat = function (struct) {
  * @return {any} - The formatted param
  */
 ABICoder.prototype.formatParam = function (type, param) {
-    const paramTypeBytes = new RegExp(/^bytes([0-9]*)$/);
-    const paramTypeBytesArray = new RegExp(/^bytes([0-9]*)\[\]$/);
-    const paramTypeNumber = new RegExp(/^(u?int)([0-9]*)$/);
-    const paramTypeNumberArray = new RegExp(/^(u?int)([0-9]*)\[\]$/);
+  const paramTypeBytes = new RegExp(/^bytes([0-9]*)$/);
+  const paramTypeBytesArray = new RegExp(/^bytes([0-9]*)\[\]$/);
+  const paramTypeNumber = new RegExp(/^(u?int)([0-9]*)$/);
+  const paramTypeNumberArray = new RegExp(/^(u?int)([0-9]*)\[\]$/);
 
-    // Format BN to string
-    if (utils.isBN(param) || utils.isBigNumber(param)) {
-        return param.toString(10);
+  // Format BN to string
+  if (utils.isBN(param) || utils.isBigNumber(param)) {
+    return param.toString(10);
+  }
+
+  if (type.match(paramTypeBytesArray) || type.match(paramTypeNumberArray)) {
+    return param.map((p) => this.formatParam(type.replace('[]', ''), p));
+  }
+
+  // Format correct width for u?int[0-9]*
+  let match = type.match(paramTypeNumber);
+  if (match) {
+    const size = parseInt(match[2] || '256');
+    if (size / 8 < param.length) {
+      // pad to correct bit width
+      param = utils.leftPad(param, size);
+    }
+  }
+
+  // Format correct length for bytes[0-9]+
+  match = type.match(paramTypeBytes);
+  if (match) {
+    if (Buffer.isBuffer(param)) {
+      param = utils.toHex(param);
     }
 
-    if (type.match(paramTypeBytesArray) || type.match(paramTypeNumberArray)) {
-        return param.map(p => this.formatParam(type.replace('[]', ''), p));
+    // format to correct length
+    const size = parseInt(match[1]);
+    if (size) {
+      let maxSize = size * 2;
+      if (param.substring(0, 2) === '0x') {
+        maxSize += 2;
+      }
+      if (param.length < maxSize) {
+        // pad to correct length
+        param = utils.rightPad(param, size * 2);
+      }
     }
 
-    // Format correct width for u?int[0-9]*
-    let match = type.match(paramTypeNumber);
-    if (match) {
-        let size = parseInt(match[2] || "256");
-        if (size / 8 < param.length) {
-            // pad to correct bit width
-            param = utils.leftPad(param, size);
-        }
+    // format odd-length bytes to even-length
+    if (param.length % 2 === 1) {
+      param = `0x0${param.substring(2)}`;
     }
+  }
 
-    // Format correct length for bytes[0-9]+
-    match = type.match(paramTypeBytes);
-    if (match) {
-        if (Buffer.isBuffer(param)) {
-            param = utils.toHex(param);
-        }
-
-        // format to correct length
-        let size = parseInt(match[1]);
-        if (size) {
-            let maxSize = size * 2;
-            if (param.substring(0, 2) === '0x') {
-                maxSize += 2;
-            }
-            if (param.length < maxSize) {
-                // pad to correct length
-                param = utils.rightPad(param, size * 2);
-            }
-        }
-
-        // format odd-length bytes to even-length
-        if (param.length % 2 === 1) {
-            param = '0x0' + param.substring(2);
-        }
-    }
-
-    return param;
+  return param;
 };
 
 /**
@@ -309,7 +307,7 @@ ABICoder.prototype.formatParam = function (type, param) {
  * @return {String} The encoded ABI for this function call
  */
 ABICoder.prototype.encodeFunctionCall = function (jsonInterface, params) {
-    return this.encodeFunctionSignature(jsonInterface) + this.encodeParameters(jsonInterface.inputs, params).replace('0x', '');
+  return this.encodeFunctionSignature(jsonInterface) + this.encodeParameters(jsonInterface.inputs, params).replace('0x', '');
 };
 
 /**
@@ -321,7 +319,7 @@ ABICoder.prototype.encodeFunctionCall = function (jsonInterface, params) {
  * @return {Object} plain param
  */
 ABICoder.prototype.decodeParameter = function (type, bytes) {
-    return this.decodeParameters([type], bytes)[0];
+  return this.decodeParameters([type], bytes)[0];
 };
 
 /**
@@ -333,8 +331,8 @@ ABICoder.prototype.decodeParameter = function (type, bytes) {
  * @return {Array} array of plain params
  */
 ABICoder.prototype.decodeParameters = function (outputs, bytes) {
-    return this.decodeParametersWith(outputs, bytes, false);
-}
+  return this.decodeParametersWith(outputs, bytes, false);
+};
 
 /**
  * Should be used to decode list of params
@@ -346,34 +344,34 @@ ABICoder.prototype.decodeParameters = function (outputs, bytes) {
  * @return {Array} array of plain params
  */
 ABICoder.prototype.decodeParametersWith = function (outputs, bytes, loose) {
-    if (outputs.length > 0 && (!bytes || bytes === '0x' || bytes === '0X')) {
-        throw new Error(
-            'Returned values aren\'t valid, did it run Out of Gas? ' +
-            'You might also see this error if you are not using the ' +
-            'correct ABI for the contract you are retrieving data from, ' +
-            'requesting data from a block number that does not exist, ' +
-            'or querying a node which is not fully synced.'
-        );
+  if (outputs.length > 0 && (!bytes || bytes === '0x' || bytes === '0X')) {
+    throw new Error(
+      'Returned values aren\'t valid, did it run Out of Gas? '
+            + 'You might also see this error if you are not using the '
+            + 'correct ABI for the contract you are retrieving data from, '
+            + 'requesting data from a block number that does not exist, '
+            + 'or querying a node which is not fully synced.',
+    );
+  }
+
+  const res = ethersAbiCoder.decode(this.mapTypes(outputs), `0x${bytes.replace(/0x/i, '')}`, loose);
+  const returnValue = new Result();
+  returnValue.__length__ = 0;
+
+  outputs.forEach((output, i) => {
+    let decodedValue = res[returnValue.__length__];
+    decodedValue = (decodedValue === '0x') ? null : decodedValue;
+
+    returnValue[i] = decodedValue;
+
+    if ((typeof output === 'function' || !!output && typeof output === 'object') && output.name) {
+      returnValue[output.name] = decodedValue;
     }
 
-    var res = ethersAbiCoder.decode(this.mapTypes(outputs), '0x' + bytes.replace(/0x/i, ''), loose);
-    var returnValue = new Result();
-    returnValue.__length__ = 0;
+    returnValue.__length__++;
+  });
 
-    outputs.forEach(function (output, i) {
-        var decodedValue = res[returnValue.__length__];
-        decodedValue = (decodedValue === '0x') ? null : decodedValue;
-
-        returnValue[i] = decodedValue;
-
-        if ((typeof output === 'function' || !!output && typeof output === 'object') && output.name) {
-            returnValue[output.name] = decodedValue;
-        }
-
-        returnValue.__length__++;
-    });
-
-    return returnValue;
+  return returnValue;
 };
 
 /**
@@ -386,56 +384,52 @@ ABICoder.prototype.decodeParametersWith = function (outputs, bytes, loose) {
  * @return {Array} array of plain params
  */
 ABICoder.prototype.decodeLog = function (inputs, data, topics) {
-    var _this = this;
-    topics = Array.isArray(topics) ? topics : [topics];
+  const _this = this;
+  topics = Array.isArray(topics) ? topics : [topics];
 
-    data = data || '';
+  data = data || '';
 
-    var notIndexedInputs = [];
-    var indexedParams = [];
-    var topicCount = 0;
+  const notIndexedInputs = [];
+  const indexedParams = [];
+  let topicCount = 0;
 
-    // TODO check for anonymous logs?
+  // TODO check for anonymous logs?
 
-    inputs.forEach(function (input, i) {
-        if (input.indexed) {
-            indexedParams[i] = (['bool', 'int', 'uint', 'address', 'fixed', 'ufixed'].find(function (staticType) {
-                return input.type.indexOf(staticType) !== -1;
-            })) ? _this.decodeParameter(input.type, topics[topicCount]) : topics[topicCount];
-            topicCount++;
-        } else {
-            notIndexedInputs[i] = input;
-        }
-    });
+  inputs.forEach((input, i) => {
+    if (input.indexed) {
+      indexedParams[i] = (['bool', 'int', 'uint', 'address', 'fixed', 'ufixed'].find((staticType) => input.type.indexOf(staticType) !== -1)) ? _this.decodeParameter(input.type, topics[topicCount]) : topics[topicCount];
+      topicCount++;
+    } else {
+      notIndexedInputs[i] = input;
+    }
+  });
 
+  const nonIndexedData = data;
+  const notIndexedParams = (nonIndexedData) ? this.decodeParametersWith(notIndexedInputs, nonIndexedData, true) : [];
 
-    var nonIndexedData = data;
-    var notIndexedParams = (nonIndexedData) ? this.decodeParametersWith(notIndexedInputs, nonIndexedData, true) : [];
+  const returnValue = new Result();
+  returnValue.__length__ = 0;
 
-    var returnValue = new Result();
-    returnValue.__length__ = 0;
+  inputs.forEach((res, i) => {
+    returnValue[i] = (res.type === 'string') ? '' : null;
 
+    if (typeof notIndexedParams[i] !== 'undefined') {
+      returnValue[i] = notIndexedParams[i];
+    }
+    if (typeof indexedParams[i] !== 'undefined') {
+      returnValue[i] = indexedParams[i];
+    }
 
-    inputs.forEach(function (res, i) {
-        returnValue[i] = (res.type === 'string') ? '' : null;
+    if (res.name) {
+      returnValue[res.name] = returnValue[i];
+    }
 
-        if (typeof notIndexedParams[i] !== 'undefined') {
-            returnValue[i] = notIndexedParams[i];
-        }
-        if (typeof indexedParams[i] !== 'undefined') {
-            returnValue[i] = indexedParams[i];
-        }
+    returnValue.__length__++;
+  });
 
-        if (res.name) {
-            returnValue[res.name] = returnValue[i];
-        }
-
-        returnValue.__length__++;
-    });
-
-    return returnValue;
+  return returnValue;
 };
 
-var coder = new ABICoder();
+const coder = new ABICoder();
 
 export default coder;

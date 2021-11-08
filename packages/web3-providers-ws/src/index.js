@@ -23,9 +23,9 @@
 'use strict';
 
 import EventEmitter from 'https://jspm.dev/eventemitter3';
+import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import { w3cwebsocket as Ws } from 'https://jspm.dev/websocket';
 import helpers from './helpers.js';
-import {errors} from 'https://github.com/ntrotner/web3-deno/raw/main/packages/web3-core-helpers/src/index.js';
-import {w3cwebsocket as Ws} from 'https://jspm.dev/websocket';
 
 /**
  * @param {string} url
@@ -33,60 +33,59 @@ import {w3cwebsocket as Ws} from 'https://jspm.dev/websocket';
  *
  * @constructor
  */
-var WebsocketProvider = function WebsocketProvider(url, options) {
-    EventEmitter.call(this);
+const WebsocketProvider = function WebsocketProvider(url, options) {
+  EventEmitter.call(this);
 
-    options = options || {};
-    this.url = url;
-    this._customTimeout = options.timeout || 1000 * 15;
-    this.headers = options.headers || {};
-    this.protocol = options.protocol || undefined;
-    this.reconnectOptions = Object.assign({
-            auto: false,
-            delay: 5000,
-            maxAttempts: false,
-            onTimeout: false
-        },
-        options.reconnect
-    );
-    this.clientConfig = options.clientConfig || undefined; // Allow a custom client configuration
-    this.requestOptions = options.requestOptions || undefined; // Allow a custom request options (https://github.com/theturtle32/WebSocket-Node/blob/master/docs/WebSocketClient.md#connectrequesturl-requestedprotocols-origin-headers-requestoptions)
+  options = options || {};
+  this.url = url;
+  this._customTimeout = options.timeout || 1000 * 15;
+  this.headers = options.headers || {};
+  this.protocol = options.protocol || undefined;
+  this.reconnectOptions = {
+    auto: false,
+    delay: 5000,
+    maxAttempts: false,
+    onTimeout: false,
+    ...options.reconnect,
+  };
+  this.clientConfig = options.clientConfig || undefined; // Allow a custom client configuration
+  this.requestOptions = options.requestOptions || undefined; // Allow a custom request options (https://github.com/theturtle32/WebSocket-Node/blob/master/docs/WebSocketClient.md#connectrequesturl-requestedprotocols-origin-headers-requestoptions)
 
-    this.DATA = 'data';
-    this.CLOSE = 'close';
-    this.ERROR = 'error';
-    this.CONNECT = 'connect';
-    this.RECONNECT = 'reconnect';
+  this.DATA = 'data';
+  this.CLOSE = 'close';
+  this.ERROR = 'error';
+  this.CONNECT = 'connect';
+  this.RECONNECT = 'reconnect';
 
-    this.connection = null;
-    this.requestQueue = new Map();
-    this.responseQueue = new Map();
-    this.reconnectAttempts = 0;
-    this.reconnecting = false;
+  this.connection = null;
+  this.requestQueue = new Map();
+  this.responseQueue = new Map();
+  this.reconnectAttempts = 0;
+  this.reconnecting = false;
 
-    // The w3cwebsocket implementation does not support Basic Auth
-    // username/password in the URL. So generate the basic auth header, and
-    // pass through with any additional headers supplied in constructor
-    var parsedURL = helpers.parseURL(url);
-    if (parsedURL.username && parsedURL.password) {
-        this.headers.authorization = 'Basic ' + helpers.btoa(parsedURL.username + ':' + parsedURL.password);
-    }
+  // The w3cwebsocket implementation does not support Basic Auth
+  // username/password in the URL. So generate the basic auth header, and
+  // pass through with any additional headers supplied in constructor
+  const parsedURL = helpers.parseURL(url);
+  if (parsedURL.username && parsedURL.password) {
+    this.headers.authorization = `Basic ${helpers.btoa(`${parsedURL.username}:${parsedURL.password}`)}`;
+  }
 
-    // When all node core implementations that do not have the
-    // WHATWG compatible URL parser go out of service this line can be removed.
-    if (parsedURL.auth) {
-        this.headers.authorization = 'Basic ' + helpers.btoa(parsedURL.auth);
-    }
+  // When all node core implementations that do not have the
+  // WHATWG compatible URL parser go out of service this line can be removed.
+  if (parsedURL.auth) {
+    this.headers.authorization = `Basic ${helpers.btoa(parsedURL.auth)}`;
+  }
 
-    // make property `connected` which will return the current connection status
-    Object.defineProperty(this, 'connected', {
-        get: function () {
-            return this.connection && this.connection.readyState === this.connection.OPEN;
-        },
-        enumerable: true
-    });
+  // make property `connected` which will return the current connection status
+  Object.defineProperty(this, 'connected', {
+    get() {
+      return this.connection && this.connection.readyState === this.connection.OPEN;
+    },
+    enumerable: true,
+  });
 
-    this.connect();
+  this.connect();
 };
 
 // Inherit from EventEmitter
@@ -101,8 +100,8 @@ WebsocketProvider.prototype.constructor = WebsocketProvider;
  * @returns {void}
  */
 WebsocketProvider.prototype.connect = function () {
-    this.connection = new Ws(this.url, this.protocol, undefined, this.headers, this.requestOptions, this.clientConfig);
-    this._addSocketListeners();
+  this.connection = new Ws(this.url, this.protocol, undefined, this.headers, this.requestOptions, this.clientConfig);
+  this._addSocketListeners();
 };
 
 /**
@@ -113,29 +112,29 @@ WebsocketProvider.prototype.connect = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype._onMessage = function (e) {
-    var _this = this;
+  const _this = this;
 
-    this._parseResponse((typeof e.data === 'string') ? e.data : '').forEach(function (result) {
-        if (result.method && result.method.indexOf('_subscription') !== -1) {
-            _this.emit(_this.DATA, result);
+  this._parseResponse((typeof e.data === 'string') ? e.data : '').forEach((result) => {
+    if (result.method && result.method.indexOf('_subscription') !== -1) {
+      _this.emit(_this.DATA, result);
 
-            return;
-        }
+      return;
+    }
 
-        var id = result.id;
+    let { id } = result;
 
-        // get the id which matches the returned id
-        if (Array.isArray(result)) {
-            id = result[0].id;
-        }
+    // get the id which matches the returned id
+    if (Array.isArray(result)) {
+      id = result[0].id;
+    }
 
-        if (_this.responseQueue.has(id)) {
-            if(_this.responseQueue.get(id).callback !== undefined) {
-                _this.responseQueue.get(id).callback(false, result);
-            }
-            _this.responseQueue.delete(id);
-        }
-    });
+    if (_this.responseQueue.has(id)) {
+      if (_this.responseQueue.get(id).callback !== undefined) {
+        _this.responseQueue.get(id).callback(false, result);
+      }
+      _this.responseQueue.delete(id);
+    }
+  });
 };
 
 /**
@@ -146,18 +145,18 @@ WebsocketProvider.prototype._onMessage = function (e) {
  * @returns {void}
  */
 WebsocketProvider.prototype._onConnect = function () {
-    this.emit(this.CONNECT);
-    this.reconnectAttempts = 0;
-    this.reconnecting = false;
+  this.emit(this.CONNECT);
+  this.reconnectAttempts = 0;
+  this.reconnecting = false;
 
-    if (this.requestQueue.size > 0) {
-        var _this = this;
+  if (this.requestQueue.size > 0) {
+    const _this = this;
 
-        this.requestQueue.forEach(function (request, key) {
-            _this.send(request.payload, request.callback);
-            _this.requestQueue.delete(key);
-        });
-    }
+    this.requestQueue.forEach((request, key) => {
+      _this.send(request.payload, request.callback);
+      _this.requestQueue.delete(key);
+    });
+  }
 };
 
 /**
@@ -168,32 +167,32 @@ WebsocketProvider.prototype._onConnect = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype._onClose = function (event) {
-    var _this = this;
+  const _this = this;
 
-    if (this.reconnectOptions.auto && (![1000, 1001].includes(event.code) || event.wasClean === false)) {
-        this.reconnect();
+  if (this.reconnectOptions.auto && (![1000, 1001].includes(event.code) || event.wasClean === false)) {
+    this.reconnect();
 
-        return;
-    }
+    return;
+  }
 
-    this.emit(this.CLOSE, event);
+  this.emit(this.CLOSE, event);
 
-    if (this.requestQueue.size > 0) {
-        this.requestQueue.forEach(function (request, key) {
-            request.callback(errors.ConnectionNotOpenError(event));
-            _this.requestQueue.delete(key);
-        });
-    }
+  if (this.requestQueue.size > 0) {
+    this.requestQueue.forEach((request, key) => {
+      request.callback(errors.ConnectionNotOpenError(event));
+      _this.requestQueue.delete(key);
+    });
+  }
 
-    if (this.responseQueue.size > 0) {
-        this.responseQueue.forEach(function (request, key) {
-            request.callback(errors.InvalidConnection('on WS', event));
-            _this.responseQueue.delete(key);
-        });
-    }
+  if (this.responseQueue.size > 0) {
+    this.responseQueue.forEach((request, key) => {
+      request.callback(errors.InvalidConnection('on WS', event));
+      _this.responseQueue.delete(key);
+    });
+  }
 
-    this._removeSocketListeners();
-    this.removeAllListeners();
+  this._removeSocketListeners();
+  this.removeAllListeners();
 };
 
 /**
@@ -204,9 +203,9 @@ WebsocketProvider.prototype._onClose = function (event) {
  * @returns {void}
  */
 WebsocketProvider.prototype._addSocketListeners = function () {
-    this.connection.addEventListener('message', this._onMessage.bind(this));
-    this.connection.addEventListener('open', this._onConnect.bind(this));
-    this.connection.addEventListener('close', this._onClose.bind(this));
+  this.connection.addEventListener('message', this._onMessage.bind(this));
+  this.connection.addEventListener('open', this._onConnect.bind(this));
+  this.connection.addEventListener('close', this._onClose.bind(this));
 };
 
 /**
@@ -217,9 +216,9 @@ WebsocketProvider.prototype._addSocketListeners = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype._removeSocketListeners = function () {
-    this.connection.removeEventListener('message', this._onMessage);
-    this.connection.removeEventListener('open', this._onConnect);
-    this.connection.removeEventListener('close', this._onClose);
+  this.connection.removeEventListener('message', this._onMessage);
+  this.connection.removeEventListener('open', this._onConnect);
+  this.connection.removeEventListener('close', this._onClose);
 };
 
 /**
@@ -232,63 +231,58 @@ WebsocketProvider.prototype._removeSocketListeners = function () {
  * @returns {Array}
  */
 WebsocketProvider.prototype._parseResponse = function (data) {
-    var _this = this,
-        returnValues = [];
+  const _this = this;
+  const returnValues = [];
 
-    // DE-CHUNKER
-    var dechunkedData = data
-        .replace(/\}[\n\r]?\{/g, '}|--|{') // }{
-        .replace(/\}\][\n\r]?\[\{/g, '}]|--|[{') // }][{
-        .replace(/\}[\n\r]?\[\{/g, '}|--|[{') // }[{
-        .replace(/\}\][\n\r]?\{/g, '}]|--|{') // }]{
-        .split('|--|');
+  // DE-CHUNKER
+  const dechunkedData = data
+    .replace(/\}[\n\r]?\{/g, '}|--|{') // }{
+    .replace(/\}\][\n\r]?\[\{/g, '}]|--|[{') // }][{
+    .replace(/\}[\n\r]?\[\{/g, '}|--|[{') // }[{
+    .replace(/\}\][\n\r]?\{/g, '}]|--|{') // }]{
+    .split('|--|');
 
-    dechunkedData.forEach(function (data) {
+  dechunkedData.forEach((data) => {
+    // prepend the last chunk
+    if (_this.lastChunk) data = _this.lastChunk + data;
 
-        // prepend the last chunk
-        if (_this.lastChunk)
-            data = _this.lastChunk + data;
+    let result = null;
 
-        var result = null;
+    try {
+      result = JSON.parse(data);
+    } catch (e) {
+      _this.lastChunk = data;
 
-        try {
-            result = JSON.parse(data);
-        } catch (e) {
+      // start timeout to cancel all requests
+      clearTimeout(_this.lastChunkTimeout);
+      _this.lastChunkTimeout = setTimeout(() => {
+        if (_this.reconnectOptions.auto && _this.reconnectOptions.onTimeout) {
+          _this.reconnect();
 
-            _this.lastChunk = data;
-
-            // start timeout to cancel all requests
-            clearTimeout(_this.lastChunkTimeout);
-            _this.lastChunkTimeout = setTimeout(function () {
-                if (_this.reconnectOptions.auto && _this.reconnectOptions.onTimeout) {
-                    _this.reconnect();
-
-                    return;
-                }
-
-
-                _this.emit(_this.ERROR, errors.ConnectionTimeout(_this._customTimeout));
-
-                if (_this.requestQueue.size > 0) {
-                    _this.requestQueue.forEach(function (request, key) {
-                        request.callback(errors.ConnectionTimeout(_this._customTimeout));
-                        _this.requestQueue.delete(key);
-                    });
-                }
-            }, _this._customTimeout);
-
-            return;
+          return;
         }
 
-        // cancel timeout and set chunk to null
-        clearTimeout(_this.lastChunkTimeout);
-        _this.lastChunk = null;
+        _this.emit(_this.ERROR, errors.ConnectionTimeout(_this._customTimeout));
 
-        if (result)
-            returnValues.push(result);
-    });
+        if (_this.requestQueue.size > 0) {
+          _this.requestQueue.forEach((request, key) => {
+            request.callback(errors.ConnectionTimeout(_this._customTimeout));
+            _this.requestQueue.delete(key);
+          });
+        }
+      }, _this._customTimeout);
 
-    return returnValues;
+      return;
+    }
+
+    // cancel timeout and set chunk to null
+    clearTimeout(_this.lastChunkTimeout);
+    _this.lastChunk = null;
+
+    if (result) returnValues.push(result);
+  });
+
+  return returnValues;
 };
 
 /**
@@ -302,38 +296,38 @@ WebsocketProvider.prototype._parseResponse = function (data) {
  * @returns {void}
  */
 WebsocketProvider.prototype.send = function (payload, callback) {
-    var _this = this;
-    var id = payload.id;
-    var request = {payload: payload, callback: callback};
+  const _this = this;
+  let { id } = payload;
+  const request = { payload, callback };
 
-    if (Array.isArray(payload)) {
-        id = payload[0].id;
-    }
+  if (Array.isArray(payload)) {
+    id = payload[0].id;
+  }
 
-    if (this.connection.readyState === this.connection.CONNECTING || this.reconnecting) {
-        this.requestQueue.set(id, request);
+  if (this.connection.readyState === this.connection.CONNECTING || this.reconnecting) {
+    this.requestQueue.set(id, request);
 
-        return;
-    }
+    return;
+  }
 
-    if (this.connection.readyState !== this.connection.OPEN) {
-        this.requestQueue.delete(id);
-
-        this.emit(this.ERROR, errors.ConnectionNotOpenError());
-        request.callback(errors.ConnectionNotOpenError());
-
-        return;
-    }
-
-    this.responseQueue.set(id, request);
+  if (this.connection.readyState !== this.connection.OPEN) {
     this.requestQueue.delete(id);
 
-    try {
-        this.connection.send(JSON.stringify(request.payload));
-    } catch (error) {
-        request.callback(error);
-        _this.responseQueue.delete(id);
-    }
+    this.emit(this.ERROR, errors.ConnectionNotOpenError());
+    request.callback(errors.ConnectionNotOpenError());
+
+    return;
+  }
+
+  this.responseQueue.set(id, request);
+  this.requestQueue.delete(id);
+
+  try {
+    this.connection.send(JSON.stringify(request.payload));
+  } catch (error) {
+    request.callback(error);
+    _this.responseQueue.delete(id);
+  }
 };
 
 /**
@@ -344,13 +338,13 @@ WebsocketProvider.prototype.send = function (payload, callback) {
  * @returns {void}
  */
 WebsocketProvider.prototype.reset = function () {
-    this.responseQueue.clear();
-    this.requestQueue.clear();
+  this.responseQueue.clear();
+  this.requestQueue.clear();
 
-    this.removeAllListeners();
+  this.removeAllListeners();
 
-    this._removeSocketListeners();
-    this._addSocketListeners();
+  this._removeSocketListeners();
+  this._addSocketListeners();
 };
 
 /**
@@ -364,8 +358,8 @@ WebsocketProvider.prototype.reset = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype.disconnect = function (code, reason) {
-    this._removeSocketListeners();
-    this.connection.close(code || 1000, reason);
+  this._removeSocketListeners();
+  this.connection.close(code || 1000, reason);
 };
 
 /**
@@ -376,7 +370,7 @@ WebsocketProvider.prototype.disconnect = function (code, reason) {
  * @returns {boolean}
  */
 WebsocketProvider.prototype.supportsSubscriptions = function () {
-    return true;
+  return true;
 };
 
 /**
@@ -387,39 +381,39 @@ WebsocketProvider.prototype.supportsSubscriptions = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype.reconnect = function () {
-    var _this = this;
-    this.reconnecting = true;
+  const _this = this;
+  this.reconnecting = true;
 
-    if (this.responseQueue.size > 0) {
-        this.responseQueue.forEach(function (request, key) {
-            request.callback(errors.PendingRequestsOnReconnectingError());
-            _this.responseQueue.delete(key);
-        });
-    }
+  if (this.responseQueue.size > 0) {
+    this.responseQueue.forEach((request, key) => {
+      request.callback(errors.PendingRequestsOnReconnectingError());
+      _this.responseQueue.delete(key);
+    });
+  }
 
-    if (
-        !this.reconnectOptions.maxAttempts ||
-        this.reconnectAttempts < this.reconnectOptions.maxAttempts
-    ) {
-        setTimeout(function () {
-            _this.reconnectAttempts++;
-            _this._removeSocketListeners();
-            _this.emit(_this.RECONNECT, _this.reconnectAttempts);
-            _this.connect();
-        }, this.reconnectOptions.delay);
+  if (
+    !this.reconnectOptions.maxAttempts
+        || this.reconnectAttempts < this.reconnectOptions.maxAttempts
+  ) {
+    setTimeout(() => {
+      _this.reconnectAttempts++;
+      _this._removeSocketListeners();
+      _this.emit(_this.RECONNECT, _this.reconnectAttempts);
+      _this.connect();
+    }, this.reconnectOptions.delay);
 
-        return;
-    }
+    return;
+  }
 
-    this.emit(this.ERROR, errors.MaxAttemptsReachedOnReconnectingError());
-    this.reconnecting = false;
+  this.emit(this.ERROR, errors.MaxAttemptsReachedOnReconnectingError());
+  this.reconnecting = false;
 
-    if (this.requestQueue.size > 0) {
-        this.requestQueue.forEach(function (request, key) {
-            request.callback(errors.MaxAttemptsReachedOnReconnectingError());
-            _this.requestQueue.delete(key);
-        });
-    }
+  if (this.requestQueue.size > 0) {
+    this.requestQueue.forEach((request, key) => {
+      request.callback(errors.MaxAttemptsReachedOnReconnectingError());
+      _this.requestQueue.delete(key);
+    });
+  }
 };
 
 export default WebsocketProvider;

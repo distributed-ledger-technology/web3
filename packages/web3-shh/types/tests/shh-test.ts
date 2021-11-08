@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { Info, Notification, Shh } from 'web3-shh';
+import { Info, Notification, Shh } from 'https://deno.land/x/web3/packages/web3-shh/src/index.js';
 
 // $ExpectType Shh
 const shh_empty = new Shh();
@@ -41,7 +41,7 @@ shh.setProvider('https://localhost:2100');
 new shh.BatchRequest();
 
 // $ExpectType any
-shh.extend({property: 'test', methods: [{name: 'method', call: 'method'}]});
+shh.extend({ property: 'test', methods: [{ name: 'method', call: 'method' }] });
 
 // $ExpectType Promise<number>
 shh.net.getId();
@@ -90,52 +90,52 @@ shh.newKeyPair((error: Error, key: string) => {});
 
 // $ExpectType Promise<string>
 shh.addPrivateKey(
-    '0x8bda3abeb454847b515fa9b404cede50b1cc63cfdeddd4999d074284b4c21e15'
+  '0x8bda3abeb454847b515fa9b404cede50b1cc63cfdeddd4999d074284b4c21e15',
 );
 // $ExpectType Promise<string>
 shh.addPrivateKey(
-    '0x8bda3abeb454847b515fa9b404cede50b1cc63cfdeddd4999d074284b4c21e15',
-    (error: Error, privateKey: string) => {}
+  '0x8bda3abeb454847b515fa9b404cede50b1cc63cfdeddd4999d074284b4c21e15',
+  (error: Error, privateKey: string) => {},
 );
 
 // $ExpectType Promise<boolean>
 shh.deleteKeyPair(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<boolean>
 shh.deleteKeyPair(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, result: boolean) => {}
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, result: boolean) => {},
 );
 
 // $ExpectType Promise<boolean>
 shh.hasKeyPair(
-    'fe22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  'fe22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<boolean>
 shh.hasKeyPair(
-    'fe22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, result: boolean) => {}
+  'fe22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, result: boolean) => {},
 );
 
 // $ExpectType Promise<string>
 shh.getPublicKey(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<string>
 shh.getPublicKey(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, publicKey: string) => {}
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, publicKey: string) => {},
 );
 
 // $ExpectType Promise<string>
 shh.getPrivateKey(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<string>
 shh.getPrivateKey(
-    '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, privateKey: string) => {}
+  '3e22b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, privateKey: string) => {},
 );
 
 // $ExpectType Promise<string>
@@ -145,99 +145,99 @@ shh.newSymKey((error: Error, key: string) => {});
 
 // $ExpectType Promise<string>
 shh.addSymKey(
-    '0x5e11b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  '0x5e11b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<string>
 shh.addSymKey(
-    '0x5e11b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, key: string) => {}
+  '0x5e11b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, key: string) => {},
 );
 
 // $ExpectType Promise<string>
 shh.generateSymKeyFromPassword('Never use this password - password!');
 // $ExpectType Promise<string>
 shh.generateSymKeyFromPassword(
-    'Never use this password - password!',
-    (error: Error, key: string) => {}
+  'Never use this password - password!',
+  (error: Error, key: string) => {},
 );
 
 // $ExpectType Promise<boolean>
 shh.hasSymKey(
-    'f6dcf21ed6a17bd78d8c4c63195ab997b3b65ea683705501eae82d32667adc92'
+  'f6dcf21ed6a17bd78d8c4c63195ab997b3b65ea683705501eae82d32667adc92',
 );
 // $ExpectType Promise<boolean>
 shh.hasSymKey(
-    'f6dcf21ed6a17bd78d8c4c63195ab997b3b65ea683705501eae82d32667adc92',
-    (error: Error, result: boolean) => {}
+  'f6dcf21ed6a17bd78d8c4c63195ab997b3b65ea683705501eae82d32667adc92',
+  (error: Error, result: boolean) => {},
 );
 
 // $ExpectType Promise<string>
 shh.getSymKey(
-    'af33b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  'af33b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<string>
 shh.getSymKey(
-    'af33b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, key: string) => {}
+  'af33b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, key: string) => {},
 );
 
 // $ExpectType Promise<boolean>
 shh.deleteSymKey(
-    'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f'
+  'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
 );
 // $ExpectType Promise<boolean>
 shh.deleteSymKey(
-    'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    (error: Error, result: boolean) => {}
+  'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
+  (error: Error, result: boolean) => {},
 );
 
 // $ExpectType Promise<string>
 shh.post({
+  symKeyID: 'sd3',
+  sig: 'sds5',
+  ttl: 10,
+  topic: '0xffaadd11',
+  payload: '0xffffffdddddd1122',
+  powTime: 3,
+  powTarget: 0.5,
+});
+// $ExpectType Promise<string>
+shh.post(
+  {
     symKeyID: 'sd3',
     sig: 'sds5',
     ttl: 10,
     topic: '0xffaadd11',
     payload: '0xffffffdddddd1122',
     powTime: 3,
-    powTarget: 0.5
-});
-// $ExpectType Promise<string>
-shh.post(
-    {
-        symKeyID: 'sd3',
-        sig: 'sds5',
-        ttl: 10,
-        topic: '0xffaadd11',
-        payload: '0xffffffdddddd1122',
-        powTime: 3,
-        powTarget: 0.5
-    },
-    (error: Error, result: string) => {}
+    powTarget: 0.5,
+  },
+  (error: Error, result: string) => {},
 );
 
 // $ExpectType Subscribe
 shh.subscribe('messages', {
-    symKeyID:
+  symKeyID:
         'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-    sig:
+  sig:
         '0x04d1574d4eab8f3dde4d2dc7ed2c4d699d77cbbdd09167b8fffa099652ce4df00c4c6e0263eafe05007a46fdf0c8d32b11aeabcd3abbc7b2bc2bb967368a68e9c6',
-    ttl: 20,
-    topics: ['0xffddaa11'],
-    minPow: 0.8
+  ttl: 20,
+  topics: ['0xffddaa11'],
+  minPow: 0.8,
 });
 // $ExpectType Subscribe
 shh.subscribe(
-    'messages',
-    {
-        symKeyID:
+  'messages',
+  {
+    symKeyID:
             'bf31b9ffc2387e18636e0a3d0c56b023264c16e78a2adcba1303cefc685e610f',
-        sig:
+    sig:
             '0x04d1574d4eab8f3dde4d2dc7ed2c4d699d77cbbdd09167b8fffa099652ce4df00c4c6e0263eafe05007a46fdf0c8d32b11aeabcd3abbc7b2bc2bb967368a68e9c6',
-        ttl: 20,
-        topics: ['0xffddaa11'],
-        minPow: 0.8
-    },
-    (error: Error, message: Notification, subscription: any) => {}
+    ttl: 20,
+    topics: ['0xffddaa11'],
+    minPow: 0.8,
+  },
+  (error: Error, message: Notification, subscription: any) => {},
 );
 
 // $ExpectType Promise<string>
@@ -245,10 +245,10 @@ shh.newMessageFilter();
 
 // $ExpectType Promise<boolean>
 shh.deleteMessageFilter(
-    '2b47fbafb3cce24570812a82e6e93cd9e2551bbc4823f6548ff0d82d2206b326'
+  '2b47fbafb3cce24570812a82e6e93cd9e2551bbc4823f6548ff0d82d2206b326',
 );
 
 // $ExpectType Promise<Notification[]>
 shh.getFilterMessages(
-    '2b47fbafb3cce24570812a82e6e93cd9e2551bbc4823f6548ff0d82d2206b326'
+  '2b47fbafb3cce24570812a82e6e93cd9e2551bbc4823f6548ff0d82d2206b326',
 );

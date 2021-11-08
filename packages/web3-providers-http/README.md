@@ -17,8 +17,8 @@ npm install web3-providers-http
 ## Usage
 
 ```js
-const http = require('http');
-const Web3HttpProvider = require('web3-providers-http');
+const http = require('https://jspm.dev/npm:@jspm/core@2/nodelibs/http');
+const Web3HttpProvider = require('https://deno.land/x/web3/packages/web3-providers-http/src/index.js');
 
 const options = {
     keepAlive: true,
