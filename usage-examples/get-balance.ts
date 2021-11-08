@@ -1,4 +1,6 @@
 
+// import Web3 from '../mod.ts'
+
 import Web3 from 'https://deno.land/x/web3/mod.ts'
 
 const providerURL = Deno.args[0]
