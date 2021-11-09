@@ -17,11 +17,11 @@
  * @date 2018
  */
 
-import * as net from 'net';
+import * as net from 'https://deno.land/x/web3/packages/../types/net.d.ts';
 import {
   BatchRequest, provider, Providers, Extension, 
-} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
-import { Network } from 'https://deno.land/x/web3/packages/web3-net/types/index.d.ts';
+} from '../../web3-core/types/index.d.ts';
+import { Network } from '../../web3-net/types/index.d.ts';
 
 export class Shh {
   constructor();

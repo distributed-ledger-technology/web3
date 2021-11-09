@@ -19,7 +19,9 @@
  * @date 2018
  */
 
-import * as net from 'net';
+import * as net from 'https://deno.land/x/web3/packages/../types/net.d.ts';
+import { BigNumber } from 'https://deno.land/x/web3/packages/../types/bignumber.d.ts';
+import BN from 'https://deno.land/x/web3/packages/../types/bn.d.ts';
 import {
   BatchRequest,
   Extension,
@@ -37,18 +39,16 @@ import {
   BlockNumber,
   LogsOptions,
   PastLogsOptions,
-} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
-import { Subscription } from 'https://deno.land/x/web3/packages/web3-core-subscriptions/types/index.d.ts';
-import { AbiCoder } from 'https://deno.land/x/web3/packages/web3-eth-abi/types/index.d.ts';
-import { Accounts } from 'https://deno.land/x/web3/packages/web3-eth-accounts/types/index.d.ts';
-import { Contract, ContractOptions } from 'https://deno.land/x/web3/packages/web3-eth-contract/types/index.d.ts';
-import { Ens } from 'https://deno.land/x/web3/packages/web3-eth-ens/types/index.d.ts';
-import { Iban } from 'https://deno.land/x/web3/packages/web3-eth-iban/types/index.d.ts';
-import { Personal } from 'https://deno.land/x/web3/packages/web3-eth-personal/types/index.d.ts';
-import { Network } from 'https://deno.land/x/web3/packages/web3-net/types/index.d.ts';
-import { AbiItem } from 'https://deno.land/x/web3/packages/web3-utils/types/index.d.ts';
-import { BigNumber } from 'bignumber.js';
-import BN = require('bn.js');
+} from '../../web3-core/types/index.d.ts';
+import { Subscription } from '../../web3-core-subscriptions/types/index.d.ts';
+import { AbiCoder } from '../../web3-eth-abi/types/index.d.ts';
+import { Accounts } from '../../web3-eth-accounts/types/index.d.ts';
+import { Contract, ContractOptions } from '../../web3-eth-contract/types/index.d.ts';
+import { Ens } from '../../web3-eth-ens/types/index.d.ts';
+import { Iban } from '../../web3-eth-iban/types/index.d.ts';
+import { Personal } from '../../web3-eth-personal/types/index.d.ts';
+import { Network } from '../../web3-net/types/index.d.ts';
+import { AbiItem } from '../../web3-utils/types/index.d.ts';
 
 export {
   TransactionConfig,
@@ -58,7 +58,7 @@ export {
   hardfork,
   Common,
   chain,
-} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+} from '../../web3-core/types/index.d.ts';
 
 export class Eth {
   constructor();

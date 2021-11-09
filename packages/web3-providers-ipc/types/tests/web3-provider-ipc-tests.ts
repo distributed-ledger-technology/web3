@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import * as net from 'net';
+import * as net from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/net';
 import { IpcProvider } from 'web3-providers';
 import { JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
 
