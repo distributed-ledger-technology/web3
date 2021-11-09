@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3/web3-core-helpers/src/index.js';
 import oboe from 'https://jspm.dev/oboe';
 
 const IpcProvider = function IpcProvider(path, net) {

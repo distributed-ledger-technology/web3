@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { fromWei } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import { fromWei } from 'https://deno.land/x/web3/web3-utils/src/index.js';
 
 const bigNumber = new BN(3);
 

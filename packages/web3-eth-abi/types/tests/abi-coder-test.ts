@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import { AbiCoder } from 'https://deno.land/x/web3/packages/web3-eth-abi/src/index.js';
+import { AbiCoder } from 'https://deno.land/x/web3/web3-eth-abi/src/index.js';
 
 const abiCoder = new AbiCoder();
 

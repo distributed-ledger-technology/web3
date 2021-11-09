@@ -23,7 +23,7 @@
 'use strict';
 
 import EventEmitter from 'https://jspm.dev/eventemitter3';
-import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3/web3-core-helpers/src/index.js';
 import { w3cwebsocket as Ws } from 'https://jspm.dev/websocket';
 import helpers from './helpers.js';
 

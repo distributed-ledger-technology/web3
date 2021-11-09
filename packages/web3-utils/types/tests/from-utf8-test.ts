@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { fromUtf8 } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import { fromUtf8 } from 'https://deno.land/x/web3/web3-utils/src/index.js';
 
 // $ExpectType string
 fromUtf8('I have 100£');

@@ -20,10 +20,10 @@
 'use strict';
 
 import { callbackify } from 'https://deno.land/std@0.63.0/node/util.ts';
-import { errors } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
-import WebsocketProvider from 'https://deno.land/x/web3/packages/web3-providers-ws/src/index.js';
-import HttpProvider from 'https://deno.land/x/web3/packages/web3-providers-http/src/index.js';
-import IpcProvider from 'https://deno.land/x/web3/packages/web3-providers-ipc/src/index.js';
+import { errors } from 'https://deno.land/x/web3/web3-core-helpers/src/index.js';
+import WebsocketProvider from 'https://deno.land/x/web3/web3-providers-ws/src/index.js';
+import HttpProvider from 'https://deno.land/x/web3/web3-providers-http/src/index.js';
+import IpcProvider from 'https://deno.land/x/web3/web3-providers-ipc/src/index.js';
 import Jsonrpc from './jsonrpc.js';
 import BatchManager from './batch.js';
 import givenProvider from './givenProvider.js';

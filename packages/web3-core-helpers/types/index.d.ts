@@ -17,9 +17,9 @@
  * @date 2018
  */
 
-import * as net from 'net';
-import * as http from 'http';
-import * as https from 'https';
+import * as net from 'https://deno.land/x/web3/../types/net.d.ts';
+import * as http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
+import * as https from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
 
 export class formatters {
   static outputBigNumberFormatter(number: number): number;

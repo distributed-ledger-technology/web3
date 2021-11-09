@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import {hexToNumberString} from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import {hexToNumberString} from 'https://deno.land/x/web3/web3-utils/src/index.js';
 
 // $ExpectType string
 hexToNumberString('0xea');

@@ -17,7 +17,7 @@ npm install web3-providers-ipc
 ## Usage
 
 ```js
-const Web3IpcProvider = require('https://deno.land/x/web3/packages/web3-providers-ipc/src/index.js');
+const Web3IpcProvider = require('https://deno.land/x/web3/web3-providers-ipc/src/index.js');
 const net = require(net);
 
 const ipc = new Web3IpcProvider('/Users/me/Library/Ethereum/geth.ipc', net);
