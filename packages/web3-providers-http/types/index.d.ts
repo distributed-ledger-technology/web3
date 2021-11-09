@@ -19,10 +19,10 @@
  * @author Josh Stevens <joshstevens19@hotmail.co.uk>
  * @date 2018
  */
-import * as http from 'http';
-import * as https from 'https';
+import * as http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
+import * as https from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
 
-import { HttpProviderBase, JsonRpcResponse } from 'https://deno.land/x/web3/packages/web3-core-helpers/types/index.d.ts';
+import { HttpProviderBase, JsonRpcResponse } from '../../web3-core-helpers/types/index.d.ts';
 
 export interface HttpHeader {
     name: string;

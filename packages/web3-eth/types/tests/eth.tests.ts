@@ -36,7 +36,7 @@ import {
   FeeHistoryResult,
 } from 'https://deno.land/x/web3/packages/web3-eth/src/index.js';
 import BN = require('https://jspm.dev/bn.js');
-import BigNumber from 'bignumber.js';
+import BigNumber from 'https://jspm.dev/bignumber.js';
 
 // $ExpectType Eth
 const eth_empty = new Eth();
