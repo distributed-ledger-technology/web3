@@ -17,9 +17,9 @@
  * @date 2018
  */
 
-import { AccountsBase, SignedTransaction, WalletBase } from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+import { AccountsBase, SignedTransaction, WalletBase } from '../../web3-core/types/index.d.ts';
 
-export { SignedTransaction } from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
+export { SignedTransaction } from '../../web3-core/types/index.d.ts';
 
 export class Accounts extends AccountsBase {}
 

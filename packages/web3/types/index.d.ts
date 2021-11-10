@@ -17,16 +17,16 @@
  * @date 2018
  */
 
-import * as net from 'net';
-import { Bzz } from 'https://deno.land/x/web3/packages/web3-bzz/types/index.d.ts';
+import * as net from 'https://deno.land/x/web3/types/net.d.ts';
+import { Bzz } from '../../web3-bzz/types/index.d.ts';
 import {
   BatchRequest, provider, Providers, Extension, 
-} from 'https://deno.land/x/web3/packages/web3-core/types/index.d.ts';
-import { Eth } from 'https://deno.land/x/web3/packages/web3-eth/types/index.d.ts';
-import { Personal } from 'https://deno.land/x/web3/packages/web3-eth-personal/types/index.d.ts';
-import { Network } from 'https://deno.land/x/web3/packages/web3-net/types/index.d.ts';
-import { Shh } from 'https://deno.land/x/web3/packages/web3-shh/types/index.d.ts';
-import { Utils } from 'https://deno.land/x/web3/packages/web3-utils/types/index.d.ts';
+} from '../../web3-core/types/index.d.ts';
+import { Eth } from '../../web3-eth/types/index.d.ts';
+import { Personal } from '../../web3-eth-personal/types/index.d.ts';
+import { Network } from '../../web3-net/types/index.d.ts';
+import { Shh } from '../../web3-shh/types/index.d.ts';
+import { Utils } from '../../web3-utils/types/index.d.ts';
 
 export default class Web3 {
   constructor();

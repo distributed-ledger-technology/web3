@@ -8,7 +8,7 @@ Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we hav
 
 ```sh 
 
-deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/get-balance.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --allow-net https://deno.land/x/web3/usage-examples/get-balance.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
@@ -19,9 +19,9 @@ import Web3 from 'https://deno.land/x/web3/mod.ts'
 
 const providerURL = Deno.args[0]
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
+const web3 = new Web3.providers.HttpProvider(providerURL))
 
-const balance = await (web3 as any).eth.getBalance("0x7a915e362353d72570dcf90aa5baa1c5b341c7aa")
+const balance = await web3.eth.getBalance("0x7a915e362353d72570dcf90aa5baa1c5b341c7aa")
 
 console.log(`the balance is ${balance} wei`)
 
@@ -31,7 +31,7 @@ console.log(`the balance is ${balance} wei`)
 
 ```sh 
 
-deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/get-transaction.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --allow-net https://deno.land/x/web3/usage-examples/get-transaction.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
@@ -41,11 +41,11 @@ import Web3 from 'https://deno.land/x/web3/mod.ts'
 
 const providerURL = Deno.args[0]
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
+const web3 = new Web3(new Web3.providers.HttpProvider(providerURL))
 
 const transactionHash = "0x0d558d490c89fc94ddfebd284e39da5c1bcff15d18c4e9fd2eb37a202d20c703"
 
-const transaction = (await (web3.eth as any).getTransaction(transactionHash))
+const transaction = (await web3.eth.getTransaction(transactionHash))
 
 console.log(transaction)
 
@@ -56,7 +56,7 @@ console.log(transaction)
 
 ```sh 
 
-deno run --location=http://localhost --allow-all --reload https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
+deno run --allow-net https://deno.land/x/web3/usage-examples/create-account.ts https://mainnet.infura.io/v3/<your-project-id>
 
 ```
 
@@ -66,9 +66,9 @@ import Web3 from 'https://deno.land/x/web3/mod.ts'
 
 const providerURL = Deno.args[0]
 
-const web3 = new Web3(new (Web3 as any).providers.HttpProvider(providerURL))
+const web3 = new Web3(new Web3.providers.HttpProvider(providerURL))
 
-const newAccount = await (web3 as any).eth.accounts.create()
+const newAccount = await web3.eth.accounts.create()
 
 console.log(newAccount)
 

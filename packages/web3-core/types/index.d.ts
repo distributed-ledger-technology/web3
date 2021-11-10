@@ -18,7 +18,9 @@
  * @date 2018
  */
 
-import * as net from 'net';
+import * as net from 'https://deno.land/x/web3/types/net.d.ts';
+import BN from 'https://deno.land/x/web3/types/bn.d.ts';
+import BigNumber from 'https://deno.land/x/web3/types/bignumber.d.ts';
 import {
   HttpProviderBase,
   HttpProviderOptions,
@@ -27,10 +29,8 @@ import {
   WebsocketProviderOptions,
   JsonRpcPayload,
   JsonRpcResponse,
-} from 'https://deno.land/x/web3/packages/web3-core-helpers/types/index.d.ts';
-import { Method } from 'https://deno.land/x/web3/packages/web3-core-method/types/index.d.ts';
-import BN = require('bn.js');
-import BigNumber from 'bignumber.js';
+} from '../../web3-core-helpers/types/index.d.ts';
+import { Method } from '../../web3-core-method/types/index.d.ts';
 
 export interface SignedTransaction {
     messageHash?: string;

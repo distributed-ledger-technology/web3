@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import BN = require('bn.js');
+import BN from 'https://deno.land/x/web3/types/bn.d.ts';
 
 export type Unit =
     | 'noether'
