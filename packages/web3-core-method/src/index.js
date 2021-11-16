@@ -23,10 +23,10 @@
 
 'use strict';
 
-import { errors, formatters } from 'https://deno.land/x/web3/packages/web3-core-helpers/src/index.js';
-import utils from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
-import promiEvent from 'https://deno.land/x/web3/packages/web3-core-promievent/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3/packages/web3-core-subscriptions/src/index.js';
+import { errors, formatters } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
+import promiEvent from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-promievent/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-subscriptions/src/index.js';
 import * as EthersTransactionUtils from 'https://jspm.dev/@ethersproject/transactions';
 
 const Method = function Method(options) {
@@ -196,6 +196,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
   let timeoutCount = 0;
   let confirmationCount = 0;
   let intervalId = null;
+  let blockHeaderTimeoutId = null;
   let lastBlock = null;
   let receiptJSON = '';
   const gasProvided = ((!!payload.params[0] && typeof payload.params[0] === 'object') && payload.params[0].gas) ? payload.params[0].gas : null;
@@ -263,6 +264,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
         sub = {
           unsubscribe() {
             clearInterval(intervalId);
+            clearTimeout(blockHeaderTimeoutId);
           },
         };
       }
@@ -550,7 +552,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
     });
 
     // Fallback to polling if tx receipt didn't arrived in "blockHeaderTimeout" [10 seconds]
-    setTimeout(() => {
+    blockHeaderTimeoutId = setTimeout(() => {
       if (!blockHeaderArrived) {
         startInterval();
       }

@@ -17,10 +17,10 @@
  * @date 2018
  */
 
-import { PromiEvent, TransactionConfig, TransactionReceipt } from '../../web3-core/types/index.d.ts';
-import { TransactionRevertInstructionError } from '../../web3-core-helpers/types/index.d.ts';
-import { Eth } from '../../web3-eth/types/index.d.ts';
-import { Contract } from '../../web3-eth-contract/types/index.d.ts';
+import { PromiEvent, TransactionConfig, TransactionReceipt } from '../../web3-core@v0.6.1/types/index.d.ts';
+import { TransactionRevertInstructionError } from '../../web3-core-helpers@v0.6.1/types/index.d.ts';
+import { Eth } from '../../web3-eth@v0.6.1/types/index.d.ts';
+import { Contract } from '../../web3-eth-contract@v0.6.1/types/index.d.ts';
 
 export interface ContentHash {
     protocolType: 'ipfs' | 'bzz' | 'onion' | 'onion3' | null,
