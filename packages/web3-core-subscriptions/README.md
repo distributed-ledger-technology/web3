@@ -19,7 +19,7 @@ npm install web3-core-subscriptions
 ## Usage
 
 ```js
-const Web3Subscriptions = require('https://deno.land/x/web3/packages/web3-core-subscriptions/src/index.js');
+const Web3Subscriptions = require('https://deno.land/x/web3@v0.6.1/packages/web3-core-subscriptions/src/index.js');
 
 const sub = new Web3Subscriptions({
     name: 'subscribe',

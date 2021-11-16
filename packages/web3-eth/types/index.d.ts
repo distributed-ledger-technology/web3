@@ -39,16 +39,16 @@ import {
   BlockNumber,
   LogsOptions,
   PastLogsOptions,
-} from '../../web3-core/types/index.d.ts';
-import { Subscription } from '../../web3-core-subscriptions/types/index.d.ts';
-import { AbiCoder } from '../../web3-eth-abi/types/index.d.ts';
-import { Accounts } from '../../web3-eth-accounts/types/index.d.ts';
-import { Contract, ContractOptions } from '../../web3-eth-contract/types/index.d.ts';
-import { Ens } from '../../web3-eth-ens/types/index.d.ts';
-import { Iban } from '../../web3-eth-iban/types/index.d.ts';
-import { Personal } from '../../web3-eth-personal/types/index.d.ts';
-import { Network } from '../../web3-net/types/index.d.ts';
-import { AbiItem } from '../../web3-utils/types/index.d.ts';
+} from '../../web3-core@v0.6.1/types/index.d.ts';
+import { Subscription } from '../../web3-core-subscriptions@v0.6.1/types/index.d.ts';
+import { AbiCoder } from '../../web3-eth-abi@v0.6.1/types/index.d.ts';
+import { Accounts } from '../../web3-eth-accounts@v0.6.1/types/index.d.ts';
+import { Contract, ContractOptions } from '../../web3-eth-contract@v0.6.1/types/index.d.ts';
+import { Ens } from '../../web3-eth-ens@v0.6.1/types/index.d.ts';
+import { Iban } from '../../web3-eth-iban@v0.6.1/types/index.d.ts';
+import { Personal } from '../../web3-eth-personal@v0.6.1/types/index.d.ts';
+import { Network } from '../../web3-net@v0.6.1/types/index.d.ts';
+import { AbiItem } from '../../web3-utils@v0.6.1/types/index.d.ts';
 
 export {
   TransactionConfig,
@@ -58,7 +58,7 @@ export {
   hardfork,
   Common,
   chain,
-} from '../../web3-core/types/index.d.ts';
+} from '../../web3-core@v0.6.1/types/index.d.ts';
 
 export class Eth {
   constructor();
