@@ -20,8 +20,8 @@
 import * as net from 'https://deno.land/x/web3/types/net.d.ts';
 import {
   BatchRequest, provider, Providers, Extension, 
-} from '../../web3-core/types/index.d.ts';
-import { Network } from '../../web3-net/types/index.d.ts';
+} from 'https://deno.land/x/web3@v0.6.1/packages/web3-core/types/index.d.ts';
+import { Network } from 'https://deno.land/x/web3@v0.6.1/packages/web3-net/types/index.d.ts';
 
 export class Shh {
   constructor();

@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { fromAscii } from 'https://deno.land/x/web3/packages/web3-utils/src/index.js';
+import { fromAscii } from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 fromAscii('I have 100!');

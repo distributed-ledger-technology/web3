@@ -19,8 +19,6 @@
  */
 
 import * as net from 'https://deno.land/x/web3/types/net.d.ts';
-import BN from 'https://deno.land/x/web3/types/bn.d.ts';
-import BigNumber from 'https://deno.land/x/web3/types/bignumber.d.ts';
 import {
   HttpProviderBase,
   HttpProviderOptions,
@@ -29,8 +27,10 @@ import {
   WebsocketProviderOptions,
   JsonRpcPayload,
   JsonRpcResponse,
-} from '../../web3-core-helpers/types/index.d.ts';
-import { Method } from '../../web3-core-method/types/index.d.ts';
+} from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-helpers/types/index.d.ts';
+import { Method } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-method/types/index.d.ts';
+import BN from 'https://deno.land/x/web3/types/bn.d.ts';
+import BigNumber from 'https://deno.land/x/web3/types/bignumber.d.ts';
 
 export interface SignedTransaction {
     messageHash?: string;
