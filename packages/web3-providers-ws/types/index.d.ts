@@ -20,6 +20,6 @@
  * @date 2018
  */
 
-import { WebsocketProviderBase } from '../../web3-core-helpers/types/index.d.ts';
+import { WebsocketProviderBase } from '../../web3-core-helpers@v0.6.1/types/index.d.ts';
 
 export class WebsocketProvider extends WebsocketProviderBase { }

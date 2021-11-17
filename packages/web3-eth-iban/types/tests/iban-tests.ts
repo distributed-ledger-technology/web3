@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import { Iban, IndirectOptions } from 'https://deno.land/x/web3/packages/web3-eth-iban/src/index.js';
+import { Iban, IndirectOptions } from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth-iban/src/index.js';
 
 const iban = 'XE7338O073KYGTWWZN0F2WZ0R8PX5ZPPZS';
 const address = '0x45cd08334aeedd8a06265b2ae302e3597d8faa28';

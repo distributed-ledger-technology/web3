@@ -21,7 +21,7 @@
 import * as net from 'https://deno.land/x/web3/types/net.d.ts';
 import {
   provider, RLPEncodedTransaction, TransactionConfig, BatchRequest, Providers, Extension, 
-} from '../../web3-core/types/index.d.ts';
+} from '../../web3-core@v0.6.1/types/index.d.ts';
 
 export class Personal {
   constructor();
