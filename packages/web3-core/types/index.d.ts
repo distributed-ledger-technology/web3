@@ -29,8 +29,8 @@ import {
   WebsocketProviderOptions,
   JsonRpcPayload,
   JsonRpcResponse,
-} from '../../web3-core-helpers/types/index.d.ts';
-import { Method } from '../../web3-core-method/types/index.d.ts';
+} from '../../web3-core-helpers@v0.6.1/types/index.d.ts';
+import { Method } from '../../web3-core-method@v0.6.1/types/index.d.ts';
 
 export interface SignedTransaction {
     messageHash?: string;
