@@ -18,7 +18,7 @@
  * @date 2018
  */
 
-import { Log } from 'https://deno.land/x/web3/packages/web3-core/src/index.js';
+import { Log } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core/src/index.js';
 import {
   BlockTransactionObject,
   BlockTransactionString,
@@ -34,7 +34,7 @@ import {
   Common,
   chain,
   FeeHistoryResult,
-} from 'https://deno.land/x/web3/packages/web3-eth/src/index.js';
+} from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth/src/index.js';
 import BN = require('https://jspm.dev/bn.js');
 import BigNumber from 'https://jspm.dev/bignumber.js';
 
