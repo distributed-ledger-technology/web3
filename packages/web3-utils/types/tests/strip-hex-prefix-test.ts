@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { stripHexPrefix } from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
+import { stripHexPrefix } from 'https://deno.land/x/web3v0.7.1/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 stripHexPrefix('0xd1220a0cf47c7b9be7a2e6ba89f429762e7b9adb');

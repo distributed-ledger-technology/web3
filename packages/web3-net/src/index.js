@@ -22,9 +22,9 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.6.1/packages/web3-core/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-method/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
+import core from 'https://deno.land/x/web3v0.7.1/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3v0.7.1/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3v0.7.1/packages/web3-utils/src/index.js';
 
 const Net = function () {
   const _this = this;
