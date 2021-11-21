@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { toHex } from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
+import { toHex } from 'https://deno.land/x/web30.7.1/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 toHex('234');

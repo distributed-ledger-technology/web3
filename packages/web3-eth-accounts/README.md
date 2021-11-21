@@ -19,7 +19,7 @@ npm install web3-eth-accounts
 ## Usage
 
 ```js
-const Web3EthAccounts = require('https://deno.land/x/web3@v0.6.1/packages/web3-eth-accounts/src/index.js');
+const Web3EthAccounts = require('https://deno.land/x/web30.7.1/packages/web3-eth-accounts/src/index.js');
 
 const account = new Web3EthAccounts('ws://localhost:8546');
 account.create();

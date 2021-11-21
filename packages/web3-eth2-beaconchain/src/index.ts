@@ -1,4 +1,4 @@
-import { ETH2Core, BaseAPISchema, ETH2BaseOpts } from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth2-core/src/index.js';
+import { ETH2Core, BaseAPISchema, ETH2BaseOpts } from 'https://deno.land/x/web30.7.1/packages/web3-eth2-core/src/index.js';
 import { DefaultSchema } from './schema.ts';
 
 import { ETH2BeaconChain as IETH2BeaconChain } from '../types.ts';
