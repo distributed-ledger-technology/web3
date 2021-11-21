@@ -20,7 +20,7 @@
  * @date 2019
  */
 
-import { Subscriptions, Subscription } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-subscriptions/src/index.js';
+import { Subscriptions, Subscription } from 'https://deno.land/x/web3v0.7.1/packages/web3-core-subscriptions/src/index.js';
 
 const subscriptions = new Subscriptions({
   name: '',
