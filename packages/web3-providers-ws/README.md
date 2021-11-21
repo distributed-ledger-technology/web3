@@ -17,7 +17,7 @@ npm install web3-providers-ws
 ## Usage
 
 ```js
-const Web3WsProvider = require('https://deno.land/x/web3@v0.6.1/packages/web3-providers-ws/src/index.js');
+const Web3WsProvider = require('https://deno.land/x/web3@v0.7.1/packages/web3-providers-ws/src/index.js');
 
 const options = {
     timeout: 30000, // ms

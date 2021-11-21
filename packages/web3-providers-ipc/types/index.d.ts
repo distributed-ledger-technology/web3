@@ -20,6 +20,6 @@
  * @date 2018
  */
 
-import { IpcProviderBase } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-helpers/types/index.d.ts';
+import { IpcProviderBase } from 'https://deno.land/x/web3@v0.7.1/packages/web3-core-helpers/types/index.d.ts';
 
 export class IpcProvider extends IpcProviderBase { }

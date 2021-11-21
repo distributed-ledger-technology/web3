@@ -23,8 +23,9 @@
 
 import { Buffer } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/buffer';
 
-import utils from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
-import { AbiCoder as EthersAbiCoder, ParamType } from 'https://jspm.dev/@ethersproject/abi';
+import utils from 'https://deno.land/x/web3@v0.7.1/packages/web3-utils/src/index.js';
+import { AbiCoder as EthersAbiCoder } from 'https://jspm.dev/@ethersproject/abi';
+import { ParamType } from 'https://jspm.dev/@ethersproject/abi';
 
 const ethersAbiCoder = new EthersAbiCoder((type, value) => {
   if (type.match(/^u?int/) && !Array.isArray(value) && (!(!!value && typeof value === 'object') || value.constructor.name !== 'BN')) {

@@ -20,11 +20,11 @@
 
 'use strict';
 
-import Contract from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth-contract/src/index.js';
+import Contract from 'https://deno.land/x/web3@v0.7.1/packages/web3-eth-contract/src/index.js';
 import namehash from 'https://jspm.dev/eth-ens-namehash';
-import PromiEvent from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-promievent/src/index.js';
-import { formatters } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-helpers/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.6.1/packages/web3-utils/src/index.js';
+import PromiEvent from 'https://deno.land/x/web3@v0.7.1/packages/web3-core-promievent/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.7.1/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.7.1/packages/web3-utils/src/index.js';
 import REGISTRY_ABI from '../resources/ABI/Registry.js';
 import RESOLVER_ABI from '../resources/ABI/Resolver.js';
 

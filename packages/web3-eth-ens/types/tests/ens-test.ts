@@ -17,11 +17,11 @@
  * @date 2018
  */
 
-import { TransactionRevertInstructionError } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core-helpers/src/index.js';
-import { TransactionReceipt } from 'https://deno.land/x/web3@v0.6.1/packages/web3-core/src/index.js';
-import { Contract } from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth-contract/src/index.js';
-import { Ens, ContentHash } from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth-ens/src/index.js';
-import { Eth } from 'https://deno.land/x/web3@v0.6.1/packages/web3-eth/src/index.js';
+import { TransactionRevertInstructionError } from 'https://deno.land/x/web3@v0.7.1/packages/web3-core-helpers/src/index.js';
+import { TransactionReceipt } from 'https://deno.land/x/web3@v0.7.1/packages/web3-core/src/index.js';
+import { Contract } from 'https://deno.land/x/web3@v0.7.1/packages/web3-eth-contract/src/index.js';
+import { Ens, ContentHash } from 'https://deno.land/x/web3@v0.7.1/packages/web3-eth-ens/src/index.js';
+import { Eth } from 'https://deno.land/x/web3@v0.7.1/packages/web3-eth/src/index.js';
 
 const ens = new Ens(new Eth('http://localhost:8545'));
 
