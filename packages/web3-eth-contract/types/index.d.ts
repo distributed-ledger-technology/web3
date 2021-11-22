@@ -20,8 +20,8 @@
 import BN from 'https://deno.land/x/web3/types/bn.d.ts';
 import {
   Common, PromiEvent, provider, hardfork, chain, BlockNumber, PastLogsOptions, LogsOptions, 
-} from 'https://deno.land/x/web3@v0.7.2/packages/web3-core/types/index.d.ts';
-import { AbiItem } from 'https://deno.land/x/web3@v0.7.2/packages/web3-utils/types/index.d.ts';
+} from 'https://deno.land/x/web3@v0.7.3/packages/web3-core/types/index.d.ts';
+import { AbiItem } from 'https://deno.land/x/web3@v0.7.3/packages/web3-utils/types/index.d.ts';
 
 // TODO: Add generic type!
 export class Contract {

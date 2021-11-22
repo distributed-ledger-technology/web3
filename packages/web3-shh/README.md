@@ -19,7 +19,7 @@ npm install web3-shh
 ## Usage
 
 ```js
-const Web3Personal = require('https://deno.land/x/web3@v0.7.2/packages/web3-shh/src/index.js');
+const Web3Personal = require('https://deno.land/x/web3@v0.7.3/packages/web3-shh/src/index.js');
 
 const shh = new Web3Personal('ws://localhost:8546');
 ```

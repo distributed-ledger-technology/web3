@@ -17,6 +17,6 @@
  * @date 2018
  */
 
-import { NetworkBase } from 'https://deno.land/x/web3@v0.7.2/packages/web3-core/types/index.d.ts';
+import { NetworkBase } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core/types/index.d.ts';
 
 export class Network extends NetworkBase {}
