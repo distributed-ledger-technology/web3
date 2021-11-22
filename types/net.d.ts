@@ -13,11 +13,20 @@
  * @see [source](https://github.com/nodejs/node/blob/v16.9.0/lib/net.js)
  */
 declare module 'net' {
-    import * as stream from 'node:stream';
-    import { Abortable, EventEmitter } from 'node:events';
-    import * as dns from 'node:dns';
+    import * as stream from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/stream';
+    import { Abortable, EventEmitter } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/events';
+  
+  interface LookupOptions {
+    family?: number | undefined;
+    hints?: number | undefined;
+    all?: boolean | undefined;
+    verbatim?: boolean | undefined;
+  }
+  interface LookupOneOptions extends LookupOptions {
+    all?: false | undefined;
+  }
 
-    type LookupFunction = (hostname: string, options: dns.LookupOneOptions, callback: (err: NodeJS.ErrnoException | null, address: string, family: number) => void) => void;
+    type LookupFunction = (hostname: string, options: LookupOneOptions, callback: (err: NodeJS.ErrnoException | null, address: string, family: number) => void) => void;
     interface AddressInfo {
         address: string;
         family: string;
