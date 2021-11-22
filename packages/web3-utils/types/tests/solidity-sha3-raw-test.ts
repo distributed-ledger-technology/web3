@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { soliditySha3Raw } from 'https://deno.land/x/web3@v0.7.1/packages/web3-utils/src/index.js';
+import { soliditySha3Raw } from 'https://deno.land/x/web3@v0.7.2/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 soliditySha3Raw('234564535', '0xfff23243', true, -10);
