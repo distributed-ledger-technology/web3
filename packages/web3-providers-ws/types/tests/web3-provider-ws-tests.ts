@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import { WebsocketProviderOptions, JsonRpcResponse } from 'https://deno.land/x/web3@v0.7.2/packages/web3-core-helpers/src/index.js';
+import { WebsocketProviderOptions, JsonRpcResponse } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
 import { WebsocketProvider } from 'web3-providers';
 
 const options: WebsocketProviderOptions = {

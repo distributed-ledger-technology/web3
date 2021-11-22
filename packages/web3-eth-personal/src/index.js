@@ -22,11 +22,11 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.7.2/packages/web3-core/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.7.2/packages/web3-core-method/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.7.2/packages/web3-utils/src/index.js';
-import Net from 'https://deno.land/x/web3@v0.7.2/packages/web3-net/src/index.js';
-import { formatters } from 'https://deno.land/x/web3@v0.7.2/packages/web3-core-helpers/src/index.js';
+import core from 'https://deno.land/x/web3@v0.7.3/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.7.3/packages/web3-utils/src/index.js';
+import Net from 'https://deno.land/x/web3@v0.7.3/packages/web3-net/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
 
 const Personal = function Personal() {
   const _this = this;
