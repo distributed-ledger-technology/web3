@@ -20,7 +20,7 @@
  * @date 2018
  */
 
-import { jsonInterfaceMethodToString, AbiItem } from 'https://deno.land/x/web3@v0.8.0/packages/web3-utils/src/index.js';
+import { jsonInterfaceMethodToString, AbiItem } from 'https://deno.land/x/web3@v0.8.1/packages/web3-utils/src/index.js';
 
 const abiItem: AbiItem = {
   anonymous: false,

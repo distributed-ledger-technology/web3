@@ -19,7 +19,7 @@ npm install web3-core-promievent
 ## Usage
 
 ```js
-const Web3PromiEvent = require('https://deno.land/x/web3@v0.8.0/packages/web3-core-promievent/src/index.js');
+const Web3PromiEvent = require('https://deno.land/x/web3@v0.8.1/packages/web3-core-promievent/src/index.js');
 
 const myFunc = function(){
     const promiEvent = Web3PromiEvent();

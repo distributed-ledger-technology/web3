@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { Network } from 'https://deno.land/x/web3@v0.8.0/packages/web3-net/src/index.js';
+import { Network } from 'https://deno.land/x/web3@v0.8.1/packages/web3-net/src/index.js';
 
 // $ExpectType Network
 const network_empty = new Network();

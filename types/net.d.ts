@@ -14,8 +14,36 @@
  */
 declare module 'net' {
     import * as stream from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/stream';
-    import { Abortable, EventEmitter } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/events';
-  
+    import { EventEmitter } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/events';
+    import { Buffer, BufferEncoding } from 'https://deno.land/x/web3/types/buffer.d.ts';
+
+    interface AbortSignal {
+        /**
+         * Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise.
+         */
+        readonly aborted: boolean;
+    }
+
+    interface Abortable {
+        /**
+         * When provided the corresponding `AbortController` can be used to cancel an asynchronous action.
+         */
+        signal?: AbortSignal | undefined;
+    }
+
+    interface Error {
+        name: string;
+        message: string;
+        stack?: string;
+    }
+
+    interface ErrnoException extends Error {
+        errno?: number | undefined;
+        code?: string | undefined;
+        path?: string | undefined;
+        syscall?: string | undefined;
+    }
+
   interface LookupOptions {
     family?: number | undefined;
     hints?: number | undefined;
@@ -26,7 +54,7 @@ declare module 'net' {
     all?: false | undefined;
   }
 
-    type LookupFunction = (hostname: string, options: LookupOneOptions, callback: (err: NodeJS.ErrnoException | null, address: string, family: number) => void) => void;
+    type LookupFunction = (hostname: string, options: LookupOneOptions, callback: (err: ErrnoException | null, address: string, family: number) => void) => void;
     interface AddressInfo {
         address: string;
         family: string;
@@ -936,5 +964,5 @@ declare module 'net' {
     }
 }
 declare module 'node:net' {
-    export * from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/net';
+    export * from 'net';
 }

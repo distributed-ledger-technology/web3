@@ -19,7 +19,7 @@ npm install web3-eth-iban
 ## Usage
 
 ```js
-const Web3EthIban = require('https://deno.land/x/web3@v0.8.0/packages/web3-eth-iban/src/index.js');
+const Web3EthIban = require('https://deno.land/x/web3@v0.8.1/packages/web3-eth-iban/src/index.js');
 
 const iban = new Web3EthIban('XE75JRZCTTLBSYEQBGAS7GID8DKR7QY0QA3');
 iban.toAddress() > '0xa94f5374Fce5edBC8E2a8697C15331677e6EbF0B';
