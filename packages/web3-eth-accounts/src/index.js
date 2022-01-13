@@ -34,6 +34,8 @@ import TX from 'https://jspm.dev/@ethereumjs/tx';
 import Common from 'https://jspm.dev/@ethereumjs/common';
 import { Hardfork as HardForks } from 'https://jspm.dev/@ethereumjs/common';
 import ethereumjsUtil from 'https://jspm.dev/ethereumjs-util';
+import { Buffer } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/buffer';
+
 
 const { TransactionFactory } = TX;
 
