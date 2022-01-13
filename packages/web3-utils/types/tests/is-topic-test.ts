@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { isTopic } from 'https://deno.land/x/web3@v0.8.4/packages/web3-utils/src/index.js';
+import { isTopic } from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
 
 // $ExpectType boolean
 isTopic('0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef');

@@ -19,8 +19,8 @@
  * @date 2018
  */
 
-import { RLPEncodedTransaction } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core/src/index.js';
-import { Personal } from 'https://deno.land/x/web3@v0.8.4/packages/web3-eth-personal/src/index.js';
+import { RLPEncodedTransaction } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core/src/index.js';
+import { Personal } from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-personal/src/index.js';
 
 // $ExpectType Personal
 const personal_empty = new Personal();

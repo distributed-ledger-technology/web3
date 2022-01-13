@@ -16,7 +16,7 @@
  * @author Josh Stevens <joshstevens19@hotmail.co.uk>
  * @date 2018
  */
-import { Accounts, SignedTransaction } from 'https://deno.land/x/web3@v0.8.4/packages/web3-eth-accounts/src/index.js';
+import { Accounts, SignedTransaction } from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-accounts/src/index.js';
 
 // $ExpectType Accounts
 const accounts_empty = new Accounts();

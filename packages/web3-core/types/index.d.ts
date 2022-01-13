@@ -27,8 +27,8 @@ import {
   WebsocketProviderOptions,
   JsonRpcPayload,
   JsonRpcResponse,
-} from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-helpers/types/index.d.ts';
-import { Method } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-method/types/index.d.ts';
+} from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/types/index.d.ts';
+import { Method } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-method/types/index.d.ts';
 import BN from 'https://deno.land/x/web3/types/bn.d.ts';
 import BigNumber from 'https://deno.land/x/web3/types/bignumber.d.ts';
 
