@@ -1,4 +1,4 @@
-interface AgentOptions {
+export interface AgentOptions {
     /**
      * Keep sockets around in a pool to be used by other requests in the future. Default = false
      */
@@ -31,7 +31,7 @@ interface AgentOptions {
     scheduling?: 'fifo' | 'lifo' | undefined;
 }
 
-class Agent {
+export class Agent {
     /**
      * By default set to 256\. For agents with `keepAlive` enabled, this
      * sets the maximum number of sockets that will be left open in the free

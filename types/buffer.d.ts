@@ -368,7 +368,7 @@ declare module 'buffer' {
              * @param [encoding='utf8'] If `string` is a string, this is its encoding.
              * @return The number of bytes contained within `string`.
              */
-            byteLength(string: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer, encoding?: BufferEncoding): number;
+            byteLength(string: string | ArrayBufferView | ArrayBuffer | SharedArrayBuffer, encoding?: BufferEncoding): number;
             /**
              * Returns a new `Buffer` which is the result of concatenating all the `Buffer`instances in the `list` together.
              *
