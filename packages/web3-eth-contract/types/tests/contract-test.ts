@@ -18,7 +18,7 @@
  * @date 2018
  */
 
-import { Contract } from 'https://deno.land/x/web3@v0.8.4/packages/web3-eth-contract/src/index.js';
+import { Contract } from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-contract/src/index.js';
 
 const contract = new Contract([]);
 
