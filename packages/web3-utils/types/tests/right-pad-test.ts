@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { rightPad } from 'https://deno.land/x/web3@v0.8.2/packages/web3-utils/src/index.js';
+import { rightPad } from 'https://deno.land/x/web3@v0.8.3/packages/web3-utils/src/index.js';
 
 const bigNumber = new BN(3);
 
