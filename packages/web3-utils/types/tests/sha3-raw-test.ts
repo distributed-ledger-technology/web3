@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { sha3Raw } from 'https://deno.land/x/web3@v0.7.3/packages/web3-utils/src/index.js';
+import { sha3Raw } from 'https://deno.land/x/web3@v0.8.0/packages/web3-utils/src/index.js';
 
 // $ExpectType string
 sha3Raw('234');

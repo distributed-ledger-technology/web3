@@ -27,8 +27,8 @@ import {
   WebsocketProviderOptions,
   JsonRpcPayload,
   JsonRpcResponse,
-} from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/types/index.d.ts';
-import { Method } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-method/types/index.d.ts';
+} from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/types/index.d.ts';
+import { Method } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-method/types/index.d.ts';
 import BN from 'https://deno.land/x/web3/types/bn.d.ts';
 import BigNumber from 'https://deno.land/x/web3/types/bignumber.d.ts';
 
@@ -134,6 +134,8 @@ export interface Transaction {
     to: string | null;
     value: string;
     gasPrice: string;
+    maxPriorityFeePerGas?: number | string | BN;
+    maxFeePerGas?: number | string | BN;
     gas: number;
     input: string;
 }
@@ -144,6 +146,8 @@ export interface TransactionConfig {
     value?: number | string | BN;
     gas?: number | string;
     gasPrice?: number | string | BN;
+    maxPriorityFeePerGas?: number | string | BN;
+    maxFeePerGas?: number | string | BN;
     data?: string;
     nonce?: number;
     chainId?: number;
@@ -209,6 +213,7 @@ export interface TransactionReceipt {
     contractAddress?: string;
     cumulativeGasUsed: number;
     gasUsed: number;
+    effectiveGasPrice: number;
     logs: Log[];
     logsBloom: string;
     events?: {

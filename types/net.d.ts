@@ -936,5 +936,5 @@ declare module 'net' {
     }
 }
 declare module 'node:net' {
-    export * from 'net';
+    export * from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/net';
 }

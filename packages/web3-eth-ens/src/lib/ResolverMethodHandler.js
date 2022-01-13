@@ -20,9 +20,9 @@
 
 'use strict';
 
-import PromiEvent from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-promievent/src/index.js';
+import PromiEvent from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-promievent/src/index.js';
 import namehash from 'https://jspm.dev/eth-ens-namehash';
-import { errors } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
 import config from '../config.js';
 
 const { interfaceIds } = config;

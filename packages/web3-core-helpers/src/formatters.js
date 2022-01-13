@@ -23,8 +23,8 @@
 
 'use strict';
 
-import utils from 'https://deno.land/x/web3@v0.7.3/packages/web3-utils/src/index.js';
-import Iban from 'https://deno.land/x/web3@v0.7.3/packages/web3-eth-iban/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.8.0/packages/web3-utils/src/index.js';
+import Iban from 'https://deno.land/x/web3@v0.8.0/packages/web3-eth-iban/src/index.js';
 
 /**
  * Will format the given storage key array values to hex strings.
@@ -273,6 +273,9 @@ const outputTransactionReceiptFormatter = function (receipt) {
     receipt.logs = receipt.logs.map(outputLogFormatter);
   }
 
+  if (receipt.effectiveGasPrice) {
+    receipt.effectiveGasPrice = utils.hexToNumber(receipt.effectiveGasPrice);
+  }
   if (receipt.contractAddress) {
     receipt.contractAddress = utils.toChecksumAddress(receipt.contractAddress);
   }
