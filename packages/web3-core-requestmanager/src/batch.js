@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
 import Jsonrpc from './jsonrpc.js';
 
 const Batch = function (requestManager) {
@@ -47,8 +47,10 @@ Batch.prototype.add = function (request) {
  */
 Batch.prototype.execute = function () {
   const { requests } = this;
+  const sortResponses = this._sortResponses.bind(this);
+
   this.requestManager.sendBatch(requests, (err, results) => {
-    results = results || [];
+    results = sortResponses(results);
     requests.map((request, index) => results[index] || {}).forEach((result, index) => {
       if (requests[index].callback) {
         if (result && result.error) {
@@ -67,6 +69,11 @@ Batch.prototype.execute = function () {
       }
     });
   });
+};
+
+// Sort responses
+Batch.prototype._sortResponses = function (responses) {    
+  return (responses || []).sort((a, b) => a.id - b.id);
 };
 
 export default Batch;

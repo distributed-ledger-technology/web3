@@ -23,11 +23,11 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
-import { formatters } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-helpers/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.7.3/packages/web3-utils/src/index.js';
-import promiEvent from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-promievent/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.7.3/packages/web3-core-subscriptions/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.8.0/packages/web3-utils/src/index.js';
+import promiEvent from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-promievent/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-subscriptions/src/index.js';
 import * as EthersTransactionUtils from 'https://jspm.dev/@ethersproject/transactions';
 
 const Method = function Method(options) {
