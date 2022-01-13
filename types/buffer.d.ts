@@ -2172,6 +2172,3 @@ declare module 'buffer' {
         function btoa(data: string): string;
     }
 }
-declare module 'node:buffer' {
-    export * from 'buffer';
-}

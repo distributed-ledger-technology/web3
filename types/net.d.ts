@@ -963,6 +963,3 @@ declare module 'net' {
         readonly flowlabel: number;
     }
 }
-declare module 'node:net' {
-    export * from 'net';
-}

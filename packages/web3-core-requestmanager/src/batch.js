@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-helpers/src/index.js';
 import Jsonrpc from './jsonrpc.js';
 
 const Batch = function (requestManager) {

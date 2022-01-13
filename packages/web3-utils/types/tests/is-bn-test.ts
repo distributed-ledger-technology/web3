@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { isBN } from 'https://deno.land/x/web3@v0.8.3/packages/web3-utils/src/index.js';
+import { isBN } from 'https://deno.land/x/web3@v0.8.4/packages/web3-utils/src/index.js';
 
 // $ExpectType boolean
 isBN(7);
