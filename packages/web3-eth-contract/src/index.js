@@ -19,7 +19,7 @@
  *
  * To initialize a contract use:
  *
- *  var Contract = require('https://deno.land/x/web3@v0.8.1/packages/web3-eth-contract/src/index.js');
+ *  var Contract = require('https://deno.land/x/web3@v0.8.2/packages/web3-eth-contract/src/index.js');
  *  Contract.setProvider('ws://localhost:8546');
  *  var contract = new Contract(abi, address, ...);
  *
@@ -29,14 +29,14 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.8.1/packages/web3-core/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-method/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.8.1/packages/web3-utils/src/index.js';
-import { subscription as Subscription } from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-subscriptions/src/index.js';
-import { formatters } from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-helpers/src/index.js';
-import { errors } from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-helpers/src/index.js';
-import promiEvent from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-promievent/src/index.js';
-import abi from 'https://deno.land/x/web3@v0.8.1/packages/web3-eth-abi/src/index.js';
+import core from 'https://deno.land/x/web3@v0.8.2/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.8.2/packages/web3-utils/src/index.js';
+import { subscription as Subscription } from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-subscriptions/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-helpers/src/index.js';
+import promiEvent from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-promievent/src/index.js';
+import abi from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-abi/src/index.js';
 
 /**
  * Should be called to create new contract instance
