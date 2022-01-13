@@ -22,18 +22,18 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.8.2/packages/web3-core/src/index.js';
-import * as helpers from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-helpers/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-subscriptions/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-method/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.8.2/packages/web3-utils/src/index.js';
-import Net from 'https://deno.land/x/web3@v0.8.2/packages/web3-net/src/index.js';
-import ENS from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-ens/src/index.js';
-import Personal from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-personal/src/index.js';
-import BaseContract from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-contract/src/index.js';
-import Iban from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-iban/src/index.js';
-import Accounts from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-accounts/src/index.js';
-import abi from 'https://deno.land/x/web3@v0.8.2/packages/web3-eth-abi/src/index.js';
+import core from 'https://deno.land/x/web3@v0.8.3/packages/web3-core/src/index.js';
+import * as helpers from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-subscriptions/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.8.3/packages/web3-utils/src/index.js';
+import Net from 'https://deno.land/x/web3@v0.8.3/packages/web3-net/src/index.js';
+import ENS from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-ens/src/index.js';
+import Personal from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-personal/src/index.js';
+import BaseContract from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-contract/src/index.js';
+import Iban from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-iban/src/index.js';
+import Accounts from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-accounts/src/index.js';
+import abi from 'https://deno.land/x/web3@v0.8.3/packages/web3-eth-abi/src/index.js';
 import getNetworkType from './getNetworkType.js';
 
 const formatter = helpers.formatters;

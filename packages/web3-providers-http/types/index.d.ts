@@ -22,7 +22,7 @@
 import * as http from 'https://deno.land/x/web3/types/http.d.ts';
 import * as https from 'https://deno.land/x/web3/types/http.d.ts';
 
-import { HttpProviderBase, JsonRpcResponse } from 'https://deno.land/x/web3@v0.8.2/packages/web3-core-helpers/types/index.d.ts';
+import { HttpProviderBase, JsonRpcResponse } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/types/index.d.ts';
 
 export interface HttpHeader {
     name: string;
