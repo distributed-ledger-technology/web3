@@ -23,7 +23,7 @@
 import * as http from 'https://deno.land/x/web3/types/http.d.ts';
 import * as https from 'https://deno.land/x/web3/types/http.d.ts';
 import { HttpProvider } from 'web3-providers';
-import { JsonRpcResponse } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/src/index.js';
+import { JsonRpcResponse } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-helpers/src/index.js';
 
 const httpProvider = new HttpProvider('http://localhost:8545', {
   timeout: 20000,

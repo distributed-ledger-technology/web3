@@ -22,7 +22,7 @@
  * @date 2015
  */
 
-import { errors } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-helpers/src/index.js';
 
 import 'https://deno.land/x/xhr@0.1.0/mod.ts'; // jshint ignore: line
 import http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';

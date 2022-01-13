@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { JsonRpcPayload } from 'https://deno.land/x/web3@v0.8.3/packages/web3-core-helpers/types/index.d.ts';
+import { JsonRpcPayload } from 'https://deno.land/x/web3@v0.8.4/packages/web3-core-helpers/types/index.d.ts';
 
 export interface Method {
     name: string;

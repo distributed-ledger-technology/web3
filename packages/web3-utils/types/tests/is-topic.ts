@@ -20,7 +20,7 @@
  * @date 2019
  */
 
-import { isTopic } from 'https://deno.land/x/web3@v0.8.3/packages/web3-utils/src/index.js';
+import { isTopic } from 'https://deno.land/x/web3@v0.8.4/packages/web3-utils/src/index.js';
 
 // $ExpectType boolean
 isTopic('0x000000000000000000000000b3bb037d2f2341a1c2775d51909a3d944597987d');
