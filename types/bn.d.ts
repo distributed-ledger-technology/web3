@@ -4,6 +4,7 @@
 //                 Henry Nguyen <https://github.com/HenryNguyen5>
 //                 Gaylor Bosson <https://github.com/Gilthoniel>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+import { Buffer } from 'https://deno.land/x/web3/types/buffer.d.ts';
 
 declare namespace BN {
     type Endianness = 'le' | 'be';

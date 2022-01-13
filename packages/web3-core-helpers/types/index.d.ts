@@ -18,8 +18,8 @@
  */
 
 import * as net from 'https://deno.land/x/web3/types/net.d.ts';
-import * as http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
-import * as https from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https';
+import * as http from 'https://deno.land/x/web3/types/http.d.ts';
+import * as https from 'https://deno.land/x/web3/types/http.d.ts';
 
 export class formatters {
   static outputBigNumberFormatter(number: number): number;

@@ -22,9 +22,9 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-helpers/src/index.js';
 import EventEmitter from 'https://jspm.dev/eventemitter3';
-import { formatters } from 'https://deno.land/x/web3@v0.8.0/packages/web3-core-helpers/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.8.1/packages/web3-core-helpers/src/index.js';
 
 function identity(value) { // used to return the exact same replica of the value given to it as the argument
   return value;
