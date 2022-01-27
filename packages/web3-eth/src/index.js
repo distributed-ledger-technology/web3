@@ -22,18 +22,18 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.8.5/packages/web3-core/src/index.js';
-import * as helpers from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-subscriptions/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-method/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
-import Net from 'https://deno.land/x/web3@v0.8.5/packages/web3-net/src/index.js';
-import ENS from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-ens/src/index.js';
-import Personal from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-personal/src/index.js';
-import BaseContract from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-contract/src/index.js';
-import Iban from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-iban/src/index.js';
-import Accounts from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-accounts/src/index.js';
-import abi from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-abi/src/index.js';
+import core from 'https://deno.land/x/web3@v0.9.0/packages/web3-core/src/index.js';
+import * as helpers from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-subscriptions/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-method/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
+import Net from 'https://deno.land/x/web3@v0.9.0/packages/web3-net/src/index.js';
+import ENS from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-ens/src/index.js';
+import Personal from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-personal/src/index.js';
+import BaseContract from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-contract/src/index.js';
+import Iban from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-iban/src/index.js';
+import Accounts from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-accounts/src/index.js';
+import abi from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-abi/src/index.js';
 import getNetworkType from './getNetworkType.js';
 
 const formatter = helpers.formatters;
@@ -96,6 +96,7 @@ const Eth = function Eth() {
   let transactionBlockTimeout = 50;
   let transactionConfirmationBlocks = 24;
   let transactionPollingTimeout = 750;
+  let transactionPollingInterval = 1000;
   let blockHeaderTimeout = 10; // 10 seconds
   let maxListenersWarningThreshold = 100;
   let defaultChain; let defaultHardfork; let 
@@ -182,6 +183,23 @@ const Eth = function Eth() {
       // update defaultBlock
       methods.forEach((method) => {
         method.transactionPollingTimeout = transactionPollingTimeout;
+      });
+    },
+    enumerable: true,
+  });
+  Object.defineProperty(this, 'transactionPollingInterval', {
+    get() {
+      return transactionPollingInterval;
+    },
+    set(val) {
+      transactionPollingInterval = val;
+
+      // also set on the Contract object
+      _this.Contract.transactionPollingInterval = transactionPollingInterval;
+
+      // update defaultBlock
+      methods.forEach((method) => {
+        method.transactionPollingInterval = transactionPollingInterval;
       });
     },
     enumerable: true,
@@ -347,6 +365,7 @@ const Eth = function Eth() {
   this.Contract.transactionBlockTimeout = this.transactionBlockTimeout;
   this.Contract.transactionConfirmationBlocks = this.transactionConfirmationBlocks;
   this.Contract.transactionPollingTimeout = this.transactionPollingTimeout;
+  this.Contract.transactionPollingInterval = this.transactionPollingInterval;
   this.Contract.blockHeaderTimeout = this.blockHeaderTimeout;
   this.Contract.handleRevert = this.handleRevert;
   this.Contract._requestManager = this._requestManager;
@@ -676,6 +695,7 @@ const Eth = function Eth() {
     method.transactionBlockTimeout = _this.transactionBlockTimeout;
     method.transactionConfirmationBlocks = _this.transactionConfirmationBlocks;
     method.transactionPollingTimeout = _this.transactionPollingTimeout;
+    method.transactionPollingInterval = _this.transactionPollingInterval;
     method.handleRevert = _this.handleRevert;
   });
 };

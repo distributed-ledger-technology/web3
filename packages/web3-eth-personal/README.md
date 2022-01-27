@@ -19,7 +19,7 @@ npm install web3-eth-personal
 ## Usage
 
 ```js
-const Web3EthPersonal = require('https://deno.land/x/web3@v0.8.5/packages/web3-eth-personal/src/index.js');
+const Web3EthPersonal = require('https://deno.land/x/web3@v0.9.0/packages/web3-eth-personal/src/index.js');
 
 const personal = new Web3EthPersonal('ws://localhost:8546');
 ```

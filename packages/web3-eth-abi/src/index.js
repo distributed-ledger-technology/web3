@@ -23,7 +23,7 @@
 
 import { Buffer } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/buffer';
 
-import utils from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
 import { AbiCoder as EthersAbiCoder } from 'https://jspm.dev/@ethersproject/abi';
 import { ParamType } from 'https://jspm.dev/@ethersproject/abi';
 
@@ -361,7 +361,12 @@ ABICoder.prototype.decodeParametersWith = function (outputs, bytes, loose) {
 
   outputs.forEach((output, i) => {
     let decodedValue = res[returnValue.__length__];
-    decodedValue = (decodedValue === '0x') ? null : decodedValue;
+
+    const isStringObject = typeof output === 'object' && output.type && output.type === 'string';
+    const isStringType = typeof output === 'string' && output === 'string';
+
+    // only convert `0x` to null if it's not string value
+    decodedValue = (decodedValue === '0x' && !isStringObject && !isStringType) ? null : decodedValue;
 
     returnValue[i] = decodedValue;
 

@@ -19,8 +19,8 @@ npm install web3-core-requestmanager
 ## Usage
 
 ```js
-const Web3WsProvider = require('https://deno.land/x/web3@v0.8.5/packages/web3-providers-ws/src/index.js');
-const Web3RequestManager = require('https://deno.land/x/web3@v0.8.5/packages/web3-core-requestmanager/src/index.js');
+const Web3WsProvider = require('https://deno.land/x/web3@v0.9.0/packages/web3-providers-ws/src/index.js');
+const Web3RequestManager = require('https://deno.land/x/web3@v0.9.0/packages/web3-core-requestmanager/src/index.js');
 
 const requestManager = new Web3RequestManager(new Web3WsProvider('ws://localhost:8546'));
 ```

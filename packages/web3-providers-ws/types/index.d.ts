@@ -20,6 +20,6 @@
  * @date 2018
  */
 
-import { WebsocketProviderBase } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/types/index.d.ts';
+import { WebsocketProviderBase } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/types/index.d.ts';
 
 export class WebsocketProvider extends WebsocketProviderBase { }

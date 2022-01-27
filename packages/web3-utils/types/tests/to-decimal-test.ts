@@ -21,7 +21,7 @@
  */
 
 import BN = require('https://jspm.dev/bn.js');
-import { toDecimal } from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
+import { toDecimal } from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
 
 // $ExpectType number
 toDecimal('232');

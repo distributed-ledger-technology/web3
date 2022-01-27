@@ -17,10 +17,10 @@
  * @date 2018
  */
 
-import { PromiEvent, TransactionConfig, TransactionReceipt } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core/types/index.d.ts';
-import { TransactionRevertInstructionError } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/types/index.d.ts';
-import { Eth } from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth/types/index.d.ts';
-import { Contract } from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-contract/types/index.d.ts';
+import { PromiEvent, TransactionConfig, TransactionReceipt } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core/types/index.d.ts';
+import { TransactionRevertInstructionError } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/types/index.d.ts';
+import { Eth } from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth/types/index.d.ts';
+import { Contract } from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-contract/types/index.d.ts';
 
 export interface ContentHash {
     protocolType: 'ipfs' | 'bzz' | 'onion' | 'onion3' | null,
