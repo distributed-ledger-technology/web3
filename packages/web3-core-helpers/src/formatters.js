@@ -23,8 +23,8 @@
 
 'use strict';
 
-import utils from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
-import Iban from 'https://deno.land/x/web3@v0.8.5/packages/web3-eth-iban/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
+import Iban from 'https://deno.land/x/web3@v0.9.0/packages/web3-eth-iban/src/index.js';
 
 /**
  * Will format the given storage key array values to hex strings.

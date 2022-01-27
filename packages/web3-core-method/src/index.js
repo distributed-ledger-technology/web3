@@ -23,11 +23,11 @@
 
 'use strict';
 
-import { errors } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/src/index.js';
-import { formatters } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-helpers/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.8.5/packages/web3-utils/src/index.js';
-import promiEvent from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-promievent/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.8.5/packages/web3-core-subscriptions/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
+import promiEvent from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-promievent/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-subscriptions/src/index.js';
 import * as EthersTransactionUtils from 'https://jspm.dev/@ethersproject/transactions';
 
 const Method = function Method(options) {
@@ -54,6 +54,7 @@ const Method = function Method(options) {
   this.transactionBlockTimeout = options.transactionBlockTimeout || 50;
   this.transactionConfirmationBlocks = options.transactionConfirmationBlocks || 24;
   this.transactionPollingTimeout = options.transactionPollingTimeout || 750;
+  this.transactionPollingInterval = options.transactionPollingInterval || 1000;
   this.blockHeaderTimeout = options.blockHeaderTimeout || 10; // 10 seconds
   this.defaultCommon = options.defaultCommon;
   this.defaultChain = options.defaultChain;
@@ -532,7 +533,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
     let blockHeaderArrived = false; 
 
     const startInterval = () => {
-      intervalId = setInterval(checkConfirmation.bind(null, existingReceipt, true), 1000);
+      intervalId = setInterval(checkConfirmation.bind(null, existingReceipt, true), method.transactionPollingInterval);
     };
 
     // If provider do not support event subscription use polling

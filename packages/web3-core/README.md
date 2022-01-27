@@ -19,7 +19,7 @@ npm install web3-core
 ## Usage
 
 ```js
-const core = require('https://deno.land/x/web3@v0.8.5/packages/web3-core/src/index.js');
+const core = require('https://deno.land/x/web3@v0.9.0/packages/web3-core/src/index.js');
 
 const CoolLib = function CoolLib() {
     // sets _requestmanager and adds basic functions
