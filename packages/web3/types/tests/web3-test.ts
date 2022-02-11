@@ -17,10 +17,10 @@
  * @date 2018
  */
 
-import Web3 from 'https://deno.land/x/web3@v0.9.1/packages/web3/src/index.js';
+import Web3 from 'https://deno.land/x/web3@v0.9.2/packages/web3/src/index.js';
 import * as net from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/net';
-import { AbstractProvider, RequestArguments } from 'https://deno.land/x/web3@v0.9.1/packages/web3-core/src/index.js';
-import { JsonRpcPayload, JsonRpcResponse } from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-helpers/src/index.js';
+import { AbstractProvider, RequestArguments } from 'https://deno.land/x/web3@v0.9.2/packages/web3-core/src/index.js';
+import { JsonRpcPayload, JsonRpcResponse } from 'https://deno.land/x/web3@v0.9.2/packages/web3-core-helpers/src/index.js';
 
 // $ExpectType Utils
 Web3.utils;
