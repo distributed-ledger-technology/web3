@@ -44,7 +44,7 @@ const HttpProvider = function HttpProvider(host, options) {
   const keepAlive = options.keepAlive !== false;
   this.host = host || 'http://localhost:8545';
   if (!this.agent) {
-    if (this.host.substring(0, 5) === 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https') {
+    if (this.host.substring(0, 5) === 'https') {
       this.httpsAgent = new https.Agent({ keepAlive });
     } else {
       this.httpAgent = new http.Agent({ keepAlive });
