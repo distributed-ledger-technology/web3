@@ -27,13 +27,13 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.9.1/packages/web3-core/src/index.js';
-import Eth from 'https://deno.land/x/web3@v0.9.1/packages/web3-eth/src/index.js';
-import Net from 'https://deno.land/x/web3@v0.9.1/packages/web3-net/src/index.js';
-import Personal from 'https://deno.land/x/web3@v0.9.1/packages/web3-eth-personal/src/index.js';
-import Shh from 'https://deno.land/x/web3@v0.9.1/packages/web3-shh/src/index.js';
-import Bzz from 'https://deno.land/x/web3@v0.9.1/packages/web3-bzz/src/index.js';
-import utils from 'https://deno.land/x/web3@v0.9.1/packages/web3-utils/src/index.js';
+import core from 'https://deno.land/x/web3@v0.9.2/packages/web3-core/src/index.js';
+import Eth from 'https://deno.land/x/web3@v0.9.2/packages/web3-eth/src/index.js';
+import Net from 'https://deno.land/x/web3@v0.9.2/packages/web3-net/src/index.js';
+import Personal from 'https://deno.land/x/web3@v0.9.2/packages/web3-eth-personal/src/index.js';
+import Shh from 'https://deno.land/x/web3@v0.9.2/packages/web3-shh/src/index.js';
+import Bzz from 'https://deno.land/x/web3@v0.9.2/packages/web3-bzz/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.2/packages/web3-utils/src/index.js';
 
 const Web3 = function Web3() {
   const _this = this;

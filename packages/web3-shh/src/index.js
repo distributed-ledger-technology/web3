@@ -22,12 +22,12 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.9.1/packages/web3-core/src/index.js';
-import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-subscriptions/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-method/src/index.js';
+import core from 'https://deno.land/x/web3@v0.9.2/packages/web3-core/src/index.js';
+import { subscriptions as Subscriptions } from 'https://deno.land/x/web3@v0.9.2/packages/web3-core-subscriptions/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.9.2/packages/web3-core-method/src/index.js';
 
-// var formatters = require('https://deno.land/x/web3@v0.9.1/packages/web3-core-helpers/src/index.js').formatters;
-import Net from 'https://deno.land/x/web3@v0.9.1/packages/web3-net/src/index.js';
+// var formatters = require('https://deno.land/x/web3@v0.9.2/packages/web3-core-helpers/src/index.js').formatters;
+import Net from 'https://deno.land/x/web3@v0.9.2/packages/web3-net/src/index.js';
 
 const Shh = function Shh() {
   const _this = this;

@@ -22,7 +22,7 @@
  * @date 2015
  */
 
-import { errors } from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-helpers/src/index.js';
+import { errors } from 'https://deno.land/x/web3@v0.9.2/packages/web3-core-helpers/src/index.js';
 
 import 'https://deno.land/x/xhr@0.1.0/mod.ts'; // jshint ignore: line
 import http from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/http';
@@ -44,7 +44,7 @@ const HttpProvider = function HttpProvider(host, options) {
   const keepAlive = options.keepAlive !== false;
   this.host = host || 'http://localhost:8545';
   if (!this.agent) {
-    if (this.host.substring(0, 5) === 'https://jspm.dev/npm:@jspm/core@2/nodelibs/https') {
+    if (this.host.substring(0, 5) === 'https') {
       this.httpsAgent = new https.Agent({ keepAlive });
     } else {
       this.httpAgent = new http.Agent({ keepAlive });

@@ -19,7 +19,7 @@ npm install web3-eth
 ## Usage
 
 ```js
-const Web3Eth = require('https://deno.land/x/web3@v0.9.1/packages/web3-eth/src/index.js');
+const Web3Eth = require('https://deno.land/x/web3@v0.9.2/packages/web3-eth/src/index.js');
 
 const eth = new Web3Eth('ws://localhost:8546');
 ```

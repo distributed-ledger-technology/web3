@@ -23,7 +23,7 @@
 
 import { Buffer } from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/buffer';
 
-import utils from 'https://deno.land/x/web3@v0.9.1/packages/web3-utils/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.2/packages/web3-utils/src/index.js';
 import { AbiCoder as EthersAbiCoder } from 'https://jspm.dev/@ethersproject/abi';
 import { ParamType } from 'https://jspm.dev/@ethersproject/abi';
 

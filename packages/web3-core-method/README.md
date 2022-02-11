@@ -19,7 +19,7 @@ npm install web3-core-method
 ## Usage
 
 ```js
-const Web3Method = require('https://deno.land/x/web3@v0.9.1/packages/web3-core-method/src/index.js');
+const Web3Method = require('https://deno.land/x/web3@v0.9.2/packages/web3-core-method/src/index.js');
 
 const method = new Web3Method({
     name: 'sendTransaction',

@@ -17,7 +17,7 @@
  * @date 2018
  */
 
-import { formatters } from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-helpers/src/index.js';
+import { formatters } from 'https://deno.land/x/web3@v0.9.2/packages/web3-core-helpers/src/index.js';
 
 // $ExpectType number
 formatters.outputBigNumberFormatter(100);

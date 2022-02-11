@@ -19,7 +19,7 @@ npm install web3-eth-contract
 ## Usage
 
 ```js
-const Web3EthContract = require('https://deno.land/x/web3@v0.9.1/packages/web3-eth-contract/src/index.js');
+const Web3EthContract = require('https://deno.land/x/web3@v0.9.2/packages/web3-eth-contract/src/index.js');
 
 // Set provider for all later instances to use
 Web3EthContract.setProvider('ws://localhost:8546');
