@@ -20,7 +20,7 @@
  * @date 2017
  */
 
-import requestManager from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-requestmanager/src/index.js';
+import requestManager from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-requestmanager/src/index.js';
 
 import extend from './extend.js';
 
