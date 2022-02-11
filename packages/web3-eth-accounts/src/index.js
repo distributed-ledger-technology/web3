@@ -22,14 +22,14 @@
 
 'use strict';
 
-import core from 'https://deno.land/x/web3@v0.9.0/packages/web3-core/src/index.js';
-import Method from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-method/src/index.js';
+import core from 'https://deno.land/x/web3@v0.9.1/packages/web3-core/src/index.js';
+import Method from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-method/src/index.js';
 import Account from 'https://jspm.dev/eth-lib/lib/account';
 import cryp from 'https://jspm.dev/npm:@jspm/core@2/nodelibs/crypto';
 import scrypt from 'https://jspm.dev/scrypt-js';
 import * as uuid from 'https://jspm.dev/uuid';
-import utils from 'https://deno.land/x/web3@v0.9.0/packages/web3-utils/src/index.js';
-import * as helpers from 'https://deno.land/x/web3@v0.9.0/packages/web3-core-helpers/src/index.js';
+import utils from 'https://deno.land/x/web3@v0.9.1/packages/web3-utils/src/index.js';
+import * as helpers from 'https://deno.land/x/web3@v0.9.1/packages/web3-core-helpers/src/index.js';
 import TX from 'https://jspm.dev/@ethereumjs/tx';
 import _Common from 'https://jspm.dev/@ethereumjs/common';
 import { Hardfork as HardForks } from 'https://jspm.dev/@ethereumjs/common';
@@ -746,7 +746,7 @@ if (!storageAvailable('localStorage')) {
 function storageAvailable(type) {
   let storage;
   try {
-    storage = window[type];
+    storage = self[type];
     const x = '__storage_test__';
     storage.setItem(x, x);
     storage.removeItem(x);
