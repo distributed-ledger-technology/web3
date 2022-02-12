@@ -1,6 +1,9 @@
 # Web3
 
-Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we have received in the context of [this issue](https://github.com/ChainSafe/web3.js/issues/3700), Deno is [ready for web3](https://ethereum.stackexchange.com/questions/112900/what-is-the-best-way-to-connect-to-the-ethereum-blockchain-from-a-deno-applicati) with this module.   
+Thanks to [ntrotner](https://github.com/ntrotner) and thanks to the hints we have received in the context of [this issue](https://github.com/ChainSafe/web3.js/issues/3700), Deno is [ready for web3](https://ethereum.stackexchange.com/questions/112900/what-is-the-best-way-to-connect-to-the-ethereum-blockchain-from-a-deno-applicati) with this module.    
+
+With this module you can connect your TypeScript in Deno program with the Ethereum Blockchain.  
+
 
 ## Usage Example 
 
