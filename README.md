@@ -6,7 +6,7 @@ With this module you can connect your TypeScript in Deno program with the Ethere
 
 The detailed documentation can be found [here](https://web3js.readthedocs.io/). In case you need to use nodejs instead of deno, check the [web3 npm library](https://www.npmjs.com/package/web3). Some of you might also use the [ethers library](https://www.npmjs.com/package/ethers) as an alternative.  
 
-In some months from now (writing this early 2022) it might be possible just to import such dependencies via https://www.skypack.dev.   
+In some months from now (writing this early 2022) it might be possible to just import such dependencies via [skypack.dev](https://www.skypack.dev).   
 
 
 ## Usage Example 
